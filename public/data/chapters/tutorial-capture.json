@@ -13,7 +13,6 @@
       "id": "dian_amazed",
       "speaker": "Dian",
       "text": "Wah... kau betul-betul tangkap dia? Macam dalam cerita atuk!",
-      "character": "dian-south",
       "next": "syafiq_feels"
     },
     "syafiq_feels": {
@@ -26,6 +25,12 @@
       "id": "dian_explains_2",
       "speaker": "Dian",
       "text": "Saka kau makan tenaga toyol. Tapi tak cukup. Dia lapar lagi nanti.",
+      "next": "saka_bar_explanation"
+    },
+    "saka_bar_explanation": {
+      "id": "saka_bar_explanation",
+      "speaker": "Dian",
+      "text": "Nampak bar tu naik? Setiap kali kau tangkap, saka kenyang sikit. Tapi dia lapar balik. Kena terus tangkap.",
       "next": "syafiq_concern"
     },
     "syafiq_concern": {
@@ -64,12 +69,6 @@
       "speaker": "Syafiq",
       "text": "Kau faham benda ni. Boleh tolong aku tak?",
       "next": "dian_agrees"
-    },
-    "scared_response": {
-      "id": "scared_response",
-      "speaker": "Syafiq",
-      "text": "Ni semua terlalu pelik. Aku nak hidup normal balik.",
-      "next": "dian_reality"
     },
     "dian_reality": {
       "id": "dian_reality",
@@ -110,13 +109,11 @@
     "partnership": {
       "id": "partnership",
       "text": "Untuk kali pertama sejak semalam, Syafiq tersenyum. Mungkin dia tak sendirian.",
-      "next": "end_tutorial",
-      "onComplete": "start_main_game"
+      "next": "end_tutorial"
     },
     "end_tutorial": {
       "id": "end_tutorial",
-      "text": "Tutorial tamat. Masa untuk menjelajah PPR dan cari makanan untuk saka.",
-      "ending": true
+      "text": "Tutorial tamat. Masa untuk menjelajah PPR dan cari makanan untuk saka."
     }
   }
 }

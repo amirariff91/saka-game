@@ -24,7 +24,7 @@ export class DialogueScene extends Phaser.Scene {
   // Character portrait system (VN style)
   private portraitContainer!: Phaser.GameObjects.Container;
   private leftPortrait?: Phaser.GameObjects.Image;
-  private rightPortrait?: Phaser.GameObjects.Image;
+  private rightPortrait?: Phaser.GameObjects.Image | Phaser.GameObjects.Graphics;
   private leftPortraitGlow?: Phaser.GameObjects.Graphics;
   private rightPortraitGlow?: Phaser.GameObjects.Graphics;
   private currentSpeakerSide: 'left' | 'right' | 'center' | 'none' = 'none';
@@ -79,17 +79,12 @@ export class DialogueScene extends Phaser.Scene {
 
     // Background container (60% of screen for atmospheric art)
     this.backgroundContainer = this.add.container(0, 0);
+    this.backgroundContainer.setDepth(1);
     this.createBackground('ppr-corridor'); // Default background
     
     // Character portrait container (above dialogue box, below vignette)
     this.portraitContainer = this.add.container(0, 0);
     this.portraitContainer.setDepth(5);
-
-    // Vignette overlay
-    const vignette = this.add.graphics();
-    vignette.fillStyle(0x000000, 0.3);
-    vignette.fillRect(0, 0, w, safeTop + 40);
-    vignette.setDepth(6);
 
     // Dialogue box — full width with padding, at bottom
     const boxHeight = Math.max(160, h * 0.28);
@@ -103,16 +98,6 @@ export class DialogueScene extends Phaser.Scene {
     this.dialogueBox.lineStyle(1, 0x2dd4a8, 0.3);
     this.dialogueBox.strokeRoundedRect(boxX, boxY, boxW, boxHeight, 8);
     this.dialogueBox.setDepth(10);
-    
-    // Add subtle breathing effect to dialogue box border
-    this.tweens.add({
-      targets: this.dialogueBox,
-      alpha: { from: 0.8, to: 1.0 },
-      duration: 2000,
-      yoyo: true,
-      repeat: -1,
-      ease: 'Sine.easeInOut',
-    });
 
     // Speaker name — 14px on mobile
     this.speakerText = this.add.text(boxX + 12, boxY - 20, '', {
@@ -162,9 +147,10 @@ export class DialogueScene extends Phaser.Scene {
       fontFamily: 'monospace',
       fontSize: '12px',
       color: '#2dd4a8',
-    });
+    }).setDepth(15);
 
     this.hungerBar = this.add.graphics();
+    this.hungerBar.setDepth(15);
     this.updateHungerBar();
 
     // Chapter title display — safe area
@@ -174,7 +160,7 @@ export class DialogueScene extends Phaser.Scene {
       fontSize: `${chTitleSize}px`,
       color: '#3a5a4e',
       fontStyle: 'italic',
-    }).setOrigin(0.5);
+    }).setOrigin(0.5).setDepth(15);
 
     // Mute toggle button (top-left safe area) - hide during typing
     this.muteButton = this.add.text(16, safeTop, '🔊', {
@@ -186,15 +172,6 @@ export class DialogueScene extends Phaser.Scene {
       this.muteButton.setText(isMuted ? '🔇' : '🔊');
       this.soundManager.playSFX('ui-click');
     });
-
-    // Scan-line overlay
-    this.scanlines = this.add.graphics();
-    this.scanlines.lineStyle(1, 0x000000, 0.15);
-    for (let y = 0; y < h; y += 3) {
-      this.scanlines.lineBetween(0, y, w, y);
-    }
-    this.scanlines.setAlpha(0.04);
-    this.scanlines.setDepth(1000);
 
     // Load chapter data
     const chapterKey = (this.scene.settings.data as { chapter?: string })?.chapter ?? 'chapter1';
@@ -408,8 +385,17 @@ export class DialogueScene extends Phaser.Scene {
         this.time.delayedCall(800, () => {
           this.saka.stop();
           if (battle) {
-            // Transition to battle scene with enemy ID
-            this.scene.start('BattleScene', { enemy: battle });
+            // Determine if we need to return to a specific chapter after battle
+            const chapterKey = (this.scene.settings.data as { chapter?: string })?.chapter ?? 'chapter1';
+            let battleData: any = { enemy: battle };
+            
+            // For tutorial-dian, return to tutorial-capture after battle
+            if (chapterKey === 'tutorial-dian') {
+              battleData.returnChapter = 'tutorial-capture';
+            }
+            
+            // Transition to battle scene with enemy ID and return chapter
+            this.scene.start('BattleScene', battleData);
           } else {
             this.handleChapterCompletion();
           }
@@ -461,7 +447,7 @@ export class DialogueScene extends Phaser.Scene {
       // Show/update right portrait
       if (!this.rightPortrait && hasTexture) {
         this.createPortrait('right', key, w, portraitBottom, portraitScale);
-      } else if (this.rightPortrait && hasTexture) {
+      } else if (this.rightPortrait && hasTexture && this.rightPortrait instanceof Phaser.GameObjects.Image) {
         if (this.rightPortrait.texture.key !== key) {
           this.rightPortrait.setTexture(key);
         }
@@ -556,7 +542,9 @@ export class DialogueScene extends Phaser.Scene {
         duration: 200,
         ease: 'Power2'
       });
-      portrait.clearTint();
+      if (portrait instanceof Phaser.GameObjects.Image) {
+        portrait.clearTint();
+      }
     }
     if (glow) {
       this.tweens.add({ targets: glow, alpha: 0.12, duration: 200 });
@@ -573,7 +561,9 @@ export class DialogueScene extends Phaser.Scene {
         duration: 200,
         ease: 'Power2'
       });
-      portrait.setTint(0x666666);
+      if (portrait instanceof Phaser.GameObjects.Image) {
+        portrait.setTint(0x666666);
+      }
     }
     if (glow) {
       this.tweens.add({ targets: glow, alpha: 0.05, duration: 200 });
@@ -592,53 +582,65 @@ export class DialogueScene extends Phaser.Scene {
     const safeBottom = 24;
     const portraitBottom = h - boxHeight - safeBottom - 10;
 
-    // Spirit sprite key (use south-facing pixel art)
-    const spriteKey = `spirit-${spiritId}-south`;
-    if (!this.textures.exists(spriteKey)) return;
-
     // Clear right portrait if there is one
     this.clearPortraitSide('right');
 
-    const x = w * 0.65;
-    const spiritScale = 5; // Pixel art spirits scaled up big for dramatic effect
+    const x = w * 0.75;
+    
+    // Create shadow silhouette instead of pixel sprite
+    const shadowSize = 60;
     
     // Eerie red glow — larger for dramatic effect
     const glow = this.add.graphics();
-    glow.fillStyle(0xff4444, 0.25);
-    glow.fillCircle(0, 0, 80);
-    glow.setPosition(x, portraitBottom - 70);
+    glow.fillStyle(0xff4444, 0.3);
+    glow.fillCircle(0, 0, shadowSize * 1.2);
+    glow.setPosition(x, portraitBottom - shadowSize);
     this.portraitContainer.add(glow);
 
-    const sprite = this.add.image(x, portraitBottom, spriteKey);
-    sprite.setScale(spiritScale);
-    sprite.setOrigin(0.5, 1);
-    sprite.setData('baseScale', spiritScale);
-    this.portraitContainer.add(sprite);
+    // Dark silhouette shape
+    const shadow = this.add.graphics();
+    shadow.fillStyle(0x000000, 0.9);
+    // Create an ominous humanoid shadow shape
+    shadow.fillEllipse(0, -10, 20, 35); // body
+    shadow.fillCircle(0, -35, 12); // head
+    shadow.fillEllipse(-8, -5, 8, 15); // left arm
+    shadow.fillEllipse(8, -5, 8, 15); // right arm
+    shadow.fillEllipse(-5, 10, 6, 20); // left leg
+    shadow.fillEllipse(5, 10, 6, 20); // right leg
+    
+    shadow.setPosition(x, portraitBottom - shadowSize);
+    this.portraitContainer.add(shadow);
 
-    // Dramatic entrance — scale up from nothing
-    sprite.setAlpha(0);
-    sprite.setScale(spiritScale * 0.5);
+    // Red glowing eyes
+    const eyes = this.add.graphics();
+    eyes.fillStyle(0xff2222, 1);
+    eyes.fillCircle(-4, -35, 2); // left eye
+    eyes.fillCircle(4, -35, 2); // right eye
+    eyes.setPosition(x, portraitBottom - shadowSize);
+    this.portraitContainer.add(eyes);
+
+    // Dramatic entrance — fade in with shake
+    shadow.setAlpha(0);
     glow.setAlpha(0);
+    eyes.setAlpha(0);
 
     this.tweens.add({
-      targets: sprite,
+      targets: [shadow, eyes],
       alpha: 1,
-      scaleX: spiritScale,
-      scaleY: spiritScale,
-      duration: 600,
-      ease: 'Back.easeOut'
+      duration: 800,
+      ease: 'Power2.easeOut'
     });
     this.tweens.add({
       targets: glow,
-      alpha: 0.25,
-      duration: 600,
+      alpha: 0.3,
+      duration: 800,
     });
 
     // Menacing floating
     this.tweens.add({
-      targets: sprite,
-      y: { from: portraitBottom - 6, to: portraitBottom + 6 },
-      duration: 2000,
+      targets: [shadow, eyes],
+      y: { from: portraitBottom - shadowSize - 3, to: portraitBottom - shadowSize + 3 },
+      duration: 2500,
       yoyo: true,
       repeat: -1,
       ease: 'Sine.easeInOut'
@@ -647,10 +649,22 @@ export class DialogueScene extends Phaser.Scene {
     // Glow pulses
     this.tweens.add({
       targets: glow,
-      alpha: { from: 0.15, to: 0.35 },
+      alpha: { from: 0.2, to: 0.4 },
       scaleX: { from: 0.9, to: 1.1 },
       scaleY: { from: 0.9, to: 1.1 },
-      duration: 1500,
+      duration: 1800,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut'
+    });
+
+    // Eye glow pulse
+    this.tweens.add({
+      targets: eyes,
+      alpha: { from: 0.8, to: 1 },
+      scaleX: { from: 0.9, to: 1.2 },
+      scaleY: { from: 0.9, to: 1.2 },
+      duration: 1200,
       yoyo: true,
       repeat: -1,
       ease: 'Sine.easeInOut'
@@ -659,7 +673,10 @@ export class DialogueScene extends Phaser.Scene {
     // Dim left portrait (Syafiq reacting)
     this.dimPortrait('left');
 
-    this.rightPortrait = sprite;
+    // Screen shake effect for dramatic entrance
+    this.cameras.main.shake(400, 0.008);
+
+    this.rightPortrait = shadow;
     this.rightPortraitGlow = glow;
   }
 
@@ -792,105 +809,76 @@ export class DialogueScene extends Phaser.Scene {
   }
 
   private createPPRCorridorBackground(w: number, h: number): void {
-    // Dark grey gradient for concrete walls
+    // Simple dark gradient - no competing effects
     const bg = this.add.graphics();
-    bg.fillGradientStyle(0x2a2a2a, 0x2a2a2a, 0x1a1a1a, 0x1a1a1a, 1);
+    bg.fillGradientStyle(0x1a1a1a, 0x1a1a1a, 0x0a0a0a, 0x0a0a0a, 1);
     bg.fillRect(0, 0, w, h);
     this.backgroundContainer.add(bg);
     this.backgroundElements.push(bg);
 
-    // Vertical lines suggesting doors
+    // Simple vertical lines suggesting doors (darker, less prominent)
     const doorGraphics = this.add.graphics();
-    doorGraphics.lineStyle(2, 0x444444, 0.6);
-    for (let i = 0; i < 4; i++) {
-      const x = (w / 5) * (i + 1);
-      doorGraphics.lineBetween(x, h * 0.3, x, h * 0.8);
-      // Door frames
-      doorGraphics.strokeRect(x - 15, h * 0.3, 30, h * 0.5);
+    doorGraphics.lineStyle(1, 0x333333, 0.4);
+    for (let i = 0; i < 3; i++) {
+      const x = (w / 4) * (i + 1);
+      doorGraphics.lineBetween(x, h * 0.4, x, h * 0.7);
+      // Simple door frames
+      doorGraphics.strokeRect(x - 10, h * 0.4, 20, h * 0.3);
     }
     this.backgroundContainer.add(doorGraphics);
     this.backgroundElements.push(doorGraphics);
 
-    // Flickering light effect
+    // Simple static light (no flickering)
     const light = this.add.graphics();
-    light.fillStyle(0xffffaa, 0.3);
-    light.fillCircle(w / 2, h * 0.2, 40);
+    light.fillStyle(0xffffaa, 0.1);
+    light.fillCircle(w / 2, h * 0.2, 30);
     this.backgroundContainer.add(light);
     this.backgroundElements.push(light);
 
-    // Flicker animation
-    this.tweens.add({
-      targets: light,
-      alpha: { from: 0.1, to: 0.5 },
-      duration: Phaser.Math.Between(100, 300),
-      yoyo: true,
-      repeat: -1,
-      ease: 'Power2'
-    });
-
     // Floor
     const floor = this.add.graphics();
-    floor.fillStyle(0x333333, 1);
+    floor.fillStyle(0x2a2a2a, 1);
     floor.fillRect(0, h * 0.85, w, h * 0.15);
     this.backgroundContainer.add(floor);
     this.backgroundElements.push(floor);
   }
 
   private createUnit94Background(w: number, h: number): void {
-    // Dark room — but visible enough to see on mobile
+    // Simple dark room
     const bg = this.add.graphics();
-    bg.fillGradientStyle(0x1a1210, 0x1a1210, 0x0d0a08, 0x0d0a08, 1);
+    bg.fillGradientStyle(0x0f0c0a, 0x0f0c0a, 0x050302, 0x050302, 1);
     bg.fillRect(0, 0, w, h);
     this.backgroundContainer.add(bg);
     this.backgroundElements.push(bg);
 
-    // Wooden shelves — more visible
+    // Simple wooden shelves (darker, less distracting)
     const shelves = this.add.graphics();
-    shelves.lineStyle(2, 0x4a3a2a, 0.9);
-    for (let i = 0; i < 5; i++) {
-      const y = h * 0.2 + i * (h * 0.12);
-      shelves.lineBetween(w * 0.08, y, w * 0.92, y);
+    shelves.lineStyle(1, 0x3a2a1a, 0.6);
+    for (let i = 0; i < 4; i++) {
+      const y = h * 0.25 + i * (h * 0.15);
+      shelves.lineBetween(w * 0.1, y, w * 0.9, y);
       // Shelf supports
-      shelves.lineStyle(1, 0x3a2a1a, 0.6);
-      shelves.lineBetween(w * 0.08, y, w * 0.08, y + h * 0.12);
-      shelves.lineBetween(w * 0.92, y, w * 0.92, y + h * 0.12);
-      shelves.lineStyle(2, 0x4a3a2a, 0.9);
+      shelves.lineBetween(w * 0.1, y, w * 0.1, y + h * 0.12);
+      shelves.lineBetween(w * 0.9, y, w * 0.9, y + h * 0.12);
     }
     this.backgroundContainer.add(shelves);
     this.backgroundElements.push(shelves);
 
-    // Bottles with distinct glow — larger, brighter
-    const bottleContainer = this.add.container(0, 0);
-    for (let i = 0; i < 15; i++) {
-      const bottleX = w * 0.12 + (w * 0.76 / 15) * i;
-      const bottleY = h * 0.22 + (Math.floor(i / 3) * (h * 0.12)) + Phaser.Math.Between(-5, 5);
+    // Simple static bottles (no pulsing animations)
+    for (let i = 0; i < 8; i++) {
+      const bottleX = w * 0.15 + (w * 0.7 / 8) * i;
+      const bottleY = h * 0.3 + (Math.floor(i / 4) * (h * 0.15)) + Phaser.Math.Between(-3, 3);
       
       const bottle = this.add.graphics();
-      const color = Phaser.Math.RND.pick([0x2dd4a8, 0xd4a82d, 0x8a4d8a, 0xff6644]);
-      // Bottle body
-      bottle.fillStyle(color, 0.6);
-      bottle.fillRect(bottleX - 3, bottleY - 6, 6, 10);
-      bottle.fillRect(bottleX - 2, bottleY - 9, 4, 4);
-      // Glow
-      bottle.fillStyle(color, 0.15);
-      bottle.fillCircle(bottleX, bottleY, 10);
+      const color = Phaser.Math.RND.pick([0x2dd4a8, 0xd4a82d, 0x8a4d8a]);
+      // Simple bottle body
+      bottle.fillStyle(color, 0.3);
+      bottle.fillRect(bottleX - 2, bottleY - 4, 4, 8);
+      bottle.fillRect(bottleX - 1, bottleY - 6, 2, 3);
       
-      // Pulse animation
-      this.tweens.add({
-        targets: bottle,
-        alpha: { from: 0.2, to: 0.6 },
-        scaleX: { from: 0.8, to: 1.2 },
-        scaleY: { from: 0.8, to: 1.2 },
-        duration: Phaser.Math.Between(2000, 4000),
-        yoyo: true,
-        repeat: -1,
-        delay: Phaser.Math.Between(0, 2000)
-      });
-      
-      bottleContainer.add(bottle);
+      this.backgroundContainer.add(bottle);
+      this.backgroundElements.push(bottle);
     }
-    this.backgroundContainer.add(bottleContainer);
-    this.backgroundElements.push(bottleContainer);
   }
 
   private createStairwellBackground(w: number, h: number): void {

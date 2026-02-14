@@ -22,7 +22,11 @@
     "wake_04": {
       "id": "wake_04",
       "text": "Perut kosong. Tapi bukan perut biasa yang lapar.",
-      "systemMessage": "Saka bar appears",
+      "next": "saka_explanation"
+    },
+    "saka_explanation": {
+      "id": "saka_explanation",
+      "text": "Bar hijau di atas tu — SAKA. Benda dalam kau tu lapar. Kalau habis... kau hilang kawalan. Tangkap hantu untuk bagi dia makan.",
       "next": "wake_05"
     },
     "wake_05": {
@@ -95,13 +99,11 @@
     "inner_voice": {
       "id": "inner_voice",
       "text": "Keluar rumah, Syafiq rasa bayangan bergerak salah. Sesuatu mengikut.",
-      "next": "end_chapter",
-      "onComplete": "unlock_tangga"
+      "next": "end_chapter"
     },
     "end_chapter": {
       "id": "end_chapter",
-      "text": "Masa untuk pergi ke tangga. Mungkin jumpa orang yang boleh faham.",
-      "ending": true
+      "text": "Masa untuk pergi ke tangga. Mungkin jumpa orang yang boleh faham."
     }
   }
 }

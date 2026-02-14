@@ -18,7 +18,6 @@
     "stairs_03": {
       "id": "stairs_03",
       "text": "Gadis duduk kat anak tangga, kepala dalam tangan. Umur macam Syafiq.",
-      "character": "dian-south",
       "next": "dian_01"
     },
     "dian_01": {

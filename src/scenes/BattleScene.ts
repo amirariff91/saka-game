@@ -663,14 +663,14 @@ export class BattleScene extends Phaser.Scene {
 
     yOffset += lineHeight;
 
-    // Saka gain
+    // Saka gain with clear recovery display
     const sakaGain = this.spiritCaptured ? 30 : 15;
     const gameState = this.daySystem.getGameState();
     const newSaka = Math.min(100, gameState.sakaHunger + sakaGain);
     const sakaBarLength = Math.floor((newSaka / 100) * 12);
     const sakaBar = '█'.repeat(sakaBarLength) + '░'.repeat(12 - sakaBarLength);
     
-    const sakaText = this.add.text(w / 2, yOffset, `Saka: ${sakaBar} +${sakaGain}`, {
+    const sakaText = this.add.text(w / 2, yOffset, `Saka: ${sakaBar} +${sakaGain} kenyang`, {
       fontFamily: 'monospace',
       fontSize: '14px',
       color: '#2dd4a8'
@@ -823,7 +823,17 @@ export class BattleScene extends Phaser.Scene {
     this.cameras.main.fadeOut(800, 0, 0, 0);
     this.time.delayedCall(800, () => {
       this.saka.stop();
-      this.scene.start('LocationMenuScene');
+      
+      // Check if we should return to a specific chapter instead of LocationMenuScene
+      const returnChapter = (this.scene.settings.data as { returnChapter?: string })?.returnChapter;
+      if (returnChapter) {
+        this.scene.start('DialogueScene', {
+          chapter: returnChapter,
+          returnTo: 'LocationMenuScene'
+        });
+      } else {
+        this.scene.start('LocationMenuScene');
+      }
     });
   }
 

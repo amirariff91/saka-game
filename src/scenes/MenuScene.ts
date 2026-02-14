@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { SoundManager } from '../systems/SoundManager';
 import { DaySystem } from '../systems/DaySystem';
+import { QuestSystem } from '../systems/QuestSystem';
 
 export class MenuScene extends Phaser.Scene {
   private particles: Phaser.GameObjects.Graphics[] = [];
@@ -10,6 +11,7 @@ export class MenuScene extends Phaser.Scene {
   private fogLayer!: Phaser.GameObjects.Graphics;
   private soundManager!: SoundManager;
   private daySystem!: DaySystem;
+  private questSystem!: QuestSystem;
   private muteButton!: Phaser.GameObjects.Text;
 
   constructor() {
@@ -22,10 +24,11 @@ export class MenuScene extends Phaser.Scene {
     const safeTop = 44;
     const safeBottom = 24;
 
-    // Initialize sound manager and day system
+    // Initialize sound manager, day system, and quest system
     this.soundManager = SoundManager.getInstance();
     this.soundManager.updateScene(this);
     this.daySystem = DaySystem.getInstance();
+    this.questSystem = QuestSystem.getInstance();
 
     // Background gradient overlay
     const bg = this.add.graphics();
@@ -118,6 +121,7 @@ export class MenuScene extends Phaser.Scene {
       '#6b8f82',
       () => {
         this.daySystem.newGame(); // Reset game state
+        this.questSystem.newGame(); // Reset quest state
         this.cameras.main.fadeOut(800, 0, 0, 0);
         this.time.delayedCall(800, () => {
           this.scene.start('LocationMenuScene');

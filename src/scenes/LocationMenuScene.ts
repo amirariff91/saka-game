@@ -552,6 +552,34 @@ export class LocationMenuScene extends Phaser.Scene {
     const color = hunger > 50 ? 0x2dd4a8 : hunger > 20 ? 0xd4a82d : 0xd42d2d;
     this.hungerBar.fillStyle(color, 1);
     this.hungerBar.fillRoundedRect(x, y, barW * (hunger / 100), barH, 2);
+    
+    // Show warning text when saka is below 50%
+    if (!this.hungerBar.getData('warningText') && hunger < 50) {
+      const warningText = this.add.text(x + barW / 2, y + 20, '⚠️ Saka lapar — pergi tangkap hantu', {
+        fontFamily: 'Georgia, serif',
+        fontSize: '11px',
+        color: '#d42d2d',
+        fontStyle: 'italic'
+      }).setOrigin(0.5, 0);
+      this.hungerBar.setData('warningText', warningText);
+      
+      // Pulse the warning text
+      this.tweens.add({
+        targets: warningText,
+        alpha: { from: 0.7, to: 1 },
+        duration: 800,
+        yoyo: true,
+        repeat: -1,
+        ease: 'Sine.easeInOut'
+      });
+    } else if (this.hungerBar.getData('warningText') && hunger >= 50) {
+      // Remove warning text when hunger is restored
+      const warningText = this.hungerBar.getData('warningText');
+      if (warningText) {
+        warningText.destroy();
+        this.hungerBar.setData('warningText', null);
+      }
+    }
   }
 
   private handleResize(gameSize: Phaser.Structs.Size): void {
