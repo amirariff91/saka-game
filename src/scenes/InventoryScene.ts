@@ -39,6 +39,7 @@ export class InventoryScene extends Phaser.Scene {
 
     // Initialize sound manager
     this.soundManager = SoundManager.getInstance();
+    this.soundManager.updateScene(this);
 
     // Load spirits data
     this.spiritsData = this.cache.json.get('spirits');

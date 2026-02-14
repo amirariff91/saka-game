@@ -63,6 +63,7 @@ export class BattleScene extends Phaser.Scene {
 
     this.saka = new SakaSystem(this, 0.1); // Very slow hunger in battle
     this.soundManager = SoundManager.getInstance();
+    this.soundManager.updateScene(this);
     this.daySystem = DaySystem.getInstance();
     this.spiritsData = this.cache.json.get('spirits');
     

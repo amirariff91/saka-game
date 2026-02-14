@@ -24,6 +24,7 @@ export class MenuScene extends Phaser.Scene {
 
     // Initialize sound manager and day system
     this.soundManager = SoundManager.getInstance();
+    this.soundManager.updateScene(this);
     this.daySystem = DaySystem.getInstance();
 
     // Background gradient overlay

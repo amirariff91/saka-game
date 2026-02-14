@@ -48,6 +48,7 @@ export class DialogueScene extends Phaser.Scene {
     this.engine = new DialogueEngine();
     this.saka = new SakaSystem(this, 0.3);
     this.soundManager = SoundManager.getInstance();
+    this.soundManager.updateScene(this);
     this.daySystem = DaySystem.getInstance();
 
     // Dark atmospheric background
@@ -228,10 +229,14 @@ export class DialogueScene extends Phaser.Scene {
     this.continueIndicator.setAlpha(0);
     this.muteButton.setAlpha(0.3); // Hide mute button during typing
 
-    // Start typewriter sound
-    this.typewriterSound = this.sound.add('typewriter', { volume: 0.05, loop: true });
-    if (!this.soundManager.isSoundMuted()) {
-      this.typewriterSound.play();
+    // Start typewriter sound (use game's global sound manager for mobile compatibility)
+    try {
+      if (!this.soundManager.isSoundMuted() && this.soundManager.isUnlocked()) {
+        this.typewriterSound = this.sound.add('typewriter', { volume: 0.05, loop: true });
+        this.typewriterSound.play();
+      }
+    } catch (error) {
+      console.warn('[DialogueScene] Failed to play typewriter sound:', error);
     }
 
     this.typewriter.start(line.text, () => {

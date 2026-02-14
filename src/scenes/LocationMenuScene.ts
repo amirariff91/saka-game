@@ -40,6 +40,7 @@ export class LocationMenuScene extends Phaser.Scene {
     this.daySystem = DaySystem.getInstance();
     this.daySystem.initialize(this);
     this.soundManager = SoundManager.getInstance();
+    this.soundManager.updateScene(this);
 
     // Start ambient BGM
     this.soundManager.setBGMVolume(0.15);
