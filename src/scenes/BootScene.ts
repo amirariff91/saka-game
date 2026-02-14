@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { SoundManager } from '../systems/SoundManager';
 
 export class BootScene extends Phaser.Scene {
   constructor() {
@@ -101,12 +102,26 @@ export class BootScene extends Phaser.Scene {
     this.load.image('ppr-corridor-tileset', 'assets/tilesets/ppr-corridor.png');
     this.load.json('ppr-corridor-data', 'assets/tilesets/ppr-corridor.json');
 
+    // === SOUND EFFECTS ===
+    this.load.audio('ambient-eerie', 'assets/sfx/ambient-eerie.mp3');
+    this.load.audio('capture', 'assets/sfx/capture.mp3');
+    this.load.audio('hit', 'assets/sfx/hit.mp3');
+    this.load.audio('typewriter', 'assets/sfx/typewriter.mp3');
+    this.load.audio('ui-click', 'assets/sfx/ui-click.mp3');
+    this.load.audio('bottle-break', 'assets/sfx/bottle-break.mp3');
+    this.load.audio('bayang-activate', 'assets/sfx/bayang-activate.mp3');
+    this.load.audio('footsteps', 'assets/sfx/footsteps.mp3');
+
     // === UI ICONS ===
     // We'll create simple colored circles for now as icons
     // The real implementation would load UI icons from assets
   }
 
   create(): void {
+    // Initialize SoundManager
+    const soundManager = SoundManager.getInstance();
+    soundManager.initialize(this);
+
     // Create Phaser animations for walking
     const walkDirs = ['south', 'south-west', 'west'];
     

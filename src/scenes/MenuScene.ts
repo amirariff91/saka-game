@@ -1,10 +1,14 @@
 import Phaser from 'phaser';
+import { SoundManager } from '../systems/SoundManager';
 
 export class MenuScene extends Phaser.Scene {
   private particles: Phaser.GameObjects.Graphics[] = [];
   private titleText!: Phaser.GameObjects.Text;
   private glowTimer = 0;
   private scanlines!: Phaser.GameObjects.Graphics;
+  private fogLayer!: Phaser.GameObjects.Graphics;
+  private soundManager!: SoundManager;
+  private muteButton!: Phaser.GameObjects.Text;
 
   constructor() {
     super({ key: 'MenuScene' });
@@ -13,29 +17,39 @@ export class MenuScene extends Phaser.Scene {
   create(): void {
     const w = this.scale.width;
     const h = this.scale.height;
-    const safeTop = 40;
-    const safeBottom = 20;
+    const safeTop = 44;
+    const safeBottom = 24;
+
+    // Initialize sound manager
+    this.soundManager = SoundManager.getInstance();
 
     // Background gradient overlay
     const bg = this.add.graphics();
     bg.fillGradientStyle(0x0a0a0a, 0x0a0a0a, 0x0d1f1a, 0x0d1f1a, 1);
     bg.fillRect(0, 0, w, h);
 
-    // Floating particle effects — spirit dust (20 for mobile perf)
-    for (let i = 0; i < 20; i++) {
-      const particle = this.add.graphics();
-      const size = Phaser.Math.Between(1, 3);
-      const alpha = Phaser.Math.FloatBetween(0.1, 0.4);
-      particle.fillStyle(0x2dd4a8, alpha);
-      particle.fillCircle(0, 0, size);
-      particle.setPosition(
-        Phaser.Math.Between(0, w),
-        Phaser.Math.Between(0, h)
-      );
-      particle.setData('speed', Phaser.Math.FloatBetween(0.1, 0.5));
-      particle.setData('drift', Phaser.Math.FloatBetween(-0.3, 0.3));
-      this.particles.push(particle);
-    }
+    // Subtle fog/mist layer at the bottom
+    this.fogLayer = this.add.graphics();
+    this.fogLayer.setAlpha(0.2);
+    this.createFogLayer(w, h);
+    
+    // Animate fog
+    this.tweens.add({
+      targets: this.fogLayer,
+      alpha: { from: 0.1, to: 0.3 },
+      duration: 3000,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut',
+    });
+
+    // Mute toggle button (top-left safe area)
+    this.createMuteButton(safeTop);
+
+    // Delay before showing particles (cinematic feel)
+    this.time.delayedCall(800, () => {
+      this.createParticles(w, h);
+    });
 
     // Center point for vertical layout
     const centerY = h * 0.38;
@@ -49,14 +63,34 @@ export class MenuScene extends Phaser.Scene {
       fontStyle: 'italic',
     }).setOrigin(0.5);
 
-    // SAKA title with glow — responsive font size
-    const titleFontSize = Math.max(40, Math.floor(w * 0.2));
+    // SAKA title with glow — larger with text shadow
+    const titleFontSize = Math.max(50, Math.floor(w * 0.24));
+    
+    // Text shadow
+    const titleShadow = this.add.text(w / 2 + 3, centerY + 3, 'S A K A', {
+      fontFamily: 'Georgia, serif',
+      fontSize: `${titleFontSize}px`,
+      color: '#0a1a16',
+      fontStyle: 'bold',
+    }).setOrigin(0.5).setAlpha(0.8);
+
+    // Main title with glow effect
     this.titleText = this.add.text(w / 2, centerY, 'S A K A', {
       fontFamily: 'Georgia, serif',
       fontSize: `${titleFontSize}px`,
       color: '#2dd4a8',
       fontStyle: 'bold',
     }).setOrigin(0.5);
+
+    // Glow effect
+    this.titleText.setStyle({
+      fontFamily: 'Georgia, serif',
+      fontSize: `${titleFontSize}px`,
+      color: '#2dd4a8',
+      fontStyle: 'bold',
+      stroke: '#4af7c7',
+      strokeThickness: 1,
+    });
 
     // Subtitle below title
     const sub2FontSize = Math.max(11, Math.floor(w * 0.035));
@@ -79,8 +113,8 @@ export class MenuScene extends Phaser.Scene {
       btnFontSize,
       '#6b8f82',
       () => {
-        this.cameras.main.fadeOut(1000, 0, 0, 0);
-        this.time.delayedCall(1000, () => {
+        this.cameras.main.fadeOut(800, 0, 0, 0);
+        this.time.delayedCall(800, () => {
           this.scene.start('ExploreScene');
         });
       }
@@ -109,11 +143,57 @@ export class MenuScene extends Phaser.Scene {
     this.scanlines.setAlpha(0.04);
     this.scanlines.setDepth(1000);
 
-    // Fade in
-    this.cameras.main.fadeIn(1500, 0, 0, 0);
+    // Fade in with consistent transition
+    this.cameras.main.fadeIn(800, 0, 0, 0);
 
     // Handle resize
     this.scale.on('resize', this.handleResize, this);
+  }
+
+  private createFogLayer(w: number, h: number): void {
+    const fogHeight = h * 0.3;
+    
+    // Create misty fog effect at bottom
+    this.fogLayer.fillGradientStyle(
+      0x2dd4a8, 0x2dd4a8, 0x4af7c7, 0x4af7c7, 0, 0.1, 0.05, 0
+    );
+    this.fogLayer.fillRect(0, h - fogHeight, w, fogHeight);
+    
+    // Add some wavy texture
+    for (let x = 0; x < w; x += 20) {
+      const waveY = Math.sin(x * 0.02) * 10;
+      this.fogLayer.fillCircle(x, h - fogHeight * 0.3 + waveY, 15);
+    }
+  }
+
+  private createParticles(w: number, h: number): void {
+    // Floating particle effects — spirit dust (20 for mobile perf)
+    for (let i = 0; i < 20; i++) {
+      const particle = this.add.graphics();
+      const size = Phaser.Math.Between(1, 3);
+      const alpha = Phaser.Math.FloatBetween(0.1, 0.4);
+      particle.fillStyle(0x2dd4a8, alpha);
+      particle.fillCircle(0, 0, size);
+      particle.setPosition(
+        Phaser.Math.Between(0, w),
+        Phaser.Math.Between(0, h)
+      );
+      particle.setData('speed', Phaser.Math.FloatBetween(0.1, 0.5));
+      particle.setData('drift', Phaser.Math.FloatBetween(-0.3, 0.3));
+      this.particles.push(particle);
+    }
+  }
+
+  private createMuteButton(safeTop: number): void {
+    this.muteButton = this.add.text(16, safeTop, '🔊', {
+      fontSize: '24px',
+    }).setInteractive({ useHandCursor: true });
+
+    this.muteButton.on('pointerdown', () => {
+      const isMuted = this.soundManager.toggleMute();
+      this.muteButton.setText(isMuted ? '🔇' : '🔊');
+      this.soundManager.playSFX('ui-click');
+    });
   }
 
   private createButton(
@@ -142,12 +222,36 @@ export class MenuScene extends Phaser.Scene {
       btn.setScale(1.0);
     });
     btn.on('pointerdown', () => {
-      btn.setScale(0.95);
+      // Play UI click sound
+      this.soundManager.playSFX('ui-click');
+      
+      // Button press animation - scale to 0.92 with bounce back
+      this.tweens.add({
+        targets: btn,
+        scaleX: 0.92,
+        scaleY: 0.92,
+        duration: 100,
+        yoyo: true,
+        ease: 'Power2',
+        onComplete: () => {
+          this.tweens.add({
+            targets: btn,
+            scaleX: 1.03,
+            scaleY: 1.03,
+            duration: 150,
+            yoyo: true,
+            ease: 'Back.easeOut',
+            onComplete: () => {
+              btn.setScale(1.0);
+            }
+          });
+        }
+      });
+      
       // Touch ripple effect
       this.createRipple(x, y);
     });
     btn.on('pointerup', () => {
-      btn.setScale(1.0);
       callback();
     });
 

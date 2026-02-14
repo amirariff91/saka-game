@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { SakaSystem } from '../systems/SakaSystem';
+import { SoundManager } from '../systems/SoundManager';
 
 export class ExploreScene extends Phaser.Scene {
   // Player
@@ -10,6 +11,7 @@ export class ExploreScene extends Phaser.Scene {
 
   // Systems
   private saka!: SakaSystem;
+  private soundManager!: SoundManager;
 
   // Virtual joystick
   private joystickBase!: Phaser.GameObjects.Graphics;
@@ -37,6 +39,9 @@ export class ExploreScene extends Phaser.Scene {
   private hungerLabel!: Phaser.GameObjects.Text;
   private floorText!: Phaser.GameObjects.Text;
   private pauseBtn!: Phaser.GameObjects.Text;
+  private muteButton!: Phaser.GameObjects.Text;
+  private bottleButton!: Phaser.GameObjects.Text;
+  private lightFlicker!: Phaser.GameObjects.Graphics;
 
   constructor() {
     super({ key: 'ExploreScene' });
@@ -45,11 +50,15 @@ export class ExploreScene extends Phaser.Scene {
   create(): void {
     const w = this.scale.width;
     const h = this.scale.height;
-    const safeTop = 40;
-    const safeBottom = 20;
+    const safeTop = 44;
+    const safeBottom = 24;
 
     // Initialize systems
     this.saka = new SakaSystem(this, 0.2); // Slower hunger rate in exploration
+    this.soundManager = SoundManager.getInstance();
+
+    // Start ambient BGM
+    this.soundManager.playBGM('ambient-eerie');
 
     // Set world bounds for camera
     this.cameras.main.setBounds(0, 0, this.worldWidth, this.worldHeight);
@@ -57,6 +66,9 @@ export class ExploreScene extends Phaser.Scene {
 
     // Create corridor background
     this.createCorridor();
+
+    // Add flickering light overlay
+    this.createFlickeringLight(w, h);
 
     // Create player
     this.createPlayer();
@@ -196,6 +208,9 @@ export class ExploreScene extends Phaser.Scene {
       yoyo: true,
       repeat: -1,
     });
+
+    // Add subtle particle trail from Dian (spiritual energy)
+    this.createDianParticleTrail();
   }
 
   private createInteractionPoints(): void {
@@ -211,17 +226,23 @@ export class ExploreScene extends Phaser.Scene {
       const glow = this.add.graphics();
       glow.fillStyle(0x2dd4a8, 0.6);
       glow.fillCircle(0, 0, 12);
+      
+      // Add faint glow effect
+      glow.lineStyle(2, 0x4af7c7, 0.3);
+      glow.strokeCircle(0, 0, 16);
+      
       glow.setPosition(point.x, point.y);
 
-      // Pulsing animation
+      // Enhanced pulsing animation with scale and glow
       this.tweens.add({
         targets: glow,
-        scaleX: 1.5,
-        scaleY: 1.5,
-        alpha: 0.3,
-        duration: 1500,
+        scaleX: 1.3,
+        scaleY: 1.3,
+        alpha: 0.8,
+        duration: 1200,
         yoyo: true,
         repeat: -1,
+        ease: 'Sine.easeInOut',
       });
 
       this.interactionPoints.push({
@@ -242,19 +263,21 @@ export class ExploreScene extends Phaser.Scene {
     const joystickX = margin + joystickRadius;
     const joystickY = this.scale.height - margin - joystickRadius;
 
-    // Joystick base (fixed to camera)
+    // Joystick base (semi-transparent with teal border)
     this.joystickBase = this.add.graphics();
-    this.joystickBase.fillStyle(0x000000, 0.3);
+    this.joystickBase.fillStyle(0x0a0a0a, 0.4);
     this.joystickBase.fillCircle(0, 0, joystickRadius);
-    this.joystickBase.lineStyle(2, 0x2dd4a8, 0.5);
+    this.joystickBase.lineStyle(3, 0x2dd4a8, 0.8);
     this.joystickBase.strokeCircle(0, 0, joystickRadius);
     this.joystickBase.setScrollFactor(0);
     this.joystickBase.setPosition(joystickX, joystickY);
 
-    // Joystick knob
+    // Joystick knob (solid teal)
     this.joystickKnob = this.add.graphics();
-    this.joystickKnob.fillStyle(0x2dd4a8, 0.8);
+    this.joystickKnob.fillStyle(0x2dd4a8, 1);
     this.joystickKnob.fillCircle(0, 0, knobRadius);
+    this.joystickKnob.lineStyle(1, 0x4af7c7, 0.6);
+    this.joystickKnob.strokeCircle(0, 0, knobRadius);
     this.joystickKnob.setScrollFactor(0);
     this.joystickKnob.setPosition(joystickX, joystickY);
 
@@ -321,20 +344,34 @@ export class ExploreScene extends Phaser.Scene {
   private createUI(): void {
     const w = this.scale.width;
     const h = this.scale.height;
-    const safeTop = 40;
+    const safeTop = 44;
+    const safeBottom = 24;
     const pad = 16;
 
-    // Floor text (top-left)
-    this.floorText = this.add.text(pad, safeTop + 8, 'Tingkat 9', {
+    // Mute toggle button (top-left safe area)
+    this.muteButton = this.add.text(16, safeTop, '🔊', {
+      fontSize: '24px',
+    }).setScrollFactor(0).setInteractive({ useHandCursor: true });
+
+    this.muteButton.on('pointerdown', () => {
+      const isMuted = this.soundManager.toggleMute();
+      this.muteButton.setText(isMuted ? '🔇' : '🔊');
+      this.soundManager.playSFX('ui-click');
+    });
+
+    // Floor text with glow (top-left, below mute)
+    this.floorText = this.add.text(pad, safeTop + 32, 'Tingkat 9', {
       fontFamily: 'Georgia, serif',
       fontSize: '16px',
       color: '#2dd4a8',
       fontStyle: 'bold',
+      stroke: '#4af7c7',
+      strokeThickness: 1,
     });
     this.floorText.setScrollFactor(0);
 
     // Pause button (top-left, below floor text)
-    this.pauseBtn = this.add.text(pad, safeTop + 32, '⏸ Pause', {
+    this.pauseBtn = this.add.text(pad, safeTop + 56, '⏸ Pause', {
       fontFamily: 'Georgia, serif',
       fontSize: '14px',
       color: '#6b8f82',
@@ -345,7 +382,10 @@ export class ExploreScene extends Phaser.Scene {
 
     this.pauseBtn.on('pointerover', () => this.pauseBtn.setColor('#2dd4a8'));
     this.pauseBtn.on('pointerout', () => this.pauseBtn.setColor('#6b8f82'));
-    this.pauseBtn.on('pointerdown', () => this.showPauseMenu());
+    this.pauseBtn.on('pointerdown', () => {
+      this.soundManager.playSFX('ui-click');
+      this.showPauseMenu();
+    });
 
     // Hunger bar (top-right)
     this.hungerLabel = this.add.text(w - 120 - pad, safeTop + 8, 'SAKA', {
@@ -359,13 +399,24 @@ export class ExploreScene extends Phaser.Scene {
     this.hungerBar.setScrollFactor(0);
     this.updateHungerBar();
 
-    // Bottle icon (could lead to inventory later)
-    const bottleIcon = this.add.text(w - 60, safeTop + 32, '🏺', {
-      fontSize: '20px',
+    // Bottle icon button (bottom-right)
+    this.bottleButton = this.add.text(w - 60, h - safeBottom - 60, '🏺', {
+      fontSize: '32px',
+      backgroundColor: '#0a1a16',
+      padding: { x: 12, y: 8 },
     });
-    bottleIcon.setScrollFactor(0);
-    bottleIcon.setInteractive({ useHandCursor: true });
-    bottleIcon.on('pointerdown', () => {
+    this.bottleButton.setScrollFactor(0);
+    this.bottleButton.setInteractive({ useHandCursor: true });
+    
+    this.bottleButton.on('pointerover', () => {
+      this.bottleButton.setScale(1.1);
+    });
+    this.bottleButton.on('pointerout', () => {
+      this.bottleButton.setScale(1.0);
+    });
+    this.bottleButton.on('pointerdown', () => {
+      this.soundManager.playSFX('ui-click');
+      this.soundManager.stopBGM();
       this.scene.start('InventoryScene');
     });
   }
@@ -410,6 +461,8 @@ export class ExploreScene extends Phaser.Scene {
     });
 
     menuBtn.on('pointerdown', () => {
+      this.soundManager.playSFX('ui-click');
+      this.soundManager.stopBGM();
       this.saka.stop();
       this.scene.start('MenuScene');
     });
@@ -512,6 +565,8 @@ export class ExploreScene extends Phaser.Scene {
 
     this.currentInteraction.setInteractive({ useHandCursor: true });
     this.currentInteraction.on('pointerdown', () => {
+      this.soundManager.playSFX('ui-click');
+      this.soundManager.stopBGM();
       this.saka.stop();
       this.scene.start('DialogueScene', { chapter: point.chapter });
     });
@@ -570,5 +625,57 @@ export class ExploreScene extends Phaser.Scene {
 
     // Update UI
     this.updateHungerBar();
+  }
+
+  private createFlickeringLight(w: number, h: number): void {
+    // Create flickering light overlay
+    this.lightFlicker = this.add.graphics();
+    this.lightFlicker.setDepth(100);
+    
+    // Random flicker every few seconds
+    this.time.addEvent({
+      delay: Phaser.Math.Between(3000, 6000),
+      callback: () => {
+        this.lightFlicker.clear();
+        this.lightFlicker.fillStyle(0x000000, Phaser.Math.FloatBetween(0.1, 0.3));
+        this.lightFlicker.fillRect(0, 0, this.worldWidth, this.worldHeight);
+        
+        this.tweens.add({
+          targets: this.lightFlicker,
+          alpha: 0,
+          duration: Phaser.Math.Between(100, 400),
+          onComplete: () => {
+            this.lightFlicker.clear();
+          }
+        });
+      },
+      loop: true,
+    });
+  }
+
+  private createDianParticleTrail(): void {
+    // Create subtle particle trail from Dian
+    this.time.addEvent({
+      delay: 500,
+      callback: () => {
+        const particle = this.add.graphics();
+        particle.fillStyle(0xd4a82d, 0.6);
+        particle.fillCircle(0, 0, 2);
+        particle.setPosition(
+          this.dian.x + Phaser.Math.Between(-10, 10),
+          this.dian.y + Phaser.Math.Between(-15, 5)
+        );
+
+        this.tweens.add({
+          targets: particle,
+          y: particle.y - 30,
+          alpha: 0,
+          duration: 2000,
+          ease: 'Power2',
+          onComplete: () => particle.destroy(),
+        });
+      },
+      loop: true,
+    });
   }
 }

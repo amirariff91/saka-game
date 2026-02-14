@@ -2,11 +2,15 @@ import Phaser from 'phaser';
 import { DialogueEngine, type ChapterData, type DialogueLine } from '../systems/DialogueEngine';
 import { TypewriterEffect } from '../systems/TypewriterEffect';
 import { SakaSystem } from '../systems/SakaSystem';
+import { SoundManager } from '../systems/SoundManager';
 
 export class DialogueScene extends Phaser.Scene {
   private engine!: DialogueEngine;
   private typewriter!: TypewriterEffect;
   private saka!: SakaSystem;
+  private soundManager!: SoundManager;
+  private typewriterSound?: Phaser.Sound.BaseSound;
+  private muteButton!: Phaser.GameObjects.Text;
 
   // UI elements
   private dialogueBox!: Phaser.GameObjects.Graphics;
@@ -30,12 +34,13 @@ export class DialogueScene extends Phaser.Scene {
   create(): void {
     const w = this.scale.width;
     const h = this.scale.height;
-    const safeTop = 40;
-    const safeBottom = 20;
+    const safeTop = 44;
+    const safeBottom = 24;
     const pad = 16;
 
     this.engine = new DialogueEngine();
     this.saka = new SakaSystem(this, 0.3);
+    this.soundManager = SoundManager.getInstance();
 
     // Dark atmospheric background
     const bg = this.add.graphics();
@@ -58,6 +63,16 @@ export class DialogueScene extends Phaser.Scene {
     this.dialogueBox.fillRoundedRect(boxX, boxY, boxW, boxHeight, 8);
     this.dialogueBox.lineStyle(1, 0x2dd4a8, 0.3);
     this.dialogueBox.strokeRoundedRect(boxX, boxY, boxW, boxHeight, 8);
+    
+    // Add subtle breathing effect to dialogue box border
+    this.tweens.add({
+      targets: this.dialogueBox,
+      alpha: { from: 0.8, to: 1.0 },
+      duration: 2000,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut',
+    });
 
     // Speaker name — 14px on mobile
     this.speakerText = this.add.text(boxX + 12, boxY - 20, '', {
@@ -121,6 +136,17 @@ export class DialogueScene extends Phaser.Scene {
       fontStyle: 'italic',
     }).setOrigin(0.5);
 
+    // Mute toggle button (top-left safe area) - hide during typing
+    this.muteButton = this.add.text(16, safeTop, '🔊', {
+      fontSize: '20px',
+    }).setInteractive({ useHandCursor: true });
+
+    this.muteButton.on('pointerdown', () => {
+      const isMuted = this.soundManager.toggleMute();
+      this.muteButton.setText(isMuted ? '🔇' : '🔊');
+      this.soundManager.playSFX('ui-click');
+    });
+
     // Scan-line overlay
     this.scanlines = this.add.graphics();
     this.scanlines.lineStyle(1, 0x000000, 0.15);
@@ -172,9 +198,9 @@ export class DialogueScene extends Phaser.Scene {
 
     // Effects
     if (line.effect === 'shake') {
-      this.cameras.main.shake(300, 0.005);
+      this.cameras.main.shake(600, 0.015); // Stronger shake
     } else if (line.effect === 'flash') {
-      this.cameras.main.flash(500, 255, 255, 255);
+      this.cameras.main.flash(300, 255, 255, 255); // Brief camera flash
     } else if (line.effect === 'fadeout') {
       this.cameras.main.fade(500, 0, 0, 0);
     }
@@ -183,9 +209,24 @@ export class DialogueScene extends Phaser.Scene {
     this.isTyping = true;
     this.waitingForInput = false;
     this.continueIndicator.setAlpha(0);
+    this.muteButton.setAlpha(0.3); // Hide mute button during typing
+
+    // Start typewriter sound
+    this.typewriterSound = this.sound.add('typewriter', { volume: 0.05, loop: true });
+    if (!this.soundManager.isSoundMuted()) {
+      this.typewriterSound.play();
+    }
 
     this.typewriter.start(line.text, () => {
       this.isTyping = false;
+      this.muteButton.setAlpha(1); // Show mute button again
+      
+      // Stop typewriter sound
+      if (this.typewriterSound) {
+        this.typewriterSound.stop();
+        this.typewriterSound.destroy();
+        this.typewriterSound = undefined;
+      }
 
       if (line.choices && line.choices.length > 0) {
         this.showChoices(line);
@@ -259,6 +300,7 @@ export class DialogueScene extends Phaser.Scene {
       });
       btn.on('pointerup', () => {
         btn.setScale(1.0);
+        this.soundManager.playSFX('ui-click'); // Play UI click on choice selection
         this.selectChoice(index);
       });
 
@@ -299,9 +341,11 @@ export class DialogueScene extends Phaser.Scene {
       this.continueIndicator.setAlpha(0);
 
       if (this.engine.isEnd()) {
-        // End of chapter
-        this.cameras.main.fadeOut(1500, 0, 0, 0);
-        this.time.delayedCall(1500, () => {
+        // End of chapter - play subtle whoosh
+        this.soundManager.playSFX('bayang-activate', 0.3);
+        
+        this.cameras.main.fadeOut(800, 0, 0, 0);
+        this.time.delayedCall(800, () => {
           this.saka.stop();
           // Return to ExploreScene instead of MenuScene
           this.scene.start('ExploreScene');

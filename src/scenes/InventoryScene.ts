@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { SoundManager } from '../systems/SoundManager';
 
 interface CapturedSpirit {
   id: string;
@@ -18,6 +19,8 @@ export class InventoryScene extends Phaser.Scene {
   private detailsPanel: Phaser.GameObjects.Container | null = null;
   private scrollY = 0;
   private maxScroll = 0;
+  private soundManager!: SoundManager;
+  private muteButton!: Phaser.GameObjects.Text;
 
   private readonly COLS = 3;
   private readonly SLOT_SIZE = 80;
@@ -31,8 +34,11 @@ export class InventoryScene extends Phaser.Scene {
   create(): void {
     const w = this.scale.width;
     const h = this.scale.height;
-    const safeTop = 40;
-    const safeBottom = 20;
+    const safeTop = 44;
+    const safeBottom = 24;
+
+    // Initialize sound manager
+    this.soundManager = SoundManager.getInstance();
 
     // Load spirits data
     this.spiritsData = this.cache.json.get('spirits');
@@ -61,6 +67,17 @@ export class InventoryScene extends Phaser.Scene {
       fontSize: `${subSize}px`,
       color: '#6a5a3e',
     }).setOrigin(0.5);
+
+    // Mute toggle button (top-left safe area)
+    this.muteButton = this.add.text(16, safeTop, '🔊', {
+      fontSize: '20px',
+    }).setInteractive({ useHandCursor: true });
+
+    this.muteButton.on('pointerdown', () => {
+      const isMuted = this.soundManager.toggleMute();
+      this.muteButton.setText(isMuted ? '🔇' : '🔊');
+      this.soundManager.playSFX('ui-click');
+    });
 
     // Create bottle grid
     this.createBottleGrid();
@@ -218,8 +235,21 @@ export class InventoryScene extends Phaser.Scene {
       bg.strokeRoundedRect(-this.SLOT_SIZE / 2, -this.SLOT_SIZE / 2, this.SLOT_SIZE, this.SLOT_SIZE, 8);
     });
     slot.on('pointerdown', () => {
+      this.soundManager.playSFX('ui-click'); // Play UI click on bottle tap
       this.showSpiritDetails(spirit);
     });
+
+    // Add energy bar pulsing when low
+    if (spirit.energyLevel < 20) {
+      this.tweens.add({
+        targets: energyBar,
+        alpha: { from: 0.6, to: 1.0 },
+        duration: 800,
+        yoyo: true,
+        repeat: -1,
+        ease: 'Sine.easeInOut',
+      });
+    }
   }
 
   private createEmptySlot(slot: Phaser.GameObjects.Container): void {
@@ -239,6 +269,16 @@ export class InventoryScene extends Phaser.Scene {
       color: '#3a3a3a',
     }).setOrigin(0.5);
     slot.add(empty);
+
+    // Faint shimmer animation for empty slots
+    this.tweens.add({
+      targets: [outline, empty],
+      alpha: { from: 0.3, to: 0.7 },
+      duration: 2500,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut',
+    });
   }
 
   private getBottleColor(bottleType: string): number {
@@ -269,8 +309,8 @@ export class InventoryScene extends Phaser.Scene {
     const w = this.scale.width;
     const h = this.scale.height;
 
-    // Create details panel
-    this.detailsPanel = this.add.container(w / 2, h / 2);
+    // Create details panel (start off-screen to the right)
+    this.detailsPanel = this.add.container(w + 200, h / 2);
     this.detailsPanel.setDepth(2000);
 
     // Background overlay
@@ -374,6 +414,14 @@ export class InventoryScene extends Phaser.Scene {
         this.detailsPanel = null;
       }
     });
+
+    // Slide in from right animation
+    this.tweens.add({
+      targets: this.detailsPanel,
+      x: w / 2,
+      duration: 400,
+      ease: 'Power2.easeOut',
+    });
   }
 
   private setupScrolling(): void {
@@ -432,8 +480,9 @@ export class InventoryScene extends Phaser.Scene {
     backBtn.on('pointerdown', () => backBtn.setScale(0.95));
     backBtn.on('pointerup', () => {
       backBtn.setScale(1.0);
-      this.cameras.main.fadeOut(500, 0, 0, 0);
-      this.time.delayedCall(500, () => this.scene.start('ExploreScene'));
+      this.soundManager.playSFX('ui-click');
+      this.cameras.main.fadeOut(800, 0, 0, 0);
+      this.time.delayedCall(800, () => this.scene.start('ExploreScene'));
     });
   }
 }

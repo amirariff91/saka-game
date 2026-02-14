@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { SakaSystem } from '../systems/SakaSystem';
+import { SoundManager } from '../systems/SoundManager';
 
 interface BattleUnit {
   id: string;
@@ -47,9 +48,11 @@ export class BattleScene extends Phaser.Scene {
 
   // Systems
   private saka!: SakaSystem;
+  private soundManager!: SoundManager;
   private spiritsData: any;
   private playerSpirits: CapturedSpirit[] = [];
   private playerBottles = 3; // Available bottles for capture
+  private muteButton!: Phaser.GameObjects.Text;
 
   constructor() {
     super({ key: 'BattleScene' });
@@ -58,10 +61,11 @@ export class BattleScene extends Phaser.Scene {
   create(): void {
     const w = this.scale.width;
     const h = this.scale.height;
-    const safeTop = 40;
-    const safeBottom = 20;
+    const safeTop = 44;
+    const safeBottom = 24;
 
     this.saka = new SakaSystem(this, 0.1); // Very slow hunger in battle
+    this.soundManager = SoundManager.getInstance();
     this.spiritsData = this.cache.json.get('spirits');
     
     // Load player's captured spirits (simplified - in real game would come from save data)
@@ -220,8 +224,19 @@ export class BattleScene extends Phaser.Scene {
   private createUI(): void {
     const w = this.scale.width;
     const h = this.scale.height;
-    const safeTop = 40;
-    const safeBottom = 20;
+    const safeTop = 44;
+    const safeBottom = 24;
+
+    // Mute toggle button (top-left safe area)
+    this.muteButton = this.add.text(16, safeTop, '🔊', {
+      fontSize: '20px',
+    }).setInteractive({ useHandCursor: true });
+
+    this.muteButton.on('pointerdown', () => {
+      const isMuted = this.soundManager.toggleMute();
+      this.muteButton.setText(isMuted ? '🔇' : '🔊');
+      this.soundManager.playSFX('ui-click');
+    });
 
     // Turn indicator
     this.turnIndicator = this.add.text(w / 2, safeTop + 10, 'Giliran Kau', {
@@ -397,6 +412,12 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private performAttack(attacker: BattleUnit, target: BattleUnit): void {
+    // Play hit sound
+    this.soundManager.playSFX('hit');
+    
+    // Screen shake on hit
+    this.cameras.main.shake(200, 0.008);
+
     // Calculate damage
     const baseDamage = attacker.power;
     const defense = target.defense;
@@ -405,8 +426,8 @@ export class BattleScene extends Phaser.Scene {
     // Apply damage
     target.hp = Math.max(0, target.hp - damage);
 
-    // Show damage number
-    this.showDamageNumber(target, damage, '#d42d2d');
+    // Show floating damage number
+    this.showFloatingDamage(target, damage, '#d42d2d');
 
     // Animate attack (simple flash)
     if (attacker.sprite) {
@@ -429,6 +450,12 @@ export class BattleScene extends Phaser.Scene {
   private performBayang(): void {
     if (this.playerSpirits.length === 0) return;
 
+    // Play bayang activation sound
+    this.soundManager.playSFX('bayang-activate');
+    
+    // Flash effect when Bayang activates
+    this.cameras.main.flash(200, 212, 168, 45);
+
     const spirit = this.playerSpirits[0]; // Use first available spirit
     const enhancedDamage = this.player.power * 1.5;
     const damage = Math.max(1, enhancedDamage - this.enemy.defense);
@@ -439,8 +466,8 @@ export class BattleScene extends Phaser.Scene {
     // Apply damage
     this.enemy.hp = Math.max(0, this.enemy.hp - damage);
 
-    // Show enhanced damage
-    this.showDamageNumber(this.enemy, damage, '#d4a82d');
+    // Show enhanced floating damage
+    this.showFloatingDamage(this.enemy, damage, '#d4a82d');
 
     // Special effect for Bayang
     const flash = this.add.graphics();
@@ -482,7 +509,8 @@ export class BattleScene extends Phaser.Scene {
 
     if (success) {
       // Successful capture
-      this.showDamageNumber(this.enemy, 0, '#2dd4a8', 'CAPTURED!');
+      this.soundManager.playSFX('capture');
+      this.showFloatingDamage(this.enemy, 0, '#2dd4a8', 'CAPTURED!');
       
       // Add spirit to collection
       const capturedSpirit: CapturedSpirit = {
@@ -502,7 +530,8 @@ export class BattleScene extends Phaser.Scene {
       });
     } else {
       // Failed capture
-      this.showDamageNumber(this.enemy, 0, '#6a6a6a', 'FAILED!');
+      this.soundManager.playSFX('bottle-break');
+      this.showFloatingDamage(this.enemy, 0, '#6a6a6a', 'FAILED!');
       
       this.time.delayedCall(1000, () => {
         this.endTurn();
@@ -510,23 +539,28 @@ export class BattleScene extends Phaser.Scene {
     }
   }
 
-  private showDamageNumber(target: BattleUnit, damage: number, color: string, text?: string): void {
+  private showFloatingDamage(target: BattleUnit, damage: number, color: string, text?: string): void {
     const displayText = text || damage.toString();
     const x = this.gridStartX + target.gridX * this.cellSize + this.cellSize / 2;
     const y = this.gridStartY + target.gridY * this.cellSize + this.cellSize / 2 - 20;
 
     this.damageText = this.add.text(x, y, displayText, {
       fontFamily: 'Georgia, serif',
-      fontSize: '16px',
+      fontSize: '18px',
       color: color,
       fontStyle: 'bold',
+      stroke: '#000000',
+      strokeThickness: 2,
     }).setOrigin(0.5);
 
+    // Float up and fade out with scale animation
     this.tweens.add({
       targets: this.damageText,
-      y: y - 40,
+      y: y - 60,
       alpha: 0,
-      duration: 1500,
+      scaleX: { from: 1.2, to: 0.8 },
+      scaleY: { from: 1.2, to: 0.8 },
+      duration: 1800,
       ease: 'Power2',
       onComplete: () => {
         if (this.damageText) {
@@ -536,11 +570,25 @@ export class BattleScene extends Phaser.Scene {
       },
     });
 
-    // Update HP bars
-    this.updateHpBar(this.playerHpBar, 20, this.gridStartY + this.gridRows * this.cellSize + 35, 
-                    this.player.hp, this.player.maxHp, 0x2dd4a8);
-    this.updateHpBar(this.enemyHpBar, this.scale.width - 140, this.gridStartY + this.gridRows * this.cellSize + 35, 
-                    this.enemy.hp, this.enemy.maxHp, 0xd42d2d);
+    // Smoothly animate HP bars to new values
+    this.animateHpBars();
+  }
+
+  private animateHpBars(): void {
+    // Smooth HP bar animations instead of instant updates
+    this.tweens.addCounter({
+      from: 0,
+      to: 1,
+      duration: 500,
+      ease: 'Power2',
+      onUpdate: (tween) => {
+        const progress = tween.getValue();
+        this.updateHpBar(this.playerHpBar, 20, this.gridStartY + this.gridRows * this.cellSize + 35, 
+                        this.player.hp, this.player.maxHp, 0x2dd4a8);
+        this.updateHpBar(this.enemyHpBar, this.scale.width - 140, this.gridStartY + this.gridRows * this.cellSize + 35, 
+                        this.enemy.hp, this.enemy.maxHp, 0xd42d2d);
+      }
+    });
   }
 
   private checkBattleEnd(): void {
@@ -555,21 +603,52 @@ export class BattleScene extends Phaser.Scene {
 
   private endTurn(): void {
     if (this.currentTurn === 'player') {
+      this.showTurnTransition('Giliran Musuh', '#d42d2d');
       this.currentTurn = 'enemy';
-      this.turnIndicator.setText('Giliran Musuh');
-      this.turnIndicator.setColor('#d42d2d');
       
       // Simple AI: enemy attacks
       this.time.delayedCall(1500, () => {
         this.performAttack(this.enemy, this.player);
       });
     } else {
+      this.showTurnTransition('Giliran Kau', '#2dd4a8');
       this.currentTurn = 'player';
-      this.turnIndicator.setText('Giliran Kau');
-      this.turnIndicator.setColor('#2dd4a8');
       this.battlePhase = 'action_select';
       this.updateActionButtons();
     }
+  }
+
+  private showTurnTransition(turnText: string, color: string): void {
+    const w = this.scale.width;
+    const h = this.scale.height;
+
+    // Dark overlay
+    const overlay = this.add.graphics();
+    overlay.fillStyle(0x000000, 0.8);
+    overlay.fillRect(0, 0, w, h);
+    overlay.setDepth(1500);
+
+    // Turn text
+    const text = this.add.text(w / 2, h / 2, turnText, {
+      fontFamily: 'Georgia, serif',
+      fontSize: '24px',
+      color,
+      fontStyle: 'bold',
+    }).setOrigin(0.5).setDepth(1501);
+
+    // Animate in and out
+    this.tweens.add({
+      targets: [overlay, text],
+      alpha: { from: 0, to: 1 },
+      duration: 400,
+      yoyo: true,
+      onComplete: () => {
+        this.turnIndicator.setText(turnText);
+        this.turnIndicator.setColor(color);
+        overlay.destroy();
+        text.destroy();
+      }
+    });
   }
 
   private endBattle(playerWon: boolean, captured: boolean): void {
@@ -578,9 +657,15 @@ export class BattleScene extends Phaser.Scene {
 
     let resultText = '';
     if (playerWon) {
-      resultText = captured ? 'Spirit Ditangkap!' : 'Musuh Dikalahkan!';
+      resultText = captured ? 'Spirit Ditangkap!' : 'BERJAYA!';
       this.turnIndicator.setText(resultText);
       this.turnIndicator.setColor('#2dd4a8');
+      
+      // Victory particle explosion
+      this.createVictoryParticles();
+      
+      // Victory text with glow
+      this.showVictoryText(resultText);
     } else {
       resultText = 'Kau Kalah!';
       this.turnIndicator.setText(resultText);
@@ -590,10 +675,70 @@ export class BattleScene extends Phaser.Scene {
     // Return to exploration after delay
     this.time.delayedCall(3000, () => {
       this.saka.stop();
-      this.cameras.main.fadeOut(1000, 0, 0, 0);
-      this.time.delayedCall(1000, () => {
+      this.cameras.main.fadeOut(800, 0, 0, 0);
+      this.time.delayedCall(800, () => {
         this.scene.start('ExploreScene');
       });
+    });
+  }
+
+  private createVictoryParticles(): void {
+    const centerX = this.gridStartX + this.player.gridX * this.cellSize + this.cellSize / 2;
+    const centerY = this.gridStartY + this.player.gridY * this.cellSize + this.cellSize / 2;
+
+    // Create multiple particles
+    for (let i = 0; i < 20; i++) {
+      const particle = this.add.graphics();
+      particle.fillStyle(0x2dd4a8, 0.8);
+      particle.fillCircle(0, 0, Phaser.Math.Between(3, 8));
+      particle.setPosition(centerX, centerY);
+
+      const angle = (i / 20) * Math.PI * 2;
+      const speed = Phaser.Math.Between(50, 150);
+
+      this.tweens.add({
+        targets: particle,
+        x: centerX + Math.cos(angle) * speed,
+        y: centerY + Math.sin(angle) * speed,
+        alpha: 0,
+        scaleX: 0.1,
+        scaleY: 0.1,
+        duration: 1500,
+        ease: 'Power2',
+        onComplete: () => particle.destroy(),
+      });
+    }
+  }
+
+  private showVictoryText(text: string): void {
+    const w = this.scale.width;
+    const h = this.scale.height;
+
+    const victoryText = this.add.text(w / 2, h / 2, text, {
+      fontFamily: 'Georgia, serif',
+      fontSize: '28px',
+      color: '#2dd4a8',
+      fontStyle: 'bold',
+      stroke: '#4af7c7',
+      strokeThickness: 2,
+    }).setOrigin(0.5).setAlpha(0).setDepth(1600);
+
+    this.tweens.add({
+      targets: victoryText,
+      alpha: 1,
+      scaleX: { from: 0.5, to: 1.2 },
+      scaleY: { from: 0.5, to: 1.2 },
+      duration: 800,
+      ease: 'Back.easeOut',
+      onComplete: () => {
+        this.tweens.add({
+          targets: victoryText,
+          alpha: 0,
+          duration: 1500,
+          delay: 500,
+          onComplete: () => victoryText.destroy(),
+        });
+      }
     });
   }
 
