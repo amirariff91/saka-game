@@ -1,0 +1,440 @@
+{
+  "id": "chapter3",
+  "title": "Inheritance",
+  "titleMalay": "Warisan",
+  "startNode": "start_01",
+  "lines": {
+    "start_01": {
+      "id": "start_01",
+      "text": "Esok pagi. Syafiq jumpa Dian kat tangga lagi. Dia dah tunggu, dengan notebook tebal dalam tangan.",
+      "next": "start_02"
+    },
+    "start_02": {
+      "id": "start_02",
+      "speaker": "Dian",
+      "text": "Aku tak tidur semalam. Compile everything aku tau pasal PPR ni.",
+      "next": "start_03"
+    },
+    "start_03": {
+      "id": "start_03",
+      "text": "Dia buka notebook. Page penuh dengan tulisan rapi, sketches, maps of the building.",
+      "next": "notebook_01"
+    },
+    "notebook_01": {
+      "id": "notebook_01",
+      "speaker": "Syafiq",
+      "text": "Kau buat semua ni?",
+      "next": "notebook_02"
+    },
+    "notebook_02": {
+      "id": "notebook_02",
+      "speaker": "Dian",
+      "text": "3 tahun. Sejak aku start sedar pattern. Tengok ni — tingkat 3, suara kanak-kanak nangis setiap Rabu. Tingkat 7, bisikan dalam dialek Hokkien.",
+      "next": "notebook_03"
+    },
+    "notebook_03": {
+      "id": "notebook_03",
+      "text": "Dia flip page. More notes, more details. This is years of work.",
+      "next": "notebook_04"
+    },
+    "notebook_04": {
+      "id": "notebook_04",
+      "speaker": "Dian",
+      "text": "Tingkat 9 — yang paling active. Dan semua suara tu, mereka sebut nama sama: 'Tok Pawang Ismail'.",
+      "next": "notebook_05"
+    },
+    "notebook_05": {
+      "id": "notebook_05",
+      "speaker": "Syafiq",
+      "text": "Tok Pawang Ismail... who's that?",
+      "next": "notebook_06"
+    },
+    "notebook_06": {
+      "id": "notebook_06",
+      "speaker": "Dian",
+      "text": "Bomoh yang duduk Unit 9-4 dulu. Mati 5 tahun lepas. Dan cucu dia... Zafri... dia duduk blok sebelah.",
+      "next": "zafri_intro_01"
+    },
+    "zafri_intro_01": {
+      "id": "zafri_intro_01",
+      "text": "Setengah jam kemudian. Syafiq dan Dian tunggu depan flat Zafri. Bunyi TV dari dalam, someone tengok berita.",
+      "next": "zafri_intro_02"
+    },
+    "zafri_intro_02": {
+      "id": "zafri_intro_02",
+      "text": "Pintu terbuka. Budak umur sama dengan mereka — mata tajam, rambut kurung rapi, pakai baju kemeja walaupun pagi Sabtu.",
+      "next": "zafri_intro_03"
+    },
+    "zafri_intro_03": {
+      "id": "zafri_intro_03",
+      "speaker": "Zafri",
+      "text": "Dian? Apa hal pagi-pagi ni... oh. Kau Syafiq kan? Yang duduk tingkat 11.",
+      "next": "zafri_intro_04"
+    },
+    "zafri_intro_04": {
+      "id": "zafri_intro_04",
+      "speaker": "Dian",
+      "text": "Zafri, kitorang kena your help. Pasal datuk kau.",
+      "next": "zafri_intro_05"
+    },
+    "zafri_intro_05": {
+      "id": "zafri_intro_05",
+      "text": "Zafri's expression berubah. Serious, cautious.",
+      "next": "zafri_intro_06"
+    },
+    "zafri_intro_06": {
+      "id": "zafri_intro_06",
+      "speaker": "Zafri",
+      "text": "Masuk dulu. Dan Syafiq... kau ada benda dalam kau. Aku boleh rasa dari sini.",
+      "effect": "shake",
+      "next": "inside_01"
+    },
+    "inside_01": {
+      "id": "inside_01",
+      "text": "Dalam rumah Zafri. Living room biasa, tapi ada bookshelf besar penuh dengan buku-buku lama, manuscripts, bottled items on display.",
+      "next": "inside_02"
+    },
+    "inside_02": {
+      "id": "inside_02",
+      "speaker": "Zafri",
+      "text": "Datuk aku tinggalkan semua ni. 30 tahun dia collect, study, document. Aku spend 3 tahun lepas try faham everything.",
+      "next": "inside_03"
+    },
+    "inside_03": {
+      "id": "inside_03",
+      "speaker": "Syafiq",
+      "text": "Why you tak just... jadi bomoh macam dia?",
+      "next": "inside_04"
+    },
+    "inside_04": {
+      "id": "inside_04",
+      "speaker": "Zafri",
+      "text": "Because aku buta and pekak, spiritually. Tak boleh nampak, tak boleh dengar. Zero gift. Tapi aku ada knowledge.",
+      "next": "inside_05"
+    },
+    "inside_05": {
+      "id": "inside_05",
+      "speaker": "Dian",
+      "text": "Syafiq went into Unit 9-4. Sentuh botol yang retak.",
+      "next": "inside_06"
+    },
+    "inside_06": {
+      "id": "inside_06",
+      "text": "Zafri freeze. Pandang Syafiq dengan mata wide.",
+      "effect": "shake",
+      "next": "inside_07"
+    },
+    "inside_07": {
+      "id": "inside_07",
+      "speaker": "Zafri",
+      "text": "Fuck me. Kau bonded dengan saka. Datuk aku paling takut benda ni.",
+      "next": "saka_explanation_01"
+    },
+    "saka_explanation_01": {
+      "id": "saka_explanation_01",
+      "speaker": "Syafiq",
+      "text": "Saka? What's that?",
+      "next": "saka_explanation_02"
+    },
+    "saka_explanation_02": {
+      "id": "saka_explanation_02",
+      "speaker": "Zafri",
+      "text": "Ancient spirit. Pre-Islamic. Datuk cakap they're like... spiritual parasites. Feed on host's life force. Slowly.",
+      "next": "saka_explanation_03"
+    },
+    "saka_explanation_03": {
+      "id": "saka_explanation_03",
+      "text": "Zafri pergi ke bookshelf, keluarkan journal tebal. Buka ke page yang dah marked dengan ribbon.",
+      "next": "saka_explanation_04"
+    },
+    "saka_explanation_04": {
+      "id": "saka_explanation_04",
+      "speaker": "Zafri",
+      "text": "Tengok ni. 'Saka bond cannot be broken easily. Host will experience increasing hunger from entity. Must feed or face consequences.'",
+      "next": "saka_explanation_05"
+    },
+    "saka_explanation_05": {
+      "id": "saka_explanation_05",
+      "speaker": "Dian",
+      "text": "Feed it apa?",
+      "next": "saka_explanation_06"
+    },
+    "saka_explanation_06": {
+      "id": "saka_explanation_06",
+      "speaker": "Zafri",
+      "text": "Other spirits. Capture them, extract their energy, feed to the saka. Datuk aku describe it as... spiritual farming.",
+      "next": "choice_01"
+    },
+    "choice_01": {
+      "id": "choice_01",
+      "speaker": "Syafiq",
+      "text": "...",
+      "choices": [
+        {
+          "text": "\"So I kena jadi... spirit hunter? Forever?\"",
+          "next": "hunter_path_01",
+          "flag": "accept_fate"
+        },
+        {
+          "text": "\"There must be a way to remove this thing.\"",
+          "next": "removal_path_01"
+        }
+      ]
+    },
+    "hunter_path_01": {
+      "id": "hunter_path_01",
+      "speaker": "Zafri",
+      "text": "Not forever. Maybe. Datuk ada tulis ada ways to... manage the relationship. But yeah, basically kau jadi collector sekarang.",
+      "next": "practical_01"
+    },
+    "removal_path_01": {
+      "id": "removal_path_01",
+      "speaker": "Zafri",
+      "text": "Maybe. Datuk ada note pasal 'severance rituals'. But they're dangerous. High chance of killing the host too.",
+      "next": "removal_02"
+    },
+    "removal_02": {
+      "id": "removal_02",
+      "speaker": "Dian",
+      "text": "Let's focus on keeping Syafiq alive first. Research removal later.",
+      "next": "practical_01"
+    },
+    "practical_01": {
+      "id": "practical_01",
+      "speaker": "Zafri",
+      "text": "Ok practical stuff. Kau need bottles, inscriptions, and capture techniques. Lucky for you, datuk left everything in Unit 9-4.",
+      "next": "practical_02"
+    },
+    "practical_02": {
+      "id": "practical_02",
+      "speaker": "Syafiq",
+      "text": "So I have to go back there.",
+      "next": "practical_03"
+    },
+    "practical_03": {
+      "id": "practical_03",
+      "speaker": "Zafri",
+      "text": "We. Aku ada knowledge, Dian ada hearing, kau ada power. Team effort.",
+      "next": "practical_04"
+    },
+    "practical_04": {
+      "id": "practical_04",
+      "speaker": "Dian",
+      "text": "Tunggu. Zafri, your datuk... how did he die?",
+      "next": "death_story_01"
+    },
+    "death_story_01": {
+      "id": "death_story_01",
+      "text": "Zafri diam sekejap. Muka dia berubah.",
+      "next": "death_story_02"
+    },
+    "death_story_02": {
+      "id": "death_story_02",
+      "speaker": "Zafri",
+      "text": "Heart attack. But... yang pelik, semua bottled spirits dalam collection dia hilang pada hari yang sama.",
+      "next": "death_story_03"
+    },
+    "death_story_03": {
+      "id": "death_story_03",
+      "speaker": "Syafiq",
+      "text": "Hilang macam mana?",
+      "next": "death_story_04"
+    },
+    "death_story_04": {
+      "id": "death_story_04",
+      "speaker": "Zafri",
+      "text": "Bottles kosong. Semua spirits escaped. Aku ingat maybe ada orang pecahkan, tapi tak ada sign of break-in.",
+      "next": "death_story_05"
+    },
+    "death_story_05": {
+      "id": "death_story_05",
+      "speaker": "Dian",
+      "text": "Or maybe someone freed them. Someone who knew exactly which bottles to target.",
+      "next": "journal_discovery_01"
+    },
+    "journal_discovery_01": {
+      "id": "journal_discovery_01",
+      "text": "Zafri buka journal to different page. Tunjuk entry dated a few months before his grandfather's death.",
+      "next": "journal_discovery_02"
+    },
+    "journal_discovery_02": {
+      "id": "journal_discovery_02",
+      "speaker": "Zafri",
+      "text": "Last few entries... datuk ada tulis dia worried pasal something. Someone. 'Halim sudah berubah. Dia tak faham consequences.'",
+      "next": "journal_discovery_03"
+    },
+    "journal_discovery_03": {
+      "id": "journal_discovery_03",
+      "speaker": "Syafiq",
+      "text": "Who's Halim?",
+      "next": "journal_discovery_04"
+    },
+    "journal_discovery_04": {
+      "id": "journal_discovery_04",
+      "speaker": "Zafri",
+      "text": "Used to be datuk's partner. Fellow bomoh. But they had... philosophical differences about spirit management.",
+      "next": "journal_discovery_05"
+    },
+    "journal_discovery_05": {
+      "id": "journal_discovery_05",
+      "text": "Zafri flip ke back of the journal. Ada family tree — names connected dengan lines, notes beside each.",
+      "next": "family_tree_01"
+    },
+    "family_tree_01": {
+      "id": "family_tree_01",
+      "speaker": "Zafri",
+      "text": "Ni network of bomoh families. Datuk maintain contacts dengan mereka. Sharing knowledge, coordinating seal maintenance...",
+      "next": "family_tree_02"
+    },
+    "family_tree_02": {
+      "id": "family_tree_02",
+      "text": "Syafiq scan the names. Most dia tak kenal. But one name... familiar.",
+      "next": "family_tree_03"
+    },
+    "family_tree_03": {
+      "id": "family_tree_03",
+      "speaker": "Syafiq",
+      "text": "Wait. That name... 'Ahmad bin Rashid'. That's... that's my father's name.",
+      "effect": "flash",
+      "next": "revelation_01"
+    },
+    "revelation_01": {
+      "id": "revelation_01",
+      "text": "Silence. Dian dan Zafri pandang Syafiq, then at the journal.",
+      "next": "revelation_02"
+    },
+    "revelation_02": {
+      "id": "revelation_02",
+      "speaker": "Zafri",
+      "text": "Fuck. Your father was in the network. Circle next to his name... dengan note: 'JANGAN LEPASKAN.'",
+      "next": "revelation_03"
+    },
+    "revelation_03": {
+      "id": "revelation_03",
+      "speaker": "Dian",
+      "text": "Don't release what?",
+      "next": "revelation_04"
+    },
+    "revelation_04": {
+      "id": "revelation_04",
+      "speaker": "Zafri",
+      "text": "The saka. Your father was bonded to the same saka. Datuk aku helped him contain it. But something happened...",
+      "next": "revelation_05"
+    },
+    "revelation_05": {
+      "id": "revelation_05",
+      "text": "Zafri flip pages frantically, looking for more info.",
+      "next": "revelation_06"
+    },
+    "revelation_06": {
+      "id": "revelation_06",
+      "speaker": "Zafri",
+      "text": "Here. 'Ahmad disappeared during Cheras incident. Saka contained in emergency bottle. High priority: keep sealed.'",
+      "next": "revelation_07"
+    },
+    "revelation_07": {
+      "id": "revelation_07",
+      "speaker": "Syafiq",
+      "text": "My father didn't leave us. Something happened to him. And now the saka is in me.",
+      "next": "choice_02"
+    },
+    "choice_02": {
+      "id": "choice_02",
+      "speaker": "Syafiq",
+      "text": "...",
+      "choices": [
+        {
+          "text": "\"I need to find out what happened in Cheras. What happened to my father.\"",
+          "next": "investigation_path_01",
+          "flag": "seek_truth"
+        },
+        {
+          "text": "\"First priority is learning to control this thing. Father's mystery can wait.\"",
+          "next": "practical_path_01"
+        }
+      ]
+    },
+    "investigation_path_01": {
+      "id": "investigation_path_01",
+      "speaker": "Dian",
+      "text": "Syafiq, I understand. Tapi kalau kau tak learn to manage the saka first, you might not survive long enough to find answers.",
+      "next": "investigation_02"
+    },
+    "investigation_02": {
+      "id": "investigation_02",
+      "speaker": "Zafri",
+      "text": "She's right. And besides, learning to use the saka properly might be the key to finding your father. If he's still alive.",
+      "next": "practical_path_01"
+    },
+    "practical_path_01": {
+      "id": "practical_path_01",
+      "speaker": "Zafri",
+      "text": "Ok, plan: we go to Unit 9-4, get the bottles and tools. I'll teach you basic containment theory. First target... something small.",
+      "next": "practical_path_02"
+    },
+    "practical_path_02": {
+      "id": "practical_path_02",
+      "speaker": "Dian",
+      "text": "I know exactly the target. Tingkat 12 ada hantu raya. Been causing poltergeist activity for weeks. Residents complaining.",
+      "next": "practical_path_03"
+    },
+    "practical_path_03": {
+      "id": "practical_path_03",
+      "speaker": "Syafiq",
+      "text": "Hantu raya... how dangerous?",
+      "next": "practical_path_04"
+    },
+    "practical_path_04": {
+      "id": "practical_path_04",
+      "speaker": "Zafri",
+      "text": "Low-tier. Angry ghost, basic telekinetic abilities. Perfect for beginners. If you can't handle hantu raya, you definitely can't handle jembalang or djinn.",
+      "next": "team_formation_01"
+    },
+    "team_formation_01": {
+      "id": "team_formation_01",
+      "speaker": "Dian",
+      "text": "So we're really doing this. Syafiq the spirit-touched, me the listener, Zafri the researcher. Weird team.",
+      "next": "team_formation_02"
+    },
+    "team_formation_02": {
+      "id": "team_formation_02",
+      "speaker": "Zafri",
+      "text": "Datuk aku always said bomoh work better in groups. Different skills complement each other.",
+      "next": "team_formation_03"
+    },
+    "team_formation_03": {
+      "id": "team_formation_03",
+      "speaker": "Syafiq",
+      "text": "What if I hurt you guys? What if I lose control?",
+      "next": "team_formation_04"
+    },
+    "team_formation_04": {
+      "id": "team_formation_04",
+      "speaker": "Dian",
+      "text": "Then we'll figure it out. Kau tak perlu go through this alone. None of us do.",
+      "next": "resolution_01"
+    },
+    "resolution_01": {
+      "id": "resolution_01",
+      "text": "The three of them sit dalam Zafri's living room, surrounded by generations of spiritual knowledge, bonded by necessity dan unexpected trust.",
+      "next": "resolution_02"
+    },
+    "resolution_02": {
+      "id": "resolution_02",
+      "text": "Outside, the PPR continues its daily rhythm — unaware that three teenagers just decided to become Malaysia's newest spiritual containment team.",
+      "next": "resolution_03"
+    },
+    "resolution_03": {
+      "id": "resolution_03",
+      "text": "Dalam Syafiq, the saka stirs. It senses purpose. Plans. And most importantly... prey.",
+      "effect": "shake",
+      "next": "end_01"
+    },
+    "end_01": {
+      "id": "end_01",
+      "speaker": "Saka",
+      "text": "Akhirnya. Kita mula berburu.",
+      "effect": "fadeout"
+    }
+  }
+}

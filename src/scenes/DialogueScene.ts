@@ -303,7 +303,8 @@ export class DialogueScene extends Phaser.Scene {
         this.cameras.main.fadeOut(1500, 0, 0, 0);
         this.time.delayedCall(1500, () => {
           this.saka.stop();
-          this.scene.start('MenuScene');
+          // Return to ExploreScene instead of MenuScene
+          this.scene.start('ExploreScene');
         });
         return;
       }

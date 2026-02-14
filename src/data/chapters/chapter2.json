@@ -1,0 +1,442 @@
+{
+  "id": "chapter2",
+  "title": "See",
+  "titleMalay": "Nampak",
+  "startNode": "start_01",
+  "lines": {
+    "start_01": {
+      "id": "start_01",
+      "text": "Pagi lepas insiden Unit 9-4. Syafiq bangun dengan rasa berat di belakang tengkuk. Macam ada orang berdiri belakang dia.",
+      "next": "start_02"
+    },
+    "start_02": {
+      "id": "start_02",
+      "text": "Sarapan pagi. Mak goreng telur mata, kakak baca nota SPM. Kerusi ayah kosong seperti biasa.",
+      "next": "start_03"
+    },
+    "start_03": {
+      "id": "start_03",
+      "text": "Syafiq duduk, angkat garpu. Mata dia pandang sisi — ada bayangan kecil atas meja. Bergerak-gerak.",
+      "next": "start_04"
+    },
+    "start_04": {
+      "id": "start_04",
+      "text": "Pandang betul-betul — tiada apa-apa.",
+      "next": "toyol_01"
+    },
+    "toyol_01": {
+      "id": "toyol_01",
+      "speaker": "Syafiq",
+      "text": "Mak... ada tak... benda pelik dalam rumah ni?",
+      "next": "toyol_02"
+    },
+    "toyol_02": {
+      "id": "toyol_02",
+      "speaker": "Mak",
+      "text": "Pelik macam mana? Kalau pasal lipas tu, ada ubat dalam dapur.",
+      "next": "toyol_03"
+    },
+    "toyol_03": {
+      "id": "toyol_03",
+      "text": "Syafiq pandang lagi. Kali ni nampak jelas — budak kecil, hijau pucat, duduk atas kabinet dapur. Mukanya macam kanak-kanak tapi mata... tua.",
+      "effect": "flash",
+      "next": "toyol_04"
+    },
+    "toyol_04": {
+      "id": "toyol_04",
+      "text": "Budak tu tengok Syafiq. Senyum. Lambai tangan.",
+      "next": "toyol_05"
+    },
+    "toyol_05": {
+      "id": "toyol_05",
+      "speaker": "Syafiq",
+      "text": "WOAH!",
+      "next": "toyol_06"
+    },
+    "toyol_06": {
+      "id": "toyol_06",
+      "speaker": "Kakak",
+      "text": "Kenapa pulak? Nampak hantu ke?",
+      "next": "toyol_07"
+    },
+    "toyol_07": {
+      "id": "toyol_07",
+      "text": "Kakak gelak. Mak pandang Syafiq dengan muka concern.",
+      "next": "choice_01"
+    },
+    "choice_01": {
+      "id": "choice_01",
+      "speaker": "Syafiq",
+      "text": "...",
+      "choices": [
+        {
+          "text": "Gelak jugak. \"Haha, tersentak je. Terkejut dengan lipas.\"",
+          "next": "hide_01",
+          "flag": "hide_power"
+        },
+        {
+          "text": "Pandang kabinet lagi. \"Tadi... ada benda...\"",
+          "next": "reveal_01"
+        }
+      ]
+    },
+    "hide_01": {
+      "id": "hide_01",
+      "text": "Syafiq buat-buat gelak. Mak nampak lega. Kakak sambung makan. Tapi budak hijau tu masih atas kabinet, main sendiri.",
+      "next": "hide_02"
+    },
+    "hide_02": {
+      "id": "hide_02",
+      "text": "Sepanjang sarapan, Syafiq try jangan pandang ke arah sana. Susah.",
+      "next": "outside_01"
+    },
+    "reveal_01": {
+      "id": "reveal_01",
+      "speaker": "Mak",
+      "text": "Benda apa?",
+      "next": "reveal_02"
+    },
+    "reveal_02": {
+      "id": "reveal_02",
+      "speaker": "Syafiq",
+      "text": "Macam... budak kecil. Atas kabinet.",
+      "next": "reveal_03"
+    },
+    "reveal_03": {
+      "id": "reveal_03",
+      "text": "Mak and kakak pandang kabinet. Kosong.",
+      "next": "reveal_04"
+    },
+    "reveal_04": {
+      "id": "reveal_04",
+      "speaker": "Kakak",
+      "text": "Abang, kau ok ke? Stress sangat ke kerja mamak tu?",
+      "next": "reveal_05"
+    },
+    "reveal_05": {
+      "id": "reveal_05",
+      "speaker": "Mak",
+      "text": "Kau macam ayah kau dulu.",
+      "next": "reveal_06"
+    },
+    "reveal_06": {
+      "id": "reveal_06",
+      "text": "Mak cakap slow, careful. Macam takut something. Syafiq freeze.",
+      "effect": "shake",
+      "next": "reveal_07"
+    },
+    "reveal_07": {
+      "id": "reveal_07",
+      "speaker": "Syafiq",
+      "text": "Macam mana ayah dulu? Apa yang ayah nampak?",
+      "next": "reveal_08"
+    },
+    "reveal_08": {
+      "id": "reveal_08",
+      "speaker": "Mak",
+      "text": "Ayah kau... dia selalu cakap nampak benda yang orang lain tak nampak. Lepas tu dia...",
+      "next": "reveal_09"
+    },
+    "reveal_09": {
+      "id": "reveal_09",
+      "speaker": "Mak",
+      "text": "...hilang.",
+      "next": "outside_01"
+    },
+    "outside_01": {
+      "id": "outside_01",
+      "text": "Keluar rumah untuk pergi kelas. Koridor PPR pagi — makcik-makcik sidai baju, pakcik baca paper.",
+      "next": "outside_02"
+    },
+    "outside_02": {
+      "id": "outside_02",
+      "text": "Normal. Everyday. Tapi Syafiq nampak lagi — bayangan-bayangan kecil lari-lari kat tepi wall. Macam anak kucing, tapi bukan kucing.",
+      "next": "outside_03"
+    },
+    "outside_03": {
+      "id": "outside_03",
+      "text": "Dekat lif (masih rosak), ada makcik tunggu dengan beg plastik berat. Dia pandang Syafiq pelik.",
+      "next": "makcik_01"
+    },
+    "makcik_01": {
+      "id": "makcik_01",
+      "speaker": "Makcik",
+      "text": "Eh, budak ni... kau nampak 'dia' tak?",
+      "next": "makcik_02"
+    },
+    "makcik_02": {
+      "id": "makcik_02",
+      "speaker": "Syafiq",
+      "text": "Nampak apa, makcik?",
+      "next": "makcik_03"
+    },
+    "makcik_03": {
+      "id": "makcik_03",
+      "speaker": "Makcik",
+      "text": "Toyol aku. Dia duduk bawah tangga tu. Biasanya budak-budak tak nampak, tapi kau... mata kau lain sikit.",
+      "next": "makcik_04"
+    },
+    "makcik_04": {
+      "id": "makcik_04",
+      "text": "Syafiq tengok bawah tangga. Ada budak kecil hijau — sama macam yang dalam dapur tadi — main dengan batu-batu kecil.",
+      "next": "makcik_05"
+    },
+    "makcik_05": {
+      "id": "makcik_05",
+      "speaker": "Makcik",
+      "text": "Arwah suami aku buat perjanjian dulu. Toyol tu tolong jaga rumah, aku kasi makan. Win-win la.",
+      "next": "makcik_06"
+    },
+    "makcik_06": {
+      "id": "makcik_06",
+      "speaker": "Syafiq",
+      "text": "Bahaya tak, makcik?",
+      "next": "makcik_07"
+    },
+    "makcik_07": {
+      "id": "makcik_07",
+      "speaker": "Makcik",
+      "text": "Kalau kau tak kacau dia, dia tak kacau kau. Tapi kau... kau ada benda lain dalam kau. Aku boleh rasa.",
+      "next": "makcik_08"
+    },
+    "makcik_08": {
+      "id": "makcik_08",
+      "text": "Makcik pandang Syafiq dengan mata tajam, macam scan something.",
+      "effect": "shake",
+      "next": "makcik_09"
+    },
+    "makcik_09": {
+      "id": "makcik_09",
+      "speaker": "Makcik",
+      "text": "Berhati-hati, anak. Yang dalam kau tu... lapar.",
+      "next": "cats_01"
+    },
+    "cats_01": {
+      "id": "cats_01",
+      "text": "Turun tangga menuju ground floor. Dekat parking, ada 5-6 ekor kucing kampung sedang makan sisa dari tong sampah.",
+      "next": "cats_02"
+    },
+    "cats_02": {
+      "id": "cats_02",
+      "text": "Syafiq jalan dekat. Kucing pertama angkat kepala, tengok dia. Mata dia besar. Takut.",
+      "next": "cats_03"
+    },
+    "cats_03": {
+      "id": "cats_03",
+      "text": "Kucing kedua. Ketiga. Keempat. Satu persatu, semua kucing tengok Syafiq dengan mata yang sama — takut, confused.",
+      "next": "cats_04"
+    },
+    "cats_04": {
+      "id": "cats_04",
+      "text": "Lepas tu, semua lari. Serentak. Macam ada fire atau something.",
+      "effect": "shake",
+      "next": "cats_05"
+    },
+    "cats_05": {
+      "id": "cats_05",
+      "speaker": "Syafiq",
+      "text": "What the hell...",
+      "next": "school_01"
+    },
+    "school_01": {
+      "id": "school_01",
+      "text": "Di kelas. Cikgu explain math, Syafiq try focus. Tapi mata dia wandering — tengok corners of the room, tengok ceiling.",
+      "next": "school_02"
+    },
+    "school_02": {
+      "id": "school_02",
+      "text": "Ada something. Atas kipas siling. Bergoyang-goyang. Macam... kain? Tapi bukan kain.",
+      "next": "school_03"
+    },
+    "school_03": {
+      "id": "school_03",
+      "speaker": "Kawan",
+      "text": "Eh Syafiq, kau tengok apa atas tu?",
+      "next": "school_04"
+    },
+    "school_04": {
+      "id": "school_04",
+      "speaker": "Syafiq",
+      "text": "Kau tak nampak apa-apa ke?",
+      "next": "school_05"
+    },
+    "school_05": {
+      "id": "school_05",
+      "speaker": "Kawan",
+      "text": "Kipas je. Kau ok ke bro? Muka kau pucat.",
+      "next": "stairwell_01"
+    },
+    "stairwell_01": {
+      "id": "stairwell_01",
+      "text": "Balik PPR petang. Dalam tangga, ada perempuan muda duduk kat step, pakai headphones. Nama dia Dian — duduk tingkat 11.",
+      "next": "stairwell_02"
+    },
+    "stairwell_02": {
+      "id": "stairwell_02",
+      "text": "Syafiq kenal dia by sight je. Selalu nampak dia pakai headphones, tapi tak pernah borak.",
+      "next": "stairwell_03"
+    },
+    "stairwell_03": {
+      "id": "stairwell_03",
+      "text": "Syafiq nak walk past, tapi Dian angkat kepala. Pandang dia straight.",
+      "next": "dian_01"
+    },
+    "dian_01": {
+      "id": "dian_01",
+      "speaker": "Dian",
+      "text": "Kau dengar dia tak?",
+      "next": "dian_02"
+    },
+    "dian_02": {
+      "id": "dian_02",
+      "speaker": "Syafiq",
+      "text": "Dengar apa?",
+      "next": "dian_03"
+    },
+    "dian_03": {
+      "id": "dian_03",
+      "speaker": "Dian",
+      "text": "Yang ikut kau tu. Dia bisik-bisik. Cakap... 'lapar'.",
+      "next": "dian_04"
+    },
+    "dian_04": {
+      "id": "dian_04",
+      "text": "Syafiq rasa darah dia freeze. First time ada orang lain acknowledge yang dia rasa.",
+      "effect": "shake",
+      "next": "dian_05"
+    },
+    "dian_05": {
+      "id": "dian_05",
+      "speaker": "Syafiq",
+      "text": "Kau... boleh dengar?",
+      "next": "dian_06"
+    },
+    "dian_06": {
+      "id": "dian_06",
+      "speaker": "Dian",
+      "text": "Sejak kecik. Mula-mula family ingat aku gila. Lepas tu mereka just... ignore. Pakai headphones supaya orang ingat aku dengar musik.",
+      "next": "dian_07"
+    },
+    "dian_07": {
+      "id": "dian_07",
+      "speaker": "Dian",
+      "text": "Tapi sebenarnya, aku try mute out suara-suara lain. Yang bukan manusia punya suara.",
+      "next": "dian_08"
+    },
+    "dian_08": {
+      "id": "dian_08",
+      "speaker": "Syafiq",
+      "text": "Berapa lama kau boleh dengar benda ni?",
+      "next": "dian_09"
+    },
+    "dian_09": {
+      "id": "dian_09",
+      "speaker": "Dian",
+      "text": "15 tahun. Kau? Baru start ke?",
+      "next": "choice_02"
+    },
+    "choice_02": {
+      "id": "choice_02",
+      "speaker": "Syafiq",
+      "text": "...",
+      "choices": [
+        {
+          "text": "\"Semalam. Ada incident kat Unit 9-4.\"",
+          "next": "tell_truth_01",
+          "flag": "trust_dian"
+        },
+        {
+          "text": "\"Aku... aku tak sure apa yang berlaku.\"",
+          "next": "uncertain_01"
+        }
+      ]
+    },
+    "tell_truth_01": {
+      "id": "tell_truth_01",
+      "speaker": "Dian",
+      "text": "Unit 9-4? Fuck. Kau masuk dalam?",
+      "next": "tell_truth_02"
+    },
+    "tell_truth_02": {
+      "id": "tell_truth_02",
+      "speaker": "Syafiq",
+      "text": "Ada bau kemboja. Botol-botol dalam bilik belakang. Satu retak...",
+      "next": "tell_truth_03"
+    },
+    "tell_truth_03": {
+      "id": "tell_truth_03",
+      "speaker": "Dian",
+      "text": "Oh no. Oh fuck no. Kau sentuh botol tu?",
+      "next": "tell_truth_04"
+    },
+    "tell_truth_04": {
+      "id": "tell_truth_04",
+      "speaker": "Syafiq",
+      "text": "Yeah... lepas tu everything jadi hitam.",
+      "next": "tell_truth_05"
+    },
+    "tell_truth_05": {
+      "id": "tell_truth_05",
+      "speaker": "Dian",
+      "text": "Syafiq... apa yang kau buat tu... that's not just seeing spirits. That's bonding with one.",
+      "next": "reveal_danger_01"
+    },
+    "uncertain_01": {
+      "id": "uncertain_01",
+      "speaker": "Dian",
+      "text": "It's ok. First time scary. Aku faham. Tapi kau kena careful sekarang.",
+      "next": "uncertain_02"
+    },
+    "uncertain_02": {
+      "id": "uncertain_02",
+      "speaker": "Syafiq",
+      "text": "Careful macam mana?",
+      "next": "uncertain_03"
+    },
+    "uncertain_03": {
+      "id": "uncertain_03",
+      "speaker": "Dian",
+      "text": "Yang dalam kau tu bukan just ability to see. It's something else. Something hungry.",
+      "next": "reveal_danger_01"
+    },
+    "reveal_danger_01": {
+      "id": "reveal_danger_01",
+      "speaker": "Dian",
+      "text": "Aku dengar dia bisik since semalam. Getting stronger. If you don't feed it...",
+      "next": "reveal_danger_02"
+    },
+    "reveal_danger_02": {
+      "id": "reveal_danger_02",
+      "speaker": "Syafiq",
+      "text": "Feed it apa?",
+      "next": "reveal_danger_03"
+    },
+    "reveal_danger_03": {
+      "id": "reveal_danger_03",
+      "speaker": "Dian",
+      "text": "Aku tak sure. Tapi aku tau orang yang might tau. Zafri. Cucu bomoh. Dia ada buku-buku lama.",
+      "next": "end_01"
+    },
+    "end_01": {
+      "id": "end_01",
+      "text": "Malam tu, Syafiq balik rumah dengan kepala penuh question. Dia boleh nampak spirits. Dian boleh dengar mereka. And something dalam dia makin lapar.",
+      "next": "end_02"
+    },
+    "end_02": {
+      "id": "end_02",
+      "text": "Time tidur, dia rasa presence that's been following him all day. Stronger now. Closer.",
+      "next": "end_03"
+    },
+    "end_03": {
+      "id": "end_03",
+      "text": "Dalam gelap, dia dengar whisper — same voice dari semalam, tapi louder:",
+      "effect": "shake",
+      "next": "end_04"
+    },
+    "end_04": {
+      "id": "end_04",
+      "text": "\"Esok. Cari makan.\"",
+      "effect": "fadeout"
+    }
+  }
+}

@@ -66,15 +66,71 @@ export class BootScene extends Phaser.Scene {
       pctText.destroy();
     });
 
-    // Load chapter data as JSON
+    // Load JSON data
     this.load.json('chapter1', 'data/chapters/chapter1.json');
+    this.load.json('chapter2', 'data/chapters/chapter2.json');
+    this.load.json('chapter3', 'data/chapters/chapter3.json');
     this.load.json('spirits', 'data/spirits.json');
+
+    // === CHARACTER SPRITES ===
+
+    // Syafiq - 8 direction rotation sprites
+    const directions = ['north', 'north-east', 'east', 'south-east', 'south', 'south-west', 'west', 'north-west'];
+    
+    for (const dir of directions) {
+      this.load.image(`syafiq-${dir}`, `src/assets/characters/syafiq/rotations/${dir}.png`);
+      this.load.image(`dian-${dir}`, `src/assets/characters/dian/rotations/${dir}.png`);
+      this.load.image(`zafri-${dir}`, `src/assets/characters/zafri/rotations/${dir}.png`);
+    }
+
+    // Syafiq walking animations - check what directions have animation frames
+    const walkDirs = ['south', 'south-west', 'west']; // Based on the file structure we saw
+    
+    for (const dir of walkDirs) {
+      // Load 6 frames (frame_000 to frame_005)
+      for (let i = 0; i < 6; i++) {
+        const frameNum = i.toString().padStart(3, '0');
+        this.load.image(
+          `syafiq-walk-${dir}-${i}`, 
+          `src/assets/characters/syafiq/animations/walking/${dir}/frame_${frameNum}.png`
+        );
+      }
+    }
+
+    // === TILESETS ===
+    this.load.image('ppr-corridor-tileset', 'src/assets/tilesets/ppr-corridor.png');
+    this.load.json('ppr-corridor-data', 'src/assets/tilesets/ppr-corridor.json');
+
+    // === UI ICONS ===
+    // We'll create simple colored circles for now as icons
+    // The real implementation would load UI icons from assets
   }
 
   create(): void {
+    // Create Phaser animations for walking
+    const walkDirs = ['south', 'south-west', 'west'];
+    
+    for (const dir of walkDirs) {
+      this.anims.create({
+        key: `syafiq-walk-${dir}`,
+        frames: [
+          { key: `syafiq-walk-${dir}-0` },
+          { key: `syafiq-walk-${dir}-1` },
+          { key: `syafiq-walk-${dir}-2` },
+          { key: `syafiq-walk-${dir}-3` },
+          { key: `syafiq-walk-${dir}-4` },
+          { key: `syafiq-walk-${dir}-5` },
+        ],
+        frameRate: 8,
+        repeat: -1,
+      });
+    }
+
     this.cameras.main.fadeOut(500, 0, 0, 0);
     this.time.delayedCall(500, () => {
       this.scene.start('MenuScene');
     });
   }
+
+  // Duplicate create method removed
 }
