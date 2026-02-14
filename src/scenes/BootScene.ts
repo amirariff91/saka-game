@@ -67,10 +67,15 @@ export class BootScene extends Phaser.Scene {
       pctText.destroy();
     });
 
-    // Load JSON data
+    // Load JSON data — story chapters
     this.load.json('chapter1', 'data/chapters/chapter1.json');
     this.load.json('chapter2', 'data/chapters/chapter2.json');
     this.load.json('chapter3', 'data/chapters/chapter3.json');
+    this.load.json('home-visit', 'data/chapters/home-visit.json');
+    this.load.json('rooftop-exploration', 'data/chapters/rooftop-exploration.json');
+    this.load.json('shop-visit', 'data/chapters/shop-visit.json');
+    this.load.json('unit-9-4-return', 'data/chapters/unit-9-4-return.json');
+    this.load.json('tangga-casual', 'data/chapters/tangga-casual.json');
     this.load.json('spirits', 'data/spirits.json');
 
     // === CHARACTER SPRITES ===

@@ -1,0 +1,29 @@
+{
+  "id": "tangga-casual",
+  "title": "Stairwell",
+  "titleMalay": "Tangga",
+  "startNode": "1",
+  "lines": {
+    "1": { "id": "1", "speaker": "", "text": "Tangga PPR. Echo langkah kau naik tiga tingkat.", "next": "2", "background": "stairwell" },
+    "2": { "id": "2", "speaker": "", "text": "Dian duduk di anak tangga. Headphone di leher. Buku nota di tangan.", "next": "3" },
+    "3": { "id": "3", "speaker": "Dian", "text": "Oh. Kau.", "next": "4" },
+    "4": { "id": "4", "speaker": "", "text": "Dia tak pandang kau. Mata dia fokus pada nota — penuh tulisan kecil, tarikh, lokasi.", "next": "5" },
+    "5": { "id": "5", "speaker": "Syafiq", "text": "Tulis apa tu?", "next": "6" },
+    "6": { "id": "6", "speaker": "Dian", "text": "Rekod. Apa yang aku dengar. Bila. Mana. Berapa kuat.", "next": "7" },
+    "7": { "id": "7", "speaker": "Dian", "text": "Dah tiga tahun aku buat ni. Tak ada siapa percaya.", "next": "8" },
+    "8": { "id": "8", "speaker": "", "text": "Dia tunjuk satu page. Lakaran kasar — pelan PPR. Setiap tingkat ada tanda.", "next": "9" },
+    "9": { "id": "9", "speaker": "Dian", "text": "Tingkat 3 — senyap. Tingkat 7 — kadang-kadang ada bisikan. Tingkat 9...", "next": "10" },
+    "10": { "id": "10", "speaker": "Dian", "text": "Tingkat 9 memang tak pernah senyap.", "next": "choice1", "effect": "shake" },
+    "choice1": { "id": "choice1", "speaker": "", "text": "Kau duduk sebelah dia. Dua orang yang dengar dan nampak.", "choices": [
+      { "text": "Aku boleh tolong. Aku nampak apa yang kau dengar.", "next": "offer" },
+      { "text": "Kau tak takut ke?", "next": "fear" }
+    ]},
+    "offer": { "id": "offer", "speaker": "Dian", "text": "...", "next": "offer-2" },
+    "offer-2": { "id": "offer-2", "speaker": "", "text": "Buat pertama kali, dia senyum. Kecil. Cepat. Tapi nyata.", "next": "offer-3" },
+    "offer-3": { "id": "offer-3", "speaker": "Dian", "text": "Akhirnya ada orang cakap macam tu.", "next": "end" },
+    "fear": { "id": "fear", "speaker": "Dian", "text": "Takut?", "next": "fear-2" },
+    "fear-2": { "id": "fear-2", "speaker": "Dian", "text": "Aku dah takut sejak umur 7 tahun. Sekarang aku dah bosan takut.", "next": "fear-3" },
+    "fear-3": { "id": "fear-3", "speaker": "", "text": "Ada keberanian dalam kepenatan dia. Kau hormat itu.", "next": "end" },
+    "end": { "id": "end", "speaker": "", "text": "Langkah kaki di tangga. Dua bayangan, bukan satu." }
+  }
+}

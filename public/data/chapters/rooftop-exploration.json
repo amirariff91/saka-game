@@ -1,0 +1,25 @@
+{
+  "id": "rooftop-exploration",
+  "title": "Rooftop",
+  "titleMalay": "Bumbung",
+  "startNode": "1",
+  "lines": {
+    "1": { "id": "1", "speaker": "", "text": "Angin malam. Langit KL — cahaya oren dan putih bertaburan sampai horizon.", "next": "2", "background": "rooftop" },
+    "2": { "id": "2", "speaker": "", "text": "Tangki air besar berdiri macam raksasa tidur di hujung bumbung.", "next": "3" },
+    "3": { "id": "3", "speaker": "", "text": "Kau rasa sesuatu di sini. Berat. Tua. Menunggu.", "next": "4" },
+    "4": { "id": "4", "speaker": "", "text": "Saka dalam diri kau senyap. Bukan senyap biasa — senyap takut.", "next": "5" },
+    "5": { "id": "5", "speaker": "", "text": "Di sebalik tangki air, udara bergetar. Macam haba, tapi sejuk.", "next": "6" },
+    "6": { "id": "6", "speaker": "", "text": "Ada sesuatu yang duduk di situ. Dah lama. Sebelum PPR ini dibina.", "next": "7" },
+    "7": { "id": "7", "speaker": "", "text": "Penunggu.", "next": "choice1", "effect": "shake" },
+    "choice1": { "id": "choice1", "speaker": "", "text": "Badan kau sejuk. Pilih.", "choices": [
+      { "text": "Duduk sebentar. Tengok pemandangan.", "next": "stay" },
+      { "text": "Turun. Ini bukan tempat kau. Belum.", "next": "leave" }
+    ]},
+    "stay": { "id": "stay", "speaker": "", "text": "Kau duduk di tepi. Kaki tergantung. KL berdenyut di bawah.", "next": "stay-2" },
+    "stay-2": { "id": "stay-2", "speaker": "", "text": "Dari sini, PPR nampak kecil. Masalah kau pun nampak kecil.", "next": "stay-3" },
+    "stay-3": { "id": "stay-3", "speaker": "", "text": "Tapi benda di sebalik tangki air tu... benda tu tak kecil langsung.", "next": "end" },
+    "leave": { "id": "leave", "speaker": "", "text": "Kau undur perlahan. Jangan buat bunyi. Jangan pandang belakang.", "next": "leave-2" },
+    "leave-2": { "id": "leave-2", "speaker": "", "text": "Pintu bumbung tertutup di belakang kau. Selamat. Buat masa ini.", "next": "end" },
+    "end": { "id": "end", "speaker": "", "text": "Bumbung PPR menyimpan rahsia lama. Kau belum bersedia untuk tahu." }
+  }
+}
