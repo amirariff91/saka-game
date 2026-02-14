@@ -312,10 +312,18 @@ export class DialogueScene extends Phaser.Scene {
       this.isTyping = false;
       this.muteButton.setAlpha(1); // Show mute button again
       
-      // Stop typewriter sound
-      if (this.typewriterSound) {
-        this.typewriterSound.stop();
-        this.typewriterSound.destroy();
+      // Stop typewriter sound — wrapped in try/catch because mobile audio
+      // contexts can throw when stopped/destroyed in suspended state.
+      // If this throws without protection, waitingForInput never gets set
+      // and the player is permanently stuck (can't advance dialogue).
+      try {
+        if (this.typewriterSound) {
+          this.typewriterSound.stop();
+          this.typewriterSound.destroy();
+          this.typewriterSound = undefined;
+        }
+      } catch (error) {
+        console.warn('[DialogueScene] Failed to stop typewriter sound:', error);
         this.typewriterSound = undefined;
       }
 
@@ -426,6 +434,14 @@ export class DialogueScene extends Phaser.Scene {
 
     if (this.engine.hasChoices()) {
       return; // waiting for choice click
+    }
+
+    // Safety net: if we're somehow not typing, not waiting, and no choices,
+    // but the typewriter is done — force waitingForInput so player isn't stuck
+    if (!this.waitingForInput && this.typewriter.isComplete()) {
+      console.warn('[DialogueScene] Recovery: forcing waitingForInput after stuck state');
+      this.waitingForInput = true;
+      this.continueIndicator.setAlpha(1);
     }
 
     if (this.waitingForInput) {
