@@ -804,191 +804,45 @@ export class DialogueScene extends Phaser.Scene {
     this.backgroundContainer.removeAll();
   }
 
+  // Clean dark fills only — portraits provide the atmosphere
   private createPPRCorridorBackground(w: number, h: number): void {
     const bg = this.add.graphics();
-    bg.fillStyle(0x111111, 1);
+    bg.fillStyle(0x0a0a0a, 1);
     bg.fillRect(0, 0, w, h);
     this.backgroundContainer.add(bg);
     this.backgroundElements.push(bg);
-
-    // Simple vertical lines suggesting doors (darker, less prominent)
-    const doorGraphics = this.add.graphics();
-    doorGraphics.lineStyle(1, 0x333333, 0.4);
-    for (let i = 0; i < 3; i++) {
-      const x = (w / 4) * (i + 1);
-      doorGraphics.lineBetween(x, h * 0.4, x, h * 0.7);
-      // Simple door frames
-      doorGraphics.strokeRect(x - 10, h * 0.4, 20, h * 0.3);
-    }
-    this.backgroundContainer.add(doorGraphics);
-    this.backgroundElements.push(doorGraphics);
-
-    // Simple static light (no flickering)
-    const light = this.add.graphics();
-    light.fillStyle(0xffffaa, 0.1);
-    light.fillCircle(w / 2, h * 0.2, 30);
-    this.backgroundContainer.add(light);
-    this.backgroundElements.push(light);
-
-    // Floor
-    const floor = this.add.graphics();
-    floor.fillStyle(0x2a2a2a, 1);
-    floor.fillRect(0, h * 0.85, w, h * 0.15);
-    this.backgroundContainer.add(floor);
-    this.backgroundElements.push(floor);
   }
 
   private createUnit94Background(w: number, h: number): void {
+    const bg = this.add.graphics();
+    bg.fillStyle(0x0a0808, 1);
+    bg.fillRect(0, 0, w, h);
+    this.backgroundContainer.add(bg);
+    this.backgroundElements.push(bg);
+  }
+
+  private createStairwellBackground(w: number, h: number): void {
+    const bg = this.add.graphics();
+    bg.fillStyle(0x0a0a0a, 1);
+    bg.fillRect(0, 0, w, h);
+    this.backgroundContainer.add(bg);
+    this.backgroundElements.push(bg);
+  }
+
+  private createRooftopBackground(w: number, h: number): void {
+    const bg = this.add.graphics();
+    bg.fillStyle(0x050a18, 1);
+    bg.fillRect(0, 0, w, h);
+    this.backgroundContainer.add(bg);
+    this.backgroundElements.push(bg);
+  }
+
+  private createHomeBackground(w: number, h: number): void {
     const bg = this.add.graphics();
     bg.fillStyle(0x0c0a08, 1);
     bg.fillRect(0, 0, w, h);
     this.backgroundContainer.add(bg);
     this.backgroundElements.push(bg);
-
-    // Simple wooden shelves (darker, less distracting)
-    const shelves = this.add.graphics();
-    shelves.lineStyle(1, 0x3a2a1a, 0.6);
-    for (let i = 0; i < 4; i++) {
-      const y = h * 0.25 + i * (h * 0.15);
-      shelves.lineBetween(w * 0.1, y, w * 0.9, y);
-      // Shelf supports
-      shelves.lineBetween(w * 0.1, y, w * 0.1, y + h * 0.12);
-      shelves.lineBetween(w * 0.9, y, w * 0.9, y + h * 0.12);
-    }
-    this.backgroundContainer.add(shelves);
-    this.backgroundElements.push(shelves);
-
-    // Simple static bottles (no pulsing animations)
-    for (let i = 0; i < 8; i++) {
-      const bottleX = w * 0.15 + (w * 0.7 / 8) * i;
-      const bottleY = h * 0.3 + (Math.floor(i / 4) * (h * 0.15)) + Phaser.Math.Between(-3, 3);
-      
-      const bottle = this.add.graphics();
-      const color = Phaser.Math.RND.pick([0x2dd4a8, 0xd4a82d, 0x8a4d8a]);
-      // Simple bottle body
-      bottle.fillStyle(color, 0.3);
-      bottle.fillRect(bottleX - 2, bottleY - 4, 4, 8);
-      bottle.fillRect(bottleX - 1, bottleY - 6, 2, 3);
-      
-      this.backgroundContainer.add(bottle);
-      this.backgroundElements.push(bottle);
-    }
-  }
-
-  private createStairwellBackground(w: number, h: number): void {
-    const bg = this.add.graphics();
-    bg.fillStyle(0x0f0f0f, 1);
-    bg.fillRect(0, 0, w, h);
-    this.backgroundContainer.add(bg);
-    this.backgroundElements.push(bg);
-
-    // Diagonal lines suggesting stairs
-    const stairs = this.add.graphics();
-    stairs.lineStyle(2, 0x333333, 0.7);
-    for (let i = 0; i < 8; i++) {
-      const y = h * 0.9 - i * (h * 0.1);
-      const x1 = w * 0.1 + i * (w * 0.1);
-      const x2 = x1 + w * 0.8;
-      stairs.lineBetween(x1, y, x2, y);
-      // Vertical risers
-      if (i < 7) {
-        stairs.lineBetween(x2, y, x2, y - h * 0.1);
-      }
-    }
-    this.backgroundContainer.add(stairs);
-    this.backgroundElements.push(stairs);
-
-    // Light from above
-    const light = this.add.graphics();
-    light.fillStyle(0xffffcc, 0.15);
-    light.fillRect(w * 0.35, 0, w * 0.3, h * 0.4);
-    this.backgroundContainer.add(light);
-    this.backgroundElements.push(light);
-  }
-
-  private createRooftopBackground(w: number, h: number): void {
-    const sky = this.add.graphics();
-    sky.fillStyle(0x000d22, 1);
-    sky.fillRect(0, 0, w, h * 0.7);
-    this.backgroundContainer.add(sky);
-    this.backgroundElements.push(sky);
-
-    // City lights below (tiny dots)
-    const cityLights = this.add.graphics();
-    cityLights.fillStyle(0xffffaa, 0.6);
-    for (let i = 0; i < 20; i++) {
-      const x = Phaser.Math.Between(0, w);
-      const y = h * 0.7 + Phaser.Math.Between(0, h * 0.3);
-      cityLights.fillCircle(x, y, 1);
-    }
-    this.backgroundContainer.add(cityLights);
-    this.backgroundElements.push(cityLights);
-
-    // Water tank silhouette
-    const tank = this.add.graphics();
-    tank.fillStyle(0x1a1a1a, 1);
-    tank.fillRoundedRect(w * 0.7, h * 0.3, w * 0.25, h * 0.25, 5);
-    // Tank legs
-    tank.fillRect(w * 0.72, h * 0.55, 4, h * 0.15);
-    tank.fillRect(w * 0.91, h * 0.55, 4, h * 0.15);
-    this.backgroundContainer.add(tank);
-    this.backgroundElements.push(tank);
-
-    // Concrete floor
-    const floor = this.add.graphics();
-    floor.fillStyle(0x2a2a2a, 1);
-    floor.fillRect(0, h * 0.85, w, h * 0.15);
-    this.backgroundContainer.add(floor);
-    this.backgroundElements.push(floor);
-  }
-
-  private createHomeBackground(w: number, h: number): void {
-    // Warmer background with slight brown tint
-    const bg = this.add.graphics();
-    bg.fillStyle(0x1a1612, 1);
-    bg.fillRect(0, 0, w, h);
-    this.backgroundContainer.add(bg);
-    this.backgroundElements.push(bg);
-
-    // TV glow (flickering blue rectangle)
-    const tv = this.add.graphics();
-    tv.fillStyle(0x4488cc, 0.3);
-    tv.fillRoundedRect(w * 0.1, h * 0.3, w * 0.3, h * 0.2, 5);
-    this.backgroundContainer.add(tv);
-    this.backgroundElements.push(tv);
-
-    // TV flicker
-    this.tweens.add({
-      targets: tv,
-      alpha: { from: 0.2, to: 0.5 },
-      duration: Phaser.Math.Between(300, 800),
-      yoyo: true,
-      repeat: -1
-    });
-
-    // Window light
-    const window = this.add.graphics();
-    window.fillStyle(0xffffaa, 0.1);
-    window.fillRect(w * 0.7, h * 0.1, w * 0.25, h * 0.4);
-    // Window frame
-    window.lineStyle(2, 0x444444, 0.6);
-    window.strokeRect(w * 0.7, h * 0.1, w * 0.25, h * 0.4);
-    // Cross pattern
-    window.lineBetween(w * 0.825, h * 0.1, w * 0.825, h * 0.5);
-    window.lineBetween(w * 0.7, h * 0.3, w * 0.95, h * 0.3);
-    this.backgroundContainer.add(window);
-    this.backgroundElements.push(window);
-
-    // Furniture silhouettes
-    const furniture = this.add.graphics();
-    furniture.fillStyle(0x2a2a2a, 1);
-    // Table
-    furniture.fillRect(w * 0.4, h * 0.6, w * 0.4, w * 0.05);
-    // Chair
-    furniture.fillRect(w * 0.45, h * 0.5, w * 0.1, h * 0.15);
-    furniture.fillRect(w * 0.45, h * 0.4, w * 0.1, w * 0.05);
-    this.backgroundContainer.add(furniture);
-    this.backgroundElements.push(furniture);
   }
 
   update(): void {
