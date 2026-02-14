@@ -82,6 +82,11 @@ export class BootScene extends Phaser.Scene {
     this.load.json('tutorial-capture', 'data/chapters/tutorial-capture.json');
     this.load.json('spirits', 'data/spirits.json');
 
+    // === VN CHARACTER PORTRAITS (high quality, 1024x1024) ===
+    this.load.image('portrait-syafiq', 'assets/portraits/syafiq.png');
+    this.load.image('portrait-dian', 'assets/portraits/dian.png');
+    this.load.image('portrait-zafri', 'assets/portraits/zafri.png');
+
     // === CHARACTER SPRITES ===
 
     // Syafiq - 8 direction rotation sprites

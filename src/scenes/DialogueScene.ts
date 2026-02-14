@@ -30,12 +30,12 @@ export class DialogueScene extends Phaser.Scene {
   private currentSpeakerSide: 'left' | 'right' | 'center' | 'none' = 'none';
   private lastSpeaker = '';
 
-  // Speaker → sprite key mapping
+  // Speaker → portrait key mapping (HD portraits, 1024x1024)
   private readonly speakerSpriteMap: Record<string, { key: string; side: 'left' | 'right' }> = {
-    'Syafiq': { key: 'syafiq-south', side: 'left' },
-    'Dian': { key: 'dian-south', side: 'right' },
-    'Zafri': { key: 'zafri-south', side: 'right' },
-    'Mak': { key: 'mak-south', side: 'right' }, // No texture — handled gracefully
+    'Syafiq': { key: 'portrait-syafiq', side: 'left' },
+    'Dian': { key: 'portrait-dian', side: 'right' },
+    'Zafri': { key: 'portrait-zafri', side: 'right' },
+    'Mak': { key: 'portrait-mak', side: 'right' }, // No texture — handled gracefully
   };
 
   // UI elements
@@ -479,38 +479,56 @@ export class DialogueScene extends Phaser.Scene {
     textureKey: string,
     screenW: number,
     bottomY: number,
-    scale: number
+    _scale: number
   ): void {
-    const x = side === 'left' ? screenW * 0.22 : screenW * 0.78;
+    // Position: left character at ~25%, right at ~75%
+    const x = side === 'left' ? screenW * 0.25 : screenW * 0.75;
+    
+    // Calculate scale: HD portraits are 1024px, we want them to fill ~60% of the background area height
+    const bgAreaHeight = bottomY; // Background area is from top to dialogue box
+    const targetHeight = bgAreaHeight * 0.7; // Portrait fills 70% of background area
+    const portraitScale = targetHeight / 1024; // Scale down from 1024px
 
-    // Glow behind sprite
+    // Soft glow behind portrait
     const glow = this.add.graphics();
-    glow.fillStyle(0x2dd4a8, 0.15);
-    glow.fillCircle(0, 0, 50);
-    glow.setPosition(x, bottomY - 60);
+    const glowColor = side === 'left' ? 0x2dd4a8 : 0x8866cc; // Teal for Syafiq, purple for others
+    glow.fillStyle(glowColor, 0.12);
+    glow.fillCircle(0, 0, targetHeight * 0.4);
+    glow.setPosition(x, bottomY - targetHeight * 0.45);
     this.portraitContainer.add(glow);
 
-    // Character sprite
+    // HD character portrait
     const portrait = this.add.image(x, bottomY, textureKey);
-    portrait.setScale(scale);
-    portrait.setOrigin(0.5, 1); // Bottom-center anchor so feet touch dialogue box area
+    portrait.setScale(portraitScale);
+    portrait.setOrigin(0.5, 1); // Bottom-center anchor
+    portrait.setData('baseScale', portraitScale);
     this.portraitContainer.add(portrait);
 
-    // Fade in
+    // Cinematic fade + slide in
+    const slideFrom = side === 'left' ? x - 30 : x + 30;
     portrait.setAlpha(0);
+    portrait.setPosition(slideFrom, bottomY);
     glow.setAlpha(0);
+
     this.tweens.add({
-      targets: [portrait, glow],
-      alpha: { from: 0, to: 1 },
-      duration: 400,
+      targets: portrait,
+      alpha: 1,
+      x: x,
+      duration: 500,
+      ease: 'Power2.easeOut'
+    });
+    this.tweens.add({
+      targets: glow,
+      alpha: 0.12,
+      duration: 500,
       ease: 'Power2.easeOut'
     });
 
-    // Subtle idle float
+    // Subtle idle breathing
     this.tweens.add({
       targets: portrait,
-      y: { from: bottomY - 2, to: bottomY + 2 },
-      duration: 2500,
+      y: { from: bottomY - 1, to: bottomY + 1 },
+      duration: 3000,
       yoyo: true,
       repeat: -1,
       ease: 'Sine.easeInOut'
@@ -529,18 +547,19 @@ export class DialogueScene extends Phaser.Scene {
     const portrait = side === 'left' ? this.leftPortrait : this.rightPortrait;
     const glow = side === 'left' ? this.leftPortraitGlow : this.rightPortraitGlow;
     if (portrait) {
+      const baseScale = portrait.getData('baseScale') || portrait.scaleX;
       this.tweens.add({
         targets: portrait,
         alpha: 1,
-        scaleX: (portrait.getData('baseScale') || 4),
-        scaleY: (portrait.getData('baseScale') || 4),
+        scaleX: baseScale,
+        scaleY: baseScale,
         duration: 200,
         ease: 'Power2'
       });
       portrait.clearTint();
     }
     if (glow) {
-      this.tweens.add({ targets: glow, alpha: 0.15, duration: 200 });
+      this.tweens.add({ targets: glow, alpha: 0.12, duration: 200 });
     }
   }
 
@@ -573,53 +592,65 @@ export class DialogueScene extends Phaser.Scene {
     const safeBottom = 24;
     const portraitBottom = h - boxHeight - safeBottom - 10;
 
-    // Spirit sprite key (use south-facing)
+    // Spirit sprite key (use south-facing pixel art)
     const spriteKey = `spirit-${spiritId}-south`;
     if (!this.textures.exists(spriteKey)) return;
 
-    // Clear right portrait if there is one (spirits show on right/center)
+    // Clear right portrait if there is one
     this.clearPortraitSide('right');
 
     const x = w * 0.65;
+    const spiritScale = 5; // Pixel art spirits scaled up big for dramatic effect
     
-    // Eerie red glow
+    // Eerie red glow — larger for dramatic effect
     const glow = this.add.graphics();
-    glow.fillStyle(0xff4444, 0.2);
-    glow.fillCircle(0, 0, 60);
-    glow.setPosition(x, portraitBottom - 60);
+    glow.fillStyle(0xff4444, 0.25);
+    glow.fillCircle(0, 0, 80);
+    glow.setPosition(x, portraitBottom - 70);
     this.portraitContainer.add(glow);
 
     const sprite = this.add.image(x, portraitBottom, spriteKey);
-    sprite.setScale(4);
+    sprite.setScale(spiritScale);
     sprite.setOrigin(0.5, 1);
+    sprite.setData('baseScale', spiritScale);
     this.portraitContainer.add(sprite);
 
-    // Dramatic entrance
+    // Dramatic entrance — scale up from nothing
     sprite.setAlpha(0);
-    sprite.setScale(3);
+    sprite.setScale(spiritScale * 0.5);
     glow.setAlpha(0);
 
     this.tweens.add({
       targets: sprite,
       alpha: 1,
-      scaleX: 4,
-      scaleY: 4,
+      scaleX: spiritScale,
+      scaleY: spiritScale,
       duration: 600,
       ease: 'Back.easeOut'
     });
     this.tweens.add({
       targets: glow,
-      alpha: 0.2,
+      alpha: 0.25,
       duration: 600,
     });
 
-    // Floating/breathing
+    // Menacing floating
     this.tweens.add({
       targets: sprite,
-      y: { from: portraitBottom - 4, to: portraitBottom + 4 },
-      scaleX: { from: 3.9, to: 4.1 },
-      scaleY: { from: 3.9, to: 4.1 },
+      y: { from: portraitBottom - 6, to: portraitBottom + 6 },
       duration: 2000,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut'
+    });
+
+    // Glow pulses
+    this.tweens.add({
+      targets: glow,
+      alpha: { from: 0.15, to: 0.35 },
+      scaleX: { from: 0.9, to: 1.1 },
+      scaleY: { from: 0.9, to: 1.1 },
+      duration: 1500,
       yoyo: true,
       repeat: -1,
       ease: 'Sine.easeInOut'
