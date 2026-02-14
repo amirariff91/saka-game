@@ -217,8 +217,11 @@ export class DialogueScene extends Phaser.Scene {
     } else {
       this.speakerText.setText('');
       this.speakerText.setVisible(false);
-      // Narration — dim both portraits
+      // Narration — dim both portraits, show background
       this.dimAllPortraits();
+      if (!this.leftPortrait && !this.rightPortrait) {
+        this.backgroundContainer.setVisible(true);
+      }
     }
 
     // Show spirit sprite if line has enemy/spirit reference
@@ -429,6 +432,11 @@ export class DialogueScene extends Phaser.Scene {
 
     const { key, side } = spriteInfo;
     const hasTexture = this.textures.exists(key);
+
+    // Hide procedural background when portrait is showing — portrait IS the visual
+    if (hasTexture) {
+      this.backgroundContainer.setVisible(false);
+    }
 
     if (side === 'left') {
       // Show/update left portrait
