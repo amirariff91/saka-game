@@ -30,4 +30,7 @@ const config: Phaser.Types.Core.GameConfig = {
   scene: [BootScene, MenuScene, DialogueScene, LocationMenuScene, BattleScene, InventoryScene],
 };
 
-new Phaser.Game(config);
+const game = new Phaser.Game(config);
+
+// Expose for debugging
+(window as any).__SAKA_GAME__ = game;
