@@ -382,6 +382,10 @@ export class LocationMenuScene extends Phaser.Scene {
         if (!gameState.completedEvents.includes('met-dian')) {
           return 'chapter2';
         }
+        // After meeting Dian, first stairwell visit triggers Hantu Raya encounter
+        if (!gameState.completedEvents.includes('first-battle')) {
+          return 'tangga-encounter';
+        }
         return 'tangga-casual';
         
       case 'rumah-syafiq':

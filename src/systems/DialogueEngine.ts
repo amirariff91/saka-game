@@ -5,6 +5,8 @@ export interface DialogueLine {
   next?: string;
   choices?: DialogueChoice[];
   effect?: string;
+  background?: string;
+  battle?: string;  // If set, triggers BattleScene with this enemy ID on end
 }
 
 export interface DialogueChoice {

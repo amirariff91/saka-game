@@ -363,15 +363,21 @@ export class DialogueScene extends Phaser.Scene {
       this.continueIndicator.setAlpha(0);
 
       if (this.engine.isEnd()) {
-        // End of chapter - play subtle whoosh
-        this.soundManager.playSFX('bayang-activate', 0.3);
+        // Check if this chapter ends with a battle
+        const currentLine = this.engine.getCurrentLine();
+        const battle = currentLine?.battle;
         
+        this.soundManager.playSFX('bayang-activate', 0.3);
         this.cameras.main.fadeOut(800, 0, 0, 0);
         this.time.delayedCall(800, () => {
           this.saka.stop();
-          // Return to LocationMenuScene instead of ExploreScene
-          const returnTo = (this.scene.settings.data as { returnTo?: string })?.returnTo ?? 'LocationMenuScene';
-          this.scene.start(returnTo);
+          if (battle) {
+            // Transition to battle scene with enemy ID
+            this.scene.start('BattleScene', { enemy: battle });
+          } else {
+            const returnTo = (this.scene.settings.data as { returnTo?: string })?.returnTo ?? 'LocationMenuScene';
+            this.scene.start(returnTo);
+          }
         });
         return;
       }
@@ -491,33 +497,43 @@ export class DialogueScene extends Phaser.Scene {
   }
 
   private createUnit94Background(w: number, h: number): void {
-    // Very dark room
+    // Dark room — but visible enough to see on mobile
     const bg = this.add.graphics();
-    bg.fillStyle(0x0a0a0a, 1);
+    bg.fillGradientStyle(0x1a1210, 0x1a1210, 0x0d0a08, 0x0d0a08, 1);
     bg.fillRect(0, 0, w, h);
     this.backgroundContainer.add(bg);
     this.backgroundElements.push(bg);
 
-    // Shelves suggested by horizontal lines
+    // Wooden shelves — more visible
     const shelves = this.add.graphics();
-    shelves.lineStyle(1, 0x2a2a2a, 0.8);
+    shelves.lineStyle(2, 0x4a3a2a, 0.9);
     for (let i = 0; i < 5; i++) {
       const y = h * 0.2 + i * (h * 0.12);
-      shelves.lineBetween(w * 0.1, y, w * 0.9, y);
+      shelves.lineBetween(w * 0.08, y, w * 0.92, y);
+      // Shelf supports
+      shelves.lineStyle(1, 0x3a2a1a, 0.6);
+      shelves.lineBetween(w * 0.08, y, w * 0.08, y + h * 0.12);
+      shelves.lineBetween(w * 0.92, y, w * 0.92, y + h * 0.12);
+      shelves.lineStyle(2, 0x4a3a2a, 0.9);
     }
     this.backgroundContainer.add(shelves);
     this.backgroundElements.push(shelves);
 
-    // Bottles with faint glow
+    // Bottles with distinct glow — larger, brighter
     const bottleContainer = this.add.container(0, 0);
-    for (let i = 0; i < 12; i++) {
-      const bottleX = w * 0.15 + (w * 0.7 / 12) * i;
-      const bottleY = h * 0.25 + Phaser.Math.Between(-10, 40);
+    for (let i = 0; i < 15; i++) {
+      const bottleX = w * 0.12 + (w * 0.76 / 15) * i;
+      const bottleY = h * 0.22 + (Math.floor(i / 3) * (h * 0.12)) + Phaser.Math.Between(-5, 5);
       
       const bottle = this.add.graphics();
-      const color = Phaser.Math.RND.pick([0x2dd4a8, 0xd4a82d, 0x8a4d8a]);
-      bottle.fillStyle(color, 0.4);
-      bottle.fillCircle(bottleX, bottleY, 3);
+      const color = Phaser.Math.RND.pick([0x2dd4a8, 0xd4a82d, 0x8a4d8a, 0xff6644]);
+      // Bottle body
+      bottle.fillStyle(color, 0.6);
+      bottle.fillRect(bottleX - 3, bottleY - 6, 6, 10);
+      bottle.fillRect(bottleX - 2, bottleY - 9, 4, 4);
+      // Glow
+      bottle.fillStyle(color, 0.15);
+      bottle.fillCircle(bottleX, bottleY, 10);
       
       // Pulse animation
       this.tweens.add({

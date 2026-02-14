@@ -442,6 +442,12 @@ export class BattleScene extends Phaser.Scene {
     this.battlePhase = 'battle_over';
     this.hideActionButtons();
     
+    // Mark first-battle as completed for story progression
+    const gameState = this.daySystem.getGameState();
+    if (!gameState.completedEvents.includes('first-battle')) {
+      gameState.completedEvents.push('first-battle');
+    }
+    
     const victoryText = this.add.text(this.scale.width / 2, this.scale.height / 2, 'BERJAYA!', {
       fontFamily: 'Georgia, serif',
       fontSize: '32px',

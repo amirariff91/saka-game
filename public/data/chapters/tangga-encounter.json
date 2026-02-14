@@ -1,0 +1,23 @@
+{
+  "id": "tangga-encounter",
+  "title": "First Blood",
+  "titleMalay": "Pertembungan Pertama",
+  "startNode": "1",
+  "lines": {
+    "1": { "id": "1", "speaker": "", "text": "Tengah malam. Tangga PPR gelap — lampu tingkat 12 dah mati.", "next": "2", "background": "stairwell" },
+    "2": { "id": "2", "speaker": "", "text": "Kau naik perlahan. Penat kerja. Badan berat.", "next": "3" },
+    "3": { "id": "3", "speaker": "", "text": "Tapi malam ni... badan berat lain macam. Macam ada sesuatu tekan bahu kau.", "next": "4" },
+    "4": { "id": "4", "speaker": "", "text": "Saka dalam diri kau bergerak. Dia rasa sesuatu.", "next": "5", "effect": "shake" },
+    "5": { "id": "5", "speaker": "", "text": "Bunyi. Macam orang hempas pintu dari jauh. Tapi rhythmic. Berulang-ulang.", "next": "6" },
+    "6": { "id": "6", "speaker": "", "text": "BAAM. BAAM. BAAM.", "next": "7", "effect": "shake" },
+    "7": { "id": "7", "speaker": "", "text": "Di hujung koridor tingkat 12 — asap merah. Tebal. Panas.", "next": "8", "background": "ppr-corridor" },
+    "8": { "id": "8", "speaker": "", "text": "Dalam asap tu, kau nampak bentuk. Manusia, tapi tak cukup manusia. Mata merah menyala.", "next": "9" },
+    "9": { "id": "9", "speaker": "", "text": "Hantu Raya. Roh kemarahan. Dia dah terlepas dari Unit 9-4 — botol yang kau pecahkan malam tu.", "next": "10" },
+    "10": { "id": "10", "speaker": "", "text": "Dia nampak kau. Dia TAHU kau. Kau yang lepaskan dia.", "next": "11", "effect": "shake" },
+    "11": { "id": "11", "speaker": "", "text": "Saka kau menjerit. Bukan takut — lapar. Dia nak makan benda ni.", "next": "12" },
+    "12": { "id": "12", "speaker": "", "text": "Tangan kau panas. Jari bercahaya hijau.", "next": "13" },
+    "13": { "id": "13", "speaker": "Syafiq", "text": "...apa yang jadi dengan aku?", "next": "14" },
+    "14": { "id": "14", "speaker": "", "text": "Hantu Raya menjerit. Bunyi macam besi berkarat. Dia serang.", "next": "battle", "effect": "shake" },
+    "battle": { "id": "battle", "speaker": "", "text": "Tiada pilihan lain. Lawan atau mati.", "battle": "hantu-raya" }
+  }
+}
