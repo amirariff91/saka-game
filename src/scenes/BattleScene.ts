@@ -247,16 +247,17 @@ export class BattleScene extends Phaser.Scene {
     const enemyData = this.spiritsData.spirits.find((s: any) => s.id === enemyId);
     
     if (enemyData) {
+      const stats = enemyData.stats || {};
       this.enemy = {
         id: enemyData.id,
         name: enemyData.name,
         type: 'enemy',
-        hp: enemyData.hp,
-        maxHp: enemyData.hp,
-        power: enemyData.power,
-        defense: enemyData.defense,
-        speed: enemyData.speed,
-        willpower: enemyData.willpower,
+        hp: enemyData.hp || 50,
+        maxHp: enemyData.hp || 50,
+        power: stats.power || 12,
+        defense: stats.defense || 8,
+        speed: stats.speed || 10,
+        willpower: stats.willpower || 15,
         spiritType: enemyData.type
       };
     } else {

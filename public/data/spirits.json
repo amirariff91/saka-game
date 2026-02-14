@@ -1,10 +1,12 @@
 {
   "spirits": [
     {
-      "id": "hantu_raya",
+      "id": "hantu-raya",
       "name": "Hantu Raya",
+      "nameFull": "Abang Marah",
       "type": "hantu",
       "tier": "common",
+      "hp": 50,
       "description": "Semangat dendam. Bekas manusia yang mati dalam kemarahan. Telekinesis lemah tapi berterusan.",
       "bottleType": "glass",
       "stats": {
@@ -20,8 +22,10 @@
     {
       "id": "toyol",
       "name": "Toyol",
+      "nameFull": "Abang Toyol",
       "type": "familiar",
       "tier": "common",
+      "hp": 30,
       "description": "Roh kanak-kanak yang dijinakkan. Kecil, pantas, suka mencuri benda kecil.",
       "bottleType": "glass",
       "stats": {
@@ -32,14 +36,16 @@
       },
       "bayangAbility": "Shadow Step — bergerak tanpa bunyi, muat ruang sempit",
       "weakness": "Jarum di bawah bantal, cermin",
-      "lore": "Warisan makcik tingkat 7. Suami arwah buat perjanjian dulu. Toyol masih tunggu arahan."
+      "lore": "Warisan makcik tingkat 5. Suami arwah buat perjanjian 30 tahun lalu. Toyol masih setia."
     },
     {
       "id": "pelesit",
       "name": "Pelesit",
+      "nameFull": "Paku",
       "type": "familiar",
       "tier": "common",
-      "description": "Familiar bentuk serangga. Biasa datang berpasangan dengan penanggal. Menyerang dari dalam.",
+      "hp": 35,
+      "description": "Familiar bentuk serangga. Tertanam dalam tiang parking basement. Menyerang dari dalam.",
       "bottleType": "glass",
       "stats": {
         "power": 20,
@@ -54,9 +60,11 @@
     {
       "id": "jembalang",
       "name": "Jembalang Tanah",
+      "nameFull": "Si Merah",
       "type": "jembalang",
       "tier": "uncommon",
-      "description": "Roh tanah. Besar, kuat, territorial. Tak ganggu manusia kecuali diprovokasi.",
+      "hp": 80,
+      "description": "Roh tanah merah. Besar, kuat, territorial. Penunggu tanah sejak sebelum KL wujud.",
       "bottleType": "clay",
       "stats": {
         "power": 50,
@@ -64,16 +72,18 @@
         "speed": 10,
         "willpower": 40
       },
-      "bayangAbility": "Earth Grip — manipulasi tanah, kekuatan fizikal luar biasa",
+      "bayangAbility": "Earth Grip — manipulasi tanah dan batu, gegaran bumi",
       "weakness": "Besi tua, api unggun",
-      "lore": "Penunggu pondok pengawal lama PPR. Dah berpuluh tahun duduk situ sebelum flat dibina."
+      "lore": "Diusir dari keramat bawah kedai lama oleh Razak Bumi. Kemarahan dia bukan jahat — dia cuma nak tanah dia balik."
     },
     {
       "id": "penanggal",
       "name": "Penanggal",
+      "nameFull": "Mak P",
       "type": "hantu",
       "tier": "uncommon",
-      "description": "Kepala terbang dengan usus terjurai. Dahulu seorang bidan yang buat perjanjian gelap.",
+      "hp": 60,
+      "description": "Kepala terbang dengan usus terjurai. Dahulu seorang bidan. Mati semasa bersalin.",
       "bottleType": "clay",
       "stats": {
         "power": 40,
@@ -81,9 +91,294 @@
         "speed": 50,
         "willpower": 35
       },
-      "bayangAbility": "Visceral Flight — terbang + serangan jarak dekat yang mengerikan",
+      "bayangAbility": "Visceral Flight — terbang laju + serangan tentakel",
       "weakness": "Jeruk nipis di ambang pintu, duri mengkuang",
-      "lore": "Belum ditangkap. Dian dengar dia menangis setiap malam Jumaat dari arah timur PPR."
+      "lore": "Terbang keliling PPR setiap malam — sebenarnya sedang jaga ibu mengandung dalam flat."
+    },
+    {
+      "id": "pontianak",
+      "name": "Pontianak",
+      "nameFull": "Seri",
+      "type": "hantu",
+      "tier": "rare",
+      "hp": 70,
+      "description": "Pemburu yang methodical. Cantik, senyap, sabar. Hanya buru lelaki yang sakiti wanita.",
+      "bottleType": "clay",
+      "stats": {
+        "power": 45,
+        "defense": 25,
+        "speed": 40,
+        "willpower": 55
+      },
+      "bayangAbility": "Glamour — kecantikan supernatural + kelajuan dan cakar tajam",
+      "weakness": "Paku di tengkuk, bunga kemboja",
+      "lore": "Dibunuh teman lelaki 40 tahun lalu. Kembali dengan tenang. Dia tak mengamuk — dia memburu. Dengan criteria yang tepat."
+    },
+    {
+      "id": "pocong",
+      "name": "Pocong",
+      "nameFull": "Encik Kain",
+      "type": "hantu",
+      "tier": "common",
+      "hp": 40,
+      "description": "Mayat berbalut kain kafan yang tak dilepaskan ikatannya. Keliru, takut, marah.",
+      "bottleType": "glass",
+      "stats": {
+        "power": 15,
+        "defense": 30,
+        "speed": 5,
+        "willpower": 20
+      },
+      "bayangAbility": "Binding — immobilize sasaran dengan balutan spiritual",
+      "weakness": "Lepaskan ikatan kain kafan, bacaan yasin",
+      "lore": "Meninggal waktu COVID, dikebumikan tergesa-gesa. Ikatan tak dilepas. Dia cuma nak bebas."
+    },
+    {
+      "id": "orang-minyak",
+      "name": "Orang Minyak",
+      "nameFull": "Minyak",
+      "type": "hantu",
+      "tier": "uncommon",
+      "hp": 55,
+      "description": "Manusia yang buat perjanjian untuk jadi ghaib — tapi perjanjian tu backfire. Sekarang kekal nampak sebagai makhluk hitam berminyak.",
+      "bottleType": "clay",
+      "stats": {
+        "power": 30,
+        "defense": 35,
+        "speed": 35,
+        "willpower": 25
+      },
+      "bayangAbility": "Oil Slick — badan jadi licin, mustahil dipegang, boleh masuk mana-mana celah",
+      "weakness": "Air suci, cahaya terang",
+      "lore": "Dah berpuluh tahun cuba jumpa keluarga. Mereka nampak monster. Dia nampak mereka. Kesunyian yang menghancurkan."
+    },
+    {
+      "id": "langsuir",
+      "name": "Langsuir",
+      "nameFull": "Cik Embun",
+      "type": "hantu",
+      "tier": "rare",
+      "hp": 65,
+      "description": "Wanita yang mati bersalin, kembali sebagai roh anggun yang terbang. Penjaga Kampung Baru.",
+      "bottleType": "clay",
+      "stats": {
+        "power": 40,
+        "defense": 20,
+        "speed": 45,
+        "willpower": 50
+      },
+      "bayangAbility": "Sonic Scream — jeritan pecahkan kaca, disorientasi lawan",
+      "weakness": "Rambut ditebang, kuku dipotong",
+      "lore": "Penduduk Kampung Baru yang meninggal tahun 60-an. Minyak Esso pun tak boleh usir dia."
+    },
+    {
+      "id": "hantu-galah",
+      "name": "Hantu Galah",
+      "nameFull": "Si Panjang",
+      "type": "hantu",
+      "tier": "common",
+      "hp": 35,
+      "description": "Makhluk tinggi kurus yang berdiri antara pokok. Tak serang. Cuma... tengok.",
+      "bottleType": "glass",
+      "stats": {
+        "power": 10,
+        "defense": 15,
+        "speed": 15,
+        "willpower": 20
+      },
+      "bayangAbility": "High Ground — tinggi melampau + penglihatan jarak jauh",
+      "weakness": "Cahaya matahari, bunyi kuat",
+      "lore": "Bekas penoreh getah yang sesat dalam estet dan mati kelaparan. Masih cari jalan keluar."
+    },
+    {
+      "id": "tok-belang",
+      "name": "Harimau Jadian",
+      "nameFull": "Tok Belang",
+      "type": "guardian",
+      "tier": "legendary",
+      "hp": 120,
+      "description": "Roh harimau Malaya purba. Gagah, bangga, marah. Penjaga spiritual yang dimeterai zaman penjajah.",
+      "bottleType": "metal",
+      "stats": {
+        "power": 70,
+        "defense": 50,
+        "speed": 60,
+        "willpower": 80
+      },
+      "bayangAbility": "Predator Resonance — kelajuan, kekuatan, naluri pemangsa (dipinjam, bukan dikawal)",
+      "weakness": "Hormatan — tak boleh dipaksa, hanya dirunding",
+      "lore": "Dimeterai penjajah sebab dia lawan. Sekarang bebas. Bukan musuh — tapi bukan kawan. Belum lagi."
+    },
+    {
+      "id": "nenek-buai",
+      "name": "Hantu Kopek",
+      "nameFull": "Nenek Buai",
+      "type": "hantu",
+      "tier": "common",
+      "hp": 30,
+      "description": "Nenek tua yang lembut. Berkeliaran di taman permainan, tolak buaian kosong, nyanyi lagu tidur.",
+      "bottleType": "glass",
+      "stats": {
+        "power": 5,
+        "defense": 10,
+        "speed": 5,
+        "willpower": 40
+      },
+      "bayangAbility": "Lullaby — medan tidur yang buat semua makhluk dalam radius tertidur",
+      "weakness": "Gambar cucunya, lagu Nina Bobo",
+      "lore": "Kehilangan cucu dalam kebakaran. Kembali mencari mereka. Tak akan jumpa."
+    },
+    {
+      "id": "bajang",
+      "name": "Bajang",
+      "nameFull": "Unding",
+      "type": "familiar",
+      "tier": "uncommon",
+      "hp": 50,
+      "description": "Saka warisan berbentuk musang. Ganas, licik, penyakit kanak-kanak. Senjata tanpa tuan.",
+      "bottleType": "clay",
+      "stats": {
+        "power": 35,
+        "defense": 20,
+        "speed": 40,
+        "willpower": 30
+      },
+      "bayangAbility": "Shape-shift — ciri-ciri musang: kelincahan, pemanjat, hidung tajam",
+      "weakness": "Ritual netralisasi bomoh, tabur beras kunyit",
+      "lore": "Dicipta dari bayi mati oleh jiran dengki. Tiga generasi kemudian, keluarga tu dah tiada tapi Unding masih jalan arahan lama."
+    },
+    {
+      "id": "polong",
+      "name": "Polong",
+      "nameFull": "Cik Cik",
+      "type": "familiar",
+      "tier": "common",
+      "hp": 25,
+      "description": "Roh pembunuh dalam botol, bunyi macam cengkerik. Setia, patuh, sedikit pathetic.",
+      "bottleType": "glass",
+      "stats": {
+        "power": 30,
+        "defense": 5,
+        "speed": 40,
+        "willpower": 10
+      },
+      "bayangAbility": "Precision Strike — ketepatan melampau dalam serangan, titik saraf",
+      "weakness": "Cahaya kuat, bunyi loceng",
+      "lore": "Dicipta bomoh tapi tak pernah digunakan. Menunggu arahan bertahun-tahun. Bila jumpa Syafiq, terus imprint macam anak anjing."
+    },
+    {
+      "id": "jenglot",
+      "name": "Jenglot",
+      "nameFull": "Si Kecil",
+      "type": "ancient",
+      "tier": "rare",
+      "hp": 45,
+      "description": "Patung mumia 6 inci berambut panjang. Minum darah. Tanpa darah, tarik bencana ke lokasi.",
+      "bottleType": "metal",
+      "stats": {
+        "power": 25,
+        "defense": 40,
+        "speed": 5,
+        "willpower": 60
+      },
+      "bayangAbility": "Blood Sense — kesan makhluk hidup melalui degupan jantung dalam radius luas",
+      "weakness": "Cahaya matahari terus, garam laut",
+      "lore": "Hutang nenek moyang. Pemilik kedai antik dah bagi makan selama bertahun. Dia penat. Dia nak lepas."
+    },
+    {
+      "id": "djinn-sultan",
+      "name": "Djinn Raja",
+      "nameFull": "Raja Khamis",
+      "type": "djinn",
+      "tier": "legendary",
+      "hp": 150,
+      "description": "Raja djinn hari Khamis. Purba, bijak, geli hati dengan manusia. Api tanpa asap.",
+      "bottleType": "metal",
+      "stats": {
+        "power": 80,
+        "defense": 60,
+        "speed": 50,
+        "willpower": 100
+      },
+      "bayangAbility": "TIDAK BOLEH — channeling Ifrit bunuh Syafiq serta-merta",
+      "weakness": "Kontrak sahaja — djinn raja tak boleh dipaksa",
+      "lore": "Wujud sebelum Islam tiba di Nusantara. Kenal saka dalam Syafiq. 'Aku kenal benda dalam kau tu. Dulu dia ada nama lain.'"
+    },
+    {
+      "id": "hantu-kubur",
+      "name": "Hantu Kubur",
+      "nameFull": "Ramai",
+      "type": "hantu",
+      "tier": "rare",
+      "hp": 100,
+      "description": "Bukan satu hantu — puluhan, bergabung jadi satu. Suara bercampur-campur. Menakutkan dari segi skala.",
+      "bottleType": "clay",
+      "stats": {
+        "power": 45,
+        "defense": 45,
+        "speed": 15,
+        "willpower": 70
+      },
+      "bayangAbility": "Multiplication — cipta 2-3 salinan bayangan diri sendiri",
+      "weakness": "Perlu dipecahkan kepada roh individu",
+      "lore": "Terlepas dari meterai Cheras. Kubur beramai-ramai — roh mereka bergabung. Bising. Sedih. Besar."
+    },
+    {
+      "id": "jembalang-air",
+      "name": "Jembalang Air",
+      "nameFull": "Si Hitam Sungai",
+      "type": "jembalang",
+      "tier": "rare",
+      "hp": 75,
+      "description": "Penjaga Sungai Klang. Perlahan mati bersama sungai yang dicemari. Sedih, kurang kuasa.",
+      "bottleType": "clay",
+      "stats": {
+        "power": 35,
+        "defense": 30,
+        "speed": 20,
+        "willpower": 55
+      },
+      "bayangAbility": "Water Form — manipulasi air, bergerak melalui air, badan jadi cecair",
+      "weakness": "Kemarau, bahan kimia",
+      "lore": "Dulu boleh banjirkan seluruh KL. Sekarang tak boleh banjirkan longkang. Cermin kematian ekologi Sungai Klang."
+    },
+    {
+      "id": "hantu-tinggi",
+      "name": "Hantu Tinggi",
+      "nameFull": "Tiang",
+      "type": "hantu",
+      "tier": "common",
+      "hp": 35,
+      "description": "Roh lelaki yang terjun dari Menara KL. Terperangkap di puncak, takut ketinggian. Ironis.",
+      "bottleType": "glass",
+      "stats": {
+        "power": 15,
+        "defense": 10,
+        "speed": 30,
+        "willpower": 15
+      },
+      "bayangAbility": "Gravity Reduction — jadi ringan, lompat tinggi, jatuh perlahan",
+      "weakness": "Ketinggian (paradoks), bunyi loceng",
+      "lore": "Lega bila ditangkap — sekurang-kurangnya tak di puncak lagi. Zafri label botol: 'Jangan buka dekat tempat tinggi.'"
+    },
+    {
+      "id": "hantu-tetek",
+      "name": "Hantu Tetek",
+      "nameFull": "Kak Tetek",
+      "type": "hantu",
+      "tier": "common",
+      "hp": 45,
+      "description": "Besar, kuat, suka kanak-kanak. Peluk sampai pengsan — tapi niat sebenarnya melindungi.",
+      "bottleType": "glass",
+      "stats": {
+        "power": 20,
+        "defense": 40,
+        "speed": 10,
+        "willpower": 30
+      },
+      "bayangAbility": "Body Shield — membesar, jadi perisai hidup, serap impak",
+      "weakness": "Tak perlu dilawan — dia penjaga",
+      "lore": "Makcik-makcik PPR dah tahu pasal dia. 'Biarlah dia. Dia jaga budak-budak.'"
     }
   ]
 }
