@@ -4,21 +4,21 @@
   "titleMalay": "Kembali ke Unit 9-4",
   "startNode": "1",
   "lines": {
-    "1": { "id": "1", "speaker": "", "text": "Pintu berderit buka. Habuk. Gelap. Bau bunga masih ada, tapi lemah.", "next": "2", "background": "unit-9-4" },
-    "2": { "id": "2", "speaker": "", "text": "Botol-botol masih tersusun di rak. Berpuluh-puluh. Tertutup rapat.", "next": "3" },
-    "3": { "id": "3", "speaker": "", "text": "Saka dalam diri kau bergerak. Dia kenal tempat ni. Rumah lama dia.", "next": "4" },
-    "4": { "id": "4", "speaker": "", "text": "Kau rasa tarikan. Satu botol di hujung rak — tanah liat, tulisan Jawi pudar.", "next": "5" },
-    "5": { "id": "5", "speaker": "", "text": "Ada sesuatu dalam tu. Masih hidup. Masih menunggu.", "next": "choice1" },
-    "choice1": { "id": "choice1", "speaker": "", "text": "Tangan kau gatal nak sentuh.", "choices": [
+    "1": { "id": "1", "text": "Pintu berderit buka. Habuk. Gelap. Bau bunga masih ada, tapi lemah.", "next": "2", "background": "unit-9-4" },
+    "2": { "id": "2", "text": "Botol-botol masih tersusun di rak. Berpuluh-puluh. Tertutup rapat.", "next": "3" },
+    "3": { "id": "3", "speaker": "Syafiq", "expression": "shocked", "text": "Saka dalam diri kau bergerak. Dia kenal tempat ni. Rumah lama dia.", "next": "4" },
+    "4": { "id": "4", "text": "Kau rasa tarikan. Satu botol di hujung rak — tanah liat, tulisan Jawi pudar.", "next": "5" },
+    "5": { "id": "5", "text": "Ada sesuatu dalam tu. Masih hidup. Masih menunggu.", "next": "choice1" },
+    "choice1": { "id": "choice1", "speaker": "Syafiq", "text": "Tangan kau gatal nak sentuh.", "choices": [
       { "text": "Pegang botol tu.", "next": "touch" },
       { "text": "Tinggalkan. Belum bersedia.", "next": "leave" }
     ]},
-    "touch": { "id": "touch", "speaker": "", "text": "Jari kau sentuh tanah liat. Sejuk. Getaran halus.", "next": "touch-2" },
-    "touch-2": { "id": "touch-2", "speaker": "", "text": "Saka kau menjerit dalam senyap. Lapar. Dia mahu apa yang ada dalam botol ni.", "next": "touch-3", "effect": "shake" },
-    "touch-3": { "id": "touch-3", "speaker": "", "text": "Kau letak balik. Cepat. Jantung berdegup kencang.", "next": "touch-4" },
-    "touch-4": { "id": "touch-4", "speaker": "", "text": "Lain kali. Bila kau lebih kuat. Bila kau lebih faham.", "next": "end" },
-    "leave": { "id": "leave", "speaker": "", "text": "Kau undur dari rak. Saka meronta, tapi kau tahan.", "next": "leave-2" },
-    "leave-2": { "id": "leave-2", "speaker": "", "text": "Bukan sekarang. Ada banyak lagi kau tak tahu.", "next": "end" },
-    "end": { "id": "end", "speaker": "", "text": "Unit 9-4 menunggu. Macam selalu." }
+    "touch": { "id": "touch", "text": "Jari kau sentuh tanah liat. Sejuk. Getaran halus.", "next": "touch-2" },
+    "touch-2": { "id": "touch-2", "speaker": "Syafiq", "expression": "angry", "text": "Saka kau menjerit dalam senyap. Lapar. Dia mahu apa yang ada dalam botol ni.", "next": "touch-3", "effect": "shake" },
+    "touch-3": { "id": "touch-3", "speaker": "Syafiq", "expression": "shocked", "text": "Kau letak balik. Cepat. Jantung berdegup kencang.", "next": "touch-4" },
+    "touch-4": { "id": "touch-4", "text": "Lain kali. Bila kau lebih kuat. Bila kau lebih faham.", "next": "end" },
+    "leave": { "id": "leave", "speaker": "Syafiq", "expression": "sad", "text": "Kau undur dari rak. Saka meronta, tapi kau tahan.", "next": "leave-2" },
+    "leave-2": { "id": "leave-2", "text": "Bukan sekarang. Ada banyak lagi kau tak tahu.", "next": "end" },
+    "end": { "id": "end", "text": "Unit 9-4 menunggu. Macam selalu." }
   }
 }

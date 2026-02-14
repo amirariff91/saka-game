@@ -4,24 +4,24 @@
   "titleMalay": "Rumah",
   "startNode": "1",
   "lines": {
-    "1": { "id": "1", "speaker": "", "text": "Unit kecil. Dinding nipis. Bunyi TV jiran sebelah kedengaran samar.", "next": "2", "background": "home" },
-    "2": { "id": "2", "speaker": "", "text": "Kasut bertaburan di depan pintu. Bau nasi goreng dari dapur.", "next": "3" },
-    "3": { "id": "3", "speaker": "Mak", "text": "Dah makan ke belum? Ada nasi goreng atas meja.", "next": "4" },
-    "4": { "id": "4", "speaker": "", "text": "Mak duduk di sofa, mata lekat pada TV. Rancangan drama Melayu malam.", "next": "5" },
-    "5": { "id": "5", "speaker": "", "text": "Kau tengok dia. Penat. Garis-garis di muka dia makin jelas.", "next": "6" },
-    "6": { "id": "6", "speaker": "", "text": "Sejak ayah hilang, dia kerja dua shift. Tak pernah komplen.", "next": "choice1" },
+    "1": { "id": "1", "text": "Unit kecil. Dinding nipis. Bunyi TV jiran sebelah kedengaran samar.", "next": "2", "background": "home" },
+    "2": { "id": "2", "text": "Kasut bertaburan di depan pintu. Bau nasi goreng dari dapur.", "next": "3" },
+    "3": { "id": "3", "speaker": "Mak", "expression": "loving", "text": "Dah makan ke belum? Ada nasi goreng atas meja.", "next": "4" },
+    "4": { "id": "4", "text": "Mak duduk di sofa, mata lekat pada TV. Rancangan drama Melayu malam.", "next": "5" },
+    "5": { "id": "5", "text": "Kau tengok dia. Penat. Garis-garis di muka dia makin jelas.", "next": "6" },
+    "6": { "id": "6", "text": "Sejak ayah hilang, dia kerja dua shift. Tak pernah komplen.", "next": "choice1" },
     "choice1": { "id": "choice1", "speaker": "Syafiq", "text": "...", "choices": [
       { "text": "Mak, ayah dulu... dia pernah cerita pasal benda pelik tak?", "next": "ask-dad" },
       { "text": "Terima kasih mak. Saya pergi tidur.", "next": "sleep" }
     ]},
-    "ask-dad": { "id": "ask-dad", "speaker": "Mak", "text": "...", "next": "ask-dad-2" },
-    "ask-dad-2": { "id": "ask-dad-2", "speaker": "Mak", "text": "Ayah kau banyak benda pelik. Keluar malam. Balik lewat. Cakap sorang-sorang.", "next": "ask-dad-3" },
-    "ask-dad-3": { "id": "ask-dad-3", "speaker": "Mak", "text": "Satu hari dia tak balik langsung.", "next": "ask-dad-4" },
-    "ask-dad-4": { "id": "ask-dad-4", "speaker": "", "text": "Tangan dia menggeletar sikit. Dia tukar channel TV.", "next": "ask-dad-5" },
-    "ask-dad-5": { "id": "ask-dad-5", "speaker": "Mak", "text": "Jangan jadi macam dia, Syafiq. Tidur awal.", "next": "end" },
-    "sleep": { "id": "sleep", "speaker": "", "text": "Kau masuk bilik. Baring atas katil. Siling putih, cat mengelupas.", "next": "sleep-2" },
-    "sleep-2": { "id": "sleep-2", "speaker": "", "text": "Saka dalam diri kau bergerak. Lapar. Sentiasa lapar.", "next": "sleep-3" },
-    "sleep-3": { "id": "sleep-3", "speaker": "", "text": "Kau pejam mata. Esok lagi satu hari.", "next": "end" },
-    "end": { "id": "end", "speaker": "", "text": "Malam semakin sunyi. Kau dengar degup jantung sendiri." }
+    "ask-dad": { "id": "ask-dad", "speaker": "Mak", "expression": "worried", "text": "...", "next": "ask-dad-2" },
+    "ask-dad-2": { "id": "ask-dad-2", "speaker": "Mak", "expression": "worried", "text": "Ayah kau banyak benda pelik. Keluar malam. Balik lewat. Cakap sorang-sorang.", "next": "ask-dad-3" },
+    "ask-dad-3": { "id": "ask-dad-3", "speaker": "Mak", "expression": "stern", "text": "Satu hari dia tak balik langsung.", "next": "ask-dad-4" },
+    "ask-dad-4": { "id": "ask-dad-4", "text": "Tangan dia menggeletar sikit. Dia tukar channel TV.", "next": "ask-dad-5" },
+    "ask-dad-5": { "id": "ask-dad-5", "speaker": "Mak", "expression": "stern", "text": "Jangan jadi macam dia, Syafiq. Tidur awal.", "next": "end" },
+    "sleep": { "id": "sleep", "text": "Kau masuk bilik. Baring atas katil. Siling putih, cat mengelupas.", "next": "sleep-2" },
+    "sleep-2": { "id": "sleep-2", "text": "Saka dalam diri kau bergerak. Lapar. Sentiasa lapar.", "next": "sleep-3" },
+    "sleep-3": { "id": "sleep-3", "text": "Kau pejam mata. Esok lagi satu hari.", "next": "end" },
+    "end": { "id": "end", "text": "Malam semakin sunyi. Kau dengar degup jantung sendiri." }
   }
 }

@@ -180,19 +180,7 @@ export class MenuScene extends Phaser.Scene {
   }
 
   private createFogLayer(w: number, h: number): void {
-    const fogHeight = h * 0.3;
-    
-    // Create misty fog effect at bottom
-    this.fogLayer.fillGradientStyle(
-      0x2dd4a8, 0x2dd4a8, 0x4af7c7, 0x4af7c7, 0, 0.1, 0.05, 0
-    );
-    this.fogLayer.fillRect(0, h - fogHeight, w, fogHeight);
-    
-    // Add some wavy texture
-    for (let x = 0; x < w; x += 20) {
-      const waveY = Math.sin(x * 0.02) * 10;
-      this.fogLayer.fillCircle(x, h - fogHeight * 0.3 + waveY, 15);
-    }
+    // Removed
   }
 
   private createParticles(w: number, h: number): void {
@@ -305,11 +293,7 @@ export class MenuScene extends Phaser.Scene {
   }
 
   private drawScanlines(w: number, h: number): void {
-    this.scanlines.clear();
-    this.scanlines.lineStyle(1, 0x000000, 0.15);
-    for (let y = 0; y < h; y += 3) {
-      this.scanlines.lineBetween(0, y, w, y);
-    }
+    // Removed
   }
 
   private handleResize(gameSize: Phaser.Structs.Size): void {

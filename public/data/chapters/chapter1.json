@@ -54,6 +54,8 @@
     },
     "narr_10": {
       "id": "narr_10",
+      "speaker": "Syafiq",
+      "expression": "sad",
       "text": "Syafiq bukan jenis percaya benda-benda macam ni. Terlalu penat, terlalu miskin untuk takut hantu.",
       "next": "narr_11"
     },
@@ -96,6 +98,7 @@
     },
     "enter_02": {
       "id": "enter_02",
+      "speaker": "Syafiq",
       "text": "Lima tahun tak disentuh. Lima tahun bau kemboja terkurung.",
       "next": "enter_03"
     },
@@ -118,6 +121,7 @@
     "enter_06": {
       "id": "enter_06",
       "speaker": "Syafiq",
+      "expression": "shocked",
       "text": "Apa benda...",
       "next": "enter_07"
     },
@@ -128,6 +132,8 @@
     },
     "enter_08": {
       "id": "enter_08",
+      "speaker": "Syafiq",
+      "expression": "shocked",
       "text": "Sejuk. Lepas tu panas. Lepas tu — kosong.",
       "effect": "shake",
       "next": "enter_09"
@@ -145,6 +151,8 @@
     },
     "wake_02": {
       "id": "wake_02",
+      "speaker": "Syafiq",
+      "expression": "sad",
       "text": "Syafiq buka mata atas lantai. Botol retak dah kosong. Botol-botol lain masih sealed.",
       "next": "wake_03"
     },
@@ -155,12 +163,15 @@
     },
     "wake_04": {
       "id": "wake_04",
+      "speaker": "Syafiq",
+      "expression": "shocked",
       "text": "Tapi takde sesiapa.",
       "next": "wake_05"
     },
     "wake_05": {
       "id": "wake_05",
       "speaker": "Syafiq",
+      "expression": "smirk",
       "text": "...ok. Mimpi je ni.",
       "next": "end_01"
     },

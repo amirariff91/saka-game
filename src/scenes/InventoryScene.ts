@@ -47,9 +47,9 @@ export class InventoryScene extends Phaser.Scene {
     // Initialize with one captured spirit (Hantu Raya from Episode 4)
     this.initializeCapturedSpirits();
 
-    // Background
+    // Background — flat dark
     const bg = this.add.graphics();
-    bg.fillGradientStyle(0x0a0a0a, 0x0a0a0a, 0x1a160d, 0x1a160d, 1);
+    bg.fillStyle(0x0a0a0a, 1);
     bg.fillRect(0, 0, w, h);
 
     // Title
@@ -99,14 +99,7 @@ export class InventoryScene extends Phaser.Scene {
     // Set up touch scrolling
     this.setupScrolling();
 
-    // Scan-line overlay
-    const scanlines = this.add.graphics();
-    scanlines.lineStyle(1, 0x000000, 0.15);
-    for (let y = 0; y < h; y += 3) {
-      scanlines.lineBetween(0, y, w, y);
-    }
-    scanlines.setAlpha(0.04);
-    scanlines.setDepth(1000);
+    // Scanlines removed — clean look
 
     this.cameras.main.fadeIn(800, 0, 0, 0);
   }

@@ -94,46 +94,6 @@ export class LocationMenuScene extends Phaser.Scene {
     this.backgroundGraphics = this.add.graphics();
     this.backgroundGraphics.fillStyle(0x0a0a0a, 1);
     this.backgroundGraphics.fillRect(0, 0, w, h);
-
-    // Subtle PPR blueprint/floor plan overlay
-    this.backgroundGraphics.lineStyle(1, 0x2dd4a8, 0.05);
-    
-    // Draw simple floor plan lines
-    const margin = 40;
-    const cellW = (w - margin * 2) / 4;
-    const cellH = (h - 200) / 6;
-    
-    // Horizontal lines (floors)
-    for (let i = 0; i <= 6; i++) {
-      const y = 120 + i * cellH;
-      this.backgroundGraphics.lineBetween(margin, y, w - margin, y);
-    }
-    
-    // Vertical lines (units)
-    for (let i = 0; i <= 4; i++) {
-      const x = margin + i * cellW;
-      this.backgroundGraphics.lineBetween(x, 120, x, 120 + cellH * 6);
-    }
-
-    // Add some architectural details
-    // Central stairwell
-    const stairX = w / 2 - 15;
-    const stairY = 120;
-    this.backgroundGraphics.fillStyle(0x2dd4a8, 0.03);
-    this.backgroundGraphics.fillRect(stairX, stairY, 30, cellH * 6);
-    
-    // Unit doors (small rectangles)
-    for (let floor = 0; floor < 6; floor++) {
-      for (let unit = 0; unit < 4; unit++) {
-        if (unit === 1) continue; // Skip stairwell area
-        const x = margin + unit * cellW + 10;
-        const y = 120 + floor * cellH + cellH / 2;
-        this.backgroundGraphics.lineStyle(1, 0x2dd4a8, 0.08);
-        this.backgroundGraphics.strokeRect(x, y - 3, 20, 6);
-      }
-    }
-
-    // Vignette removed — clean look
   }
 
   private createParticles(w: number, h: number): void {

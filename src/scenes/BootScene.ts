@@ -82,10 +82,37 @@ export class BootScene extends Phaser.Scene {
     this.load.json('tutorial-capture', 'data/chapters/tutorial-capture.json');
     this.load.json('spirits', 'data/spirits.json');
 
-    // === VN CHARACTER PORTRAITS (high quality, 1024x1024) ===
+    // === VN CHARACTER PORTRAITS (high quality) ===
+    // Syafiq (5 expressions)
     this.load.image('portrait-syafiq', 'assets/portraits/syafiq.png');
+    this.load.image('portrait-syafiq-shocked', 'assets/portraits/syafiq-shocked.jpg');
+    this.load.image('portrait-syafiq-angry', 'assets/portraits/syafiq-angry.jpg');
+    this.load.image('portrait-syafiq-sad', 'assets/portraits/syafiq-sad.jpg');
+    this.load.image('portrait-syafiq-smirk', 'assets/portraits/syafiq-smirk.jpg');
+
+    // Dian (5 expressions)
     this.load.image('portrait-dian', 'assets/portraits/dian.png');
+    this.load.image('portrait-dian-worried', 'assets/portraits/dian-worried.jpg');
+    this.load.image('portrait-dian-happy', 'assets/portraits/dian-happy.jpg');
+    this.load.image('portrait-dian-angry', 'assets/portraits/dian-angry.jpg');
+    this.load.image('portrait-dian-frightened', 'assets/portraits/dian-frightened.jpg');
+
+    // Zafri (5 expressions)
     this.load.image('portrait-zafri', 'assets/portraits/zafri.png');
+    this.load.image('portrait-zafri-excited', 'assets/portraits/zafri-excited.jpg');
+    this.load.image('portrait-zafri-nervous', 'assets/portraits/zafri-nervous.jpg');
+    this.load.image('portrait-zafri-serious', 'assets/portraits/zafri-serious.jpg');
+    this.load.image('portrait-zafri-frustrated', 'assets/portraits/zafri-frustrated.jpg');
+
+    // Mak — Syafiq's mother (3 expressions)
+    this.load.image('portrait-mak-loving', 'assets/portraits/mak-loving.jpg');
+    this.load.image('portrait-mak-worried', 'assets/portraits/mak-worried.jpg');
+    this.load.image('portrait-mak-stern', 'assets/portraits/mak-stern.jpg');
+
+    // Ikal — half-bunian (3 expressions)
+    this.load.image('portrait-ikal-guarded', 'assets/portraits/ikal-guarded.jpg');
+    this.load.image('portrait-ikal-knowing', 'assets/portraits/ikal-knowing.jpg');
+    this.load.image('portrait-ikal-warning', 'assets/portraits/ikal-warning.jpg');
 
     // === CHARACTER SPRITES ===
 

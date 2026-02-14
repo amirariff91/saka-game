@@ -4,23 +4,23 @@
   "titleMalay": "Kedai",
   "startNode": "1",
   "lines": {
-    "1": { "id": "1", "speaker": "", "text": "Kedai runcit bawah blok. Lampu neon hijau. Bau plastik dan detergen.", "next": "2", "background": "ppr-corridor" },
-    "2": { "id": "2", "speaker": "", "text": "Makcik Ros di belakang kaunter, baca Harian Metro.", "next": "3" },
+    "1": { "id": "1", "text": "Kedai runcit bawah blok. Lampu neon hijau. Bau plastik dan detergen.", "next": "2", "background": "ppr-corridor" },
+    "2": { "id": "2", "text": "Makcik Ros di belakang kaunter, baca Harian Metro.", "next": "3" },
     "3": { "id": "3", "speaker": "Makcik Ros", "text": "Eh, Syafiq. Nak beli apa? Milo tin ada promo.", "next": "4" },
-    "4": { "id": "4", "speaker": "", "text": "Makcik Ros kenal semua orang dalam PPR ni. 20 tahun dia sini.", "next": "choice1" },
+    "4": { "id": "4", "text": "Makcik Ros kenal semua orang dalam PPR ni. 20 tahun dia sini.", "next": "choice1" },
     "choice1": { "id": "choice1", "speaker": "Syafiq", "text": "Kau pandang sekeliling kedai.", "choices": [
       { "text": "Makcik, tingkat 9 tu... kenapa orang tak naik sana?", "next": "ask-floor9" },
       { "text": "Takde apa. Saje jalan.", "next": "casual" }
     ]},
     "ask-floor9": { "id": "ask-floor9", "speaker": "Makcik Ros", "text": "Tingkat 9?", "next": "ask-floor9-2" },
-    "ask-floor9-2": { "id": "ask-floor9-2", "speaker": "", "text": "Dia letak surat khabar. Pandang kau betul-betul.", "next": "ask-floor9-3" },
+    "ask-floor9-2": { "id": "ask-floor9-2", "text": "Dia letak surat khabar. Pandang kau betul-betul.", "next": "ask-floor9-3" },
     "ask-floor9-3": { "id": "ask-floor9-3", "speaker": "Makcik Ros", "text": "Dulu ada orang tua duduk situ. Tok Pawang Ismail. Baik orangnya. Tolong banyak orang.", "next": "ask-floor9-4" },
     "ask-floor9-4": { "id": "ask-floor9-4", "speaker": "Makcik Ros", "text": "Lepas dia meninggal, benda pelik-pelik jadi. Orang dengar bunyi. Bau bunga.", "next": "ask-floor9-5" },
     "ask-floor9-5": { "id": "ask-floor9-5", "speaker": "Makcik Ros", "text": "Pihak pengurusan kunci unit dia. Tak ada siapa berani masuk.", "next": "ask-floor9-6" },
-    "ask-floor9-6": { "id": "ask-floor9-6", "speaker": "", "text": "Tok Pawang Ismail. Datuk Zafri.", "next": "ask-floor9-7" },
+    "ask-floor9-6": { "id": "ask-floor9-6", "speaker": "Syafiq", "expression": "shocked", "text": "Tok Pawang Ismail. Datuk Zafri.", "next": "ask-floor9-7" },
     "ask-floor9-7": { "id": "ask-floor9-7", "speaker": "Makcik Ros", "text": "Kenapa tanya? Kau jangan naik sana.", "next": "end" },
     "casual": { "id": "casual", "speaker": "Makcik Ros", "text": "Jalan-jalan pukul 2 pagi? Budak zaman sekarang...", "next": "casual-2" },
-    "casual-2": { "id": "casual-2", "speaker": "", "text": "Dia geleng kepala tapi senyum. Kau beli Milo tin dan keluar.", "next": "end" },
-    "end": { "id": "end", "speaker": "", "text": "Pintu kedai berderit tutup. Lampu neon berkelip sekali." }
+    "casual-2": { "id": "casual-2", "speaker": "Syafiq", "expression": "smirk", "text": "Dia geleng kepala tapi senyum. Kau beli Milo tin dan keluar.", "next": "end" },
+    "end": { "id": "end", "text": "Pintu kedai berderit tutup. Lampu neon berkelip sekali." }
   }
 }

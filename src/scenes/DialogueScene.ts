@@ -30,12 +30,65 @@ export class DialogueScene extends Phaser.Scene {
   private currentSpeakerSide: 'left' | 'right' | 'center' | 'none' = 'none';
   private lastSpeaker = '';
 
-  // Speaker → portrait key mapping (HD portraits, 1024x1024)
-  private readonly speakerSpriteMap: Record<string, { key: string; side: 'left' | 'right' }> = {
-    'Syafiq': { key: 'portrait-syafiq', side: 'left' },
-    'Dian': { key: 'portrait-dian', side: 'right' },
-    'Zafri': { key: 'portrait-zafri', side: 'right' },
-    'Mak': { key: 'portrait-mak', side: 'right' }, // No texture — handled gracefully
+  // Speaker → portrait mapping with expression variants
+  private readonly speakerSpriteMap: Record<string, {
+    key: string;
+    side: 'left' | 'right';
+    expressions: Record<string, string>;
+  }> = {
+    'Syafiq': {
+      key: 'portrait-syafiq',
+      side: 'left',
+      expressions: {
+        neutral: 'portrait-syafiq',
+        shocked: 'portrait-syafiq-shocked',
+        angry: 'portrait-syafiq-angry',
+        sad: 'portrait-syafiq-sad',
+        smirk: 'portrait-syafiq-smirk',
+      },
+    },
+    'Dian': {
+      key: 'portrait-dian',
+      side: 'right',
+      expressions: {
+        neutral: 'portrait-dian',
+        worried: 'portrait-dian-worried',
+        happy: 'portrait-dian-happy',
+        angry: 'portrait-dian-angry',
+        frightened: 'portrait-dian-frightened',
+      },
+    },
+    'Zafri': {
+      key: 'portrait-zafri',
+      side: 'right',
+      expressions: {
+        neutral: 'portrait-zafri',
+        excited: 'portrait-zafri-excited',
+        nervous: 'portrait-zafri-nervous',
+        serious: 'portrait-zafri-serious',
+        frustrated: 'portrait-zafri-frustrated',
+      },
+    },
+    'Mak': {
+      key: 'portrait-mak-loving',
+      side: 'right',
+      expressions: {
+        neutral: 'portrait-mak-loving',
+        loving: 'portrait-mak-loving',
+        worried: 'portrait-mak-worried',
+        stern: 'portrait-mak-stern',
+      },
+    },
+    'Ikal': {
+      key: 'portrait-ikal-guarded',
+      side: 'right',
+      expressions: {
+        neutral: 'portrait-ikal-guarded',
+        guarded: 'portrait-ikal-guarded',
+        knowing: 'portrait-ikal-knowing',
+        warning: 'portrait-ikal-warning',
+      },
+    },
   };
 
   // UI elements
@@ -209,11 +262,12 @@ export class DialogueScene extends Phaser.Scene {
       this.createBackground((line as any).background);
     }
 
-    // Speaker + VN portrait
+    // Speaker + VN portrait with expression
     if (line.speaker) {
       this.speakerText.setText(line.speaker);
       this.speakerText.setVisible(true);
-      this.updatePortrait(line.speaker);
+      const expression = (line as any).expression || 'neutral';
+      this.updatePortrait(line.speaker, expression);
     } else {
       this.speakerText.setText('');
       this.speakerText.setVisible(false);
@@ -415,52 +469,48 @@ export class DialogueScene extends Phaser.Scene {
 
   // ===== VN PORTRAIT SYSTEM =====
 
-  private updatePortrait(speaker: string): void {
+  private updatePortrait(speaker: string, expression: string = 'neutral'): void {
     const w = this.scale.width;
     const h = this.scale.height;
     const boxHeight = Math.max(160, h * 0.28);
     const safeBottom = 24;
-    const portraitBottom = h - boxHeight - safeBottom - 10; // Just above dialogue box
-    const portraitScale = 4; // Pixel art scaled up big
+    const portraitBottom = h - boxHeight - safeBottom - 10;
+    const portraitScale = 4;
     const spriteInfo = this.speakerSpriteMap[speaker];
 
     if (!spriteInfo) {
-      // Unknown speaker — show silhouette or nothing
       this.dimAllPortraits();
       return;
     }
 
-    const { key, side } = spriteInfo;
-    const hasTexture = this.textures.exists(key);
+    const { side, expressions } = spriteInfo;
+    // Resolve expression to texture key, fallback to default
+    const textureKey = (expressions && expressions[expression]) || spriteInfo.key;
+    const hasTexture = this.textures.exists(textureKey);
 
-    // Hide procedural background when portrait is showing — portrait IS the visual
+    // Hide procedural background when portrait is showing
     if (hasTexture) {
       this.backgroundContainer.setVisible(false);
     }
 
     if (side === 'left') {
-      // Show/update left portrait
       if (!this.leftPortrait && hasTexture) {
-        this.createPortrait('left', key, w, portraitBottom, portraitScale);
+        this.createPortrait('left', textureKey, w, portraitBottom, portraitScale);
       } else if (this.leftPortrait && hasTexture) {
-        // Already showing — just ensure it's bright
-        if (this.leftPortrait.texture.key !== key) {
-          this.leftPortrait.setTexture(key);
+        if (this.leftPortrait.texture.key !== textureKey) {
+          this.leftPortrait.setTexture(textureKey);
         }
       }
-      // Activate left, dim right
       this.activatePortrait('left');
       this.dimPortrait('right');
     } else {
-      // Show/update right portrait
       if (!this.rightPortrait && hasTexture) {
-        this.createPortrait('right', key, w, portraitBottom, portraitScale);
+        this.createPortrait('right', textureKey, w, portraitBottom, portraitScale);
       } else if (this.rightPortrait && hasTexture && this.rightPortrait instanceof Phaser.GameObjects.Image) {
-        if (this.rightPortrait.texture.key !== key) {
-          this.rightPortrait.setTexture(key);
+        if (this.rightPortrait.texture.key !== textureKey) {
+          this.rightPortrait.setTexture(textureKey);
         }
       }
-      // Activate right, dim left
       this.activatePortrait('right');
       this.dimPortrait('left');
     }
