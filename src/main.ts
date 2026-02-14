@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { BootScene } from './scenes/BootScene';
 import { MenuScene } from './scenes/MenuScene';
 import { DialogueScene } from './scenes/DialogueScene';
-import { ExploreScene } from './scenes/ExploreScene';
+import { LocationMenuScene } from './scenes/LocationMenuScene';
 import { BattleScene } from './scenes/BattleScene';
 import { InventoryScene } from './scenes/InventoryScene';
 
@@ -27,7 +27,7 @@ const config: Phaser.Types.Core.GameConfig = {
       debug: false,
     },
   },
-  scene: [BootScene, MenuScene, DialogueScene, ExploreScene, BattleScene, InventoryScene],
+  scene: [BootScene, MenuScene, DialogueScene, LocationMenuScene, BattleScene, InventoryScene],
 };
 
 new Phaser.Game(config);

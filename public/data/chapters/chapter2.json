@@ -7,6 +7,7 @@
     "start_01": {
       "id": "start_01",
       "text": "Pagi lepas insiden Unit 9-4. Syafiq bangun dengan rasa berat di belakang tengkuk. Macam ada orang berdiri belakang dia.",
+      "background": "home",
       "next": "start_02"
     },
     "start_02": {

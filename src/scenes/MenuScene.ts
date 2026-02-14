@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { SoundManager } from '../systems/SoundManager';
+import { DaySystem } from '../systems/DaySystem';
 
 export class MenuScene extends Phaser.Scene {
   private particles: Phaser.GameObjects.Graphics[] = [];
@@ -8,6 +9,7 @@ export class MenuScene extends Phaser.Scene {
   private scanlines!: Phaser.GameObjects.Graphics;
   private fogLayer!: Phaser.GameObjects.Graphics;
   private soundManager!: SoundManager;
+  private daySystem!: DaySystem;
   private muteButton!: Phaser.GameObjects.Text;
 
   constructor() {
@@ -20,8 +22,9 @@ export class MenuScene extends Phaser.Scene {
     const safeTop = 44;
     const safeBottom = 24;
 
-    // Initialize sound manager
+    // Initialize sound manager and day system
     this.soundManager = SoundManager.getInstance();
+    this.daySystem = DaySystem.getInstance();
 
     // Background gradient overlay
     const bg = this.add.graphics();
@@ -113,21 +116,55 @@ export class MenuScene extends Phaser.Scene {
       btnFontSize,
       '#6b8f82',
       () => {
+        this.daySystem.newGame(); // Reset game state
         this.cameras.main.fadeOut(800, 0, 0, 0);
         this.time.delayedCall(800, () => {
-          this.scene.start('ExploreScene');
+          this.scene.start('LocationMenuScene');
         });
       }
     );
 
-    // Continue button (disabled placeholder)
-    const contFontSize = Math.max(14, Math.floor(w * 0.045));
-    this.add.text(w / 2, btnY + btnGap, '◆  Sambung', {
-      fontFamily: 'Georgia, serif',
-      fontSize: `${contFontSize}px`,
-      color: '#2a3a34',
-      padding: { x: 20, y: 14 },
-    }).setOrigin(0.5);
+    // Continue button
+    const hasSaveData = this.daySystem.hasSaveData();
+    if (hasSaveData) {
+      this.createButton(
+        w / 2, btnY + btnGap,
+        '◆  Sambung',
+        Math.max(14, Math.floor(w * 0.045)),
+        '#6b8f82',
+        () => {
+          this.cameras.main.fadeOut(800, 0, 0, 0);
+          this.time.delayedCall(800, () => {
+            this.scene.start('LocationMenuScene');
+          });
+        }
+      );
+    } else {
+      // Disabled continue button
+      this.add.text(w / 2, btnY + btnGap, '◆  Sambung', {
+        fontFamily: 'Georgia, serif',
+        fontSize: `${Math.max(14, Math.floor(w * 0.045))}px`,
+        color: '#2a3a34',
+        padding: { x: 20, y: 14 },
+      }).setOrigin(0.5);
+    }
+
+    // Story button (for people who just want to read)
+    this.createButton(
+      w / 2, btnY + btnGap * 2,
+      '📖  Cerita',
+      Math.max(14, Math.floor(w * 0.045)),
+      '#6b8f82',
+      () => {
+        this.cameras.main.fadeOut(800, 0, 0, 0);
+        this.time.delayedCall(800, () => {
+          this.scene.start('DialogueScene', { 
+            chapter: 'chapter1',
+            returnTo: 'MenuScene'
+          });
+        });
+      }
+    );
 
     // Version — bottom safe area
     const verFontSize = Math.max(9, Math.floor(w * 0.028));

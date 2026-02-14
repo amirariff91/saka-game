@@ -7,6 +7,7 @@
     "narr_01": {
       "id": "narr_01",
       "text": "Pukul 2 pagi. Jalan mati. Hanya bunyi enjin kapcai Syafiq membelah sunyi.",
+      "background": "ppr-corridor",
       "next": "narr_02"
     },
     "narr_02": {
@@ -17,6 +18,7 @@
     "narr_03": {
       "id": "narr_03",
       "text": "PPR Sri Kerinchi muncul dari gelap. Dua belas tingkat konkrit kelabu, lampu koridor berkelip macam mata yang tak boleh tidur.",
+      "background": "ppr-corridor",
       "next": "narr_04"
     },
     "narr_04": {
@@ -89,6 +91,7 @@
     "enter_01": {
       "id": "enter_01",
       "text": "Unit 9-4. Habuk tebal. Barang orang tua masih ada — kerusi rotan, radio lama, kalendar 2019.",
+      "background": "unit-9-4",
       "next": "enter_02"
     },
     "enter_02": {
@@ -164,6 +167,7 @@
     "end_01": {
       "id": "end_01",
       "text": "Dia balik rumah. Tingkat 11. Masuk perlahan — mak dah tidur, kakak dah tidur. Kerusi kosong kat meja makan. Lima tahun kosong.",
+      "background": "home",
       "next": "end_02"
     },
     "end_02": {
