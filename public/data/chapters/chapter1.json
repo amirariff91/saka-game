@@ -1,0 +1,185 @@
+{
+  "id": "chapter1",
+  "title": "Smell",
+  "titleMalay": "Bau",
+  "startNode": "narr_01",
+  "lines": {
+    "narr_01": {
+      "id": "narr_01",
+      "text": "Pukul 2 pagi. Jalan mati. Hanya bunyi enjin kapcai Syafiq membelah sunyi.",
+      "next": "narr_02"
+    },
+    "narr_02": {
+      "id": "narr_02",
+      "text": "Shift mamak habis. Badan lenguh, baju bau minyak masak. RM35 satu malam — cukup beli gas untuk dapur esok.",
+      "next": "narr_03"
+    },
+    "narr_03": {
+      "id": "narr_03",
+      "text": "PPR Sri Kerinchi muncul dari gelap. Dua belas tingkat konkrit kelabu, lampu koridor berkelip macam mata yang tak boleh tidur.",
+      "next": "narr_04"
+    },
+    "narr_04": {
+      "id": "narr_04",
+      "text": "Lif rosak lagi. Sudah seminggu. Syafiq naik tangga, kaki berat, anak tangga bergema.",
+      "next": "narr_05"
+    },
+    "narr_05": {
+      "id": "narr_05",
+      "text": "Tingkat 5... 6... 7... 8...",
+      "next": "narr_06"
+    },
+    "narr_06": {
+      "id": "narr_06",
+      "text": "Tingkat 9.",
+      "next": "narr_07",
+      "effect": "shake"
+    },
+    "narr_07": {
+      "id": "narr_07",
+      "text": "Bau kemboja. Kuat. Manis. Salah.",
+      "next": "narr_08"
+    },
+    "narr_08": {
+      "id": "narr_08",
+      "text": "Pukul 2 pagi, tingkat 9 — tiada pokok bunga. Tiada taman. Hanya konkrit dan lampu pendarfluor yang kedip-kedip.",
+      "next": "narr_09"
+    },
+    "narr_09": {
+      "id": "narr_09",
+      "text": "Semua orang tahu pasal tingkat 9. Orang tua yang mati sorang-sorang dalam Unit 9-4. Bunyi ketuk-ketuk waktu subuh. Kucing yang menjerit tengah malam.",
+      "next": "narr_10"
+    },
+    "narr_10": {
+      "id": "narr_10",
+      "text": "Syafiq bukan jenis percaya benda-benda macam ni. Terlalu penat, terlalu miskin untuk takut hantu.",
+      "next": "narr_11"
+    },
+    "narr_11": {
+      "id": "narr_11",
+      "text": "Tapi pintu Unit 9-4 terbuka sedikit. Cahaya suram dari dalam.",
+      "next": "choice_01"
+    },
+    "choice_01": {
+      "id": "choice_01",
+      "speaker": "Syafiq",
+      "text": "...",
+      "choices": [
+        {
+          "text": "Masuk tengok. Mungkin ada orang tidur situ.",
+          "next": "enter_01",
+          "flag": "brave_entry"
+        },
+        {
+          "text": "Abaikan. Bukan urusan aku.",
+          "next": "ignore_01"
+        }
+      ]
+    },
+    "ignore_01": {
+      "id": "ignore_01",
+      "text": "Syafiq melangkah lalu. Naik ke tingkat 10. Tapi bau kemboja ikut dia. Semakin kuat. Macam ada orang berdiri belakang dia.",
+      "next": "ignore_02"
+    },
+    "ignore_02": {
+      "id": "ignore_02",
+      "text": "Kaki dia berhenti sendiri. Badan berpusing. Macam ada tangan tarik dari dalam.",
+      "next": "enter_01"
+    },
+    "enter_01": {
+      "id": "enter_01",
+      "text": "Unit 9-4. Habuk tebal. Barang orang tua masih ada — kerusi rotan, radio lama, kalendar 2019.",
+      "next": "enter_02"
+    },
+    "enter_02": {
+      "id": "enter_02",
+      "text": "Lima tahun tak disentuh. Lima tahun bau kemboja terkurung.",
+      "next": "enter_03"
+    },
+    "enter_03": {
+      "id": "enter_03",
+      "text": "Bilik belakang. Pintu separuh terbuka. Dari situ — bau paling kuat.",
+      "next": "enter_04"
+    },
+    "enter_04": {
+      "id": "enter_04",
+      "text": "Rak. Berpuluh-puluh botol. Kaca, tanah liat, logam. Semua dimeterai dengan tulisan Jawi lama.",
+      "effect": "flash",
+      "next": "enter_05"
+    },
+    "enter_05": {
+      "id": "enter_05",
+      "text": "Satu botol retak. Asap hitam menitis keluar. Bunyi macam... nafas.",
+      "next": "enter_06"
+    },
+    "enter_06": {
+      "id": "enter_06",
+      "speaker": "Syafiq",
+      "text": "Apa benda...",
+      "next": "enter_07"
+    },
+    "enter_07": {
+      "id": "enter_07",
+      "text": "Tangan dia menyentuh botol retak. Bukan berani — bodoh macam budak 17 tahun.",
+      "next": "enter_08"
+    },
+    "enter_08": {
+      "id": "enter_08",
+      "text": "Sejuk. Lepas tu panas. Lepas tu — kosong.",
+      "effect": "shake",
+      "next": "enter_09"
+    },
+    "enter_09": {
+      "id": "enter_09",
+      "text": "Gelap.",
+      "effect": "fadeout",
+      "next": "wake_01"
+    },
+    "wake_01": {
+      "id": "wake_01",
+      "text": "...",
+      "next": "wake_02"
+    },
+    "wake_02": {
+      "id": "wake_02",
+      "text": "Syafiq buka mata atas lantai. Botol retak dah kosong. Botol-botol lain masih sealed.",
+      "next": "wake_03"
+    },
+    "wake_03": {
+      "id": "wake_03",
+      "text": "Badan berat. Macam ada orang berdiri belakang dia.",
+      "next": "wake_04"
+    },
+    "wake_04": {
+      "id": "wake_04",
+      "text": "Tapi takde sesiapa.",
+      "next": "wake_05"
+    },
+    "wake_05": {
+      "id": "wake_05",
+      "speaker": "Syafiq",
+      "text": "...ok. Mimpi je ni.",
+      "next": "end_01"
+    },
+    "end_01": {
+      "id": "end_01",
+      "text": "Dia balik rumah. Tingkat 11. Masuk perlahan — mak dah tidur, kakak dah tidur. Kerusi kosong kat meja makan. Lima tahun kosong.",
+      "next": "end_02"
+    },
+    "end_02": {
+      "id": "end_02",
+      "text": "Syafiq baring atas katil. Tutup mata.",
+      "next": "end_03"
+    },
+    "end_03": {
+      "id": "end_03",
+      "text": "Di belakang kelopak mata dia — sekelip cahaya hijau. Dan satu suara, jauh sangat, macam bisikan dari bawah tanah:",
+      "next": "end_04"
+    },
+    "end_04": {
+      "id": "end_04",
+      "text": "\"Lapar.\"",
+      "effect": "shake"
+    }
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "spirits": [
+    {
+      "id": "hantu_raya",
+      "name": "Hantu Raya",
+      "type": "hantu",
+      "tier": "common",
+      "description": "Semangat dendam. Bekas manusia yang mati dalam kemarahan. Telekinesis lemah tapi berterusan.",
+      "bottleType": "glass",
+      "stats": {
+        "power": 25,
+        "defense": 15,
+        "speed": 20,
+        "willpower": 30
+      },
+      "bayangAbility": "Telekinetic Burst — tolak objek dalam radius pendek",
+      "weakness": "Ayat Quran, air mawar",
+      "lore": "Seorang lelaki yang mati ditipu rakan kongsi. Kemarahannya kekal selepas kematian."
+    },
+    {
+      "id": "toyol",
+      "name": "Toyol",
+      "type": "familiar",
+      "tier": "common",
+      "description": "Roh kanak-kanak yang dijinakkan. Kecil, pantas, suka mencuri benda kecil.",
+      "bottleType": "glass",
+      "stats": {
+        "power": 10,
+        "defense": 5,
+        "speed": 45,
+        "willpower": 10
+      },
+      "bayangAbility": "Shadow Step — bergerak tanpa bunyi, muat ruang sempit",
+      "weakness": "Jarum di bawah bantal, cermin",
+      "lore": "Warisan makcik tingkat 7. Suami arwah buat perjanjian dulu. Toyol masih tunggu arahan."
+    },
+    {
+      "id": "pelesit",
+      "name": "Pelesit",
+      "type": "familiar",
+      "tier": "common",
+      "description": "Familiar bentuk serangga. Biasa datang berpasangan dengan penanggal. Menyerang dari dalam.",
+      "bottleType": "glass",
+      "stats": {
+        "power": 20,
+        "defense": 10,
+        "speed": 35,
+        "willpower": 15
+      },
+      "bayangAbility": "Infest — masuk ke dalam objek atau dinding, serang dari dalam",
+      "weakness": "Sirih pinang, garam hitam",
+      "lore": "Dijumpai di basement parking PPR. Tuan asal sudah lama mati — pelesit ni jadi liar."
+    },
+    {
+      "id": "jembalang",
+      "name": "Jembalang Tanah",
+      "type": "jembalang",
+      "tier": "uncommon",
+      "description": "Roh tanah. Besar, kuat, territorial. Tak ganggu manusia kecuali diprovokasi.",
+      "bottleType": "clay",
+      "stats": {
+        "power": 50,
+        "defense": 60,
+        "speed": 10,
+        "willpower": 40
+      },
+      "bayangAbility": "Earth Grip — manipulasi tanah, kekuatan fizikal luar biasa",
+      "weakness": "Besi tua, api unggun",
+      "lore": "Penunggu pondok pengawal lama PPR. Dah berpuluh tahun duduk situ sebelum flat dibina."
+    },
+    {
+      "id": "penanggal",
+      "name": "Penanggal",
+      "type": "hantu",
+      "tier": "uncommon",
+      "description": "Kepala terbang dengan usus terjurai. Dahulu seorang bidan yang buat perjanjian gelap.",
+      "bottleType": "clay",
+      "stats": {
+        "power": 40,
+        "defense": 20,
+        "speed": 50,
+        "willpower": 35
+      },
+      "bayangAbility": "Visceral Flight — terbang + serangan jarak dekat yang mengerikan",
+      "weakness": "Jeruk nipis di ambang pintu, duri mengkuang",
+      "lore": "Belum ditangkap. Dian dengar dia menangis setiap malam Jumaat dari arah timur PPR."
+    }
+  ]
+}
