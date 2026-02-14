@@ -117,6 +117,22 @@ export class BootScene extends Phaser.Scene {
     this.load.audio('bayang-activate', 'assets/sfx/bayang-activate.mp3');
     this.load.audio('footsteps', 'assets/sfx/footsteps.mp3');
 
+    // === SPIRIT SPRITES ===
+    const spiritNames = [
+      'hantu-raya', 'toyol', 'pelesit', 'penanggal',
+      'pontianak', 'jembalang', 'pocong', 'orang-minyak'
+    ];
+    const spiritDirs = ['south', 'east', 'north', 'west'];
+
+    for (const spirit of spiritNames) {
+      for (const dir of spiritDirs) {
+        this.load.image(
+          `spirit-${spirit}-${dir}`,
+          `assets/spirits/${spirit}/${dir}.png`
+        );
+      }
+    }
+
     // === UI ICONS ===
     // We'll create simple colored circles for now as icons
     // The real implementation would load UI icons from assets

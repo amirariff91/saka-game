@@ -34,6 +34,7 @@ export class BattleScene extends Phaser.Scene {
   // UI elements
   private enemyNameText!: Phaser.GameObjects.Text;
   private enemySprite!: Phaser.GameObjects.Graphics;
+  private enemySpriteImage?: Phaser.GameObjects.Image;
   private enemyHpBar!: Phaser.GameObjects.Graphics;
   private battleLogText!: Phaser.GameObjects.Text;
   private playerHpBar!: Phaser.GameObjects.Graphics;
@@ -110,9 +111,9 @@ export class BattleScene extends Phaser.Scene {
       fontStyle: 'bold',
     }).setOrigin(0.5);
 
-    // Enemy sprite (large orb with effects)
+    // Enemy sprite (pixel art or fallback orb)
     this.enemySprite = this.add.graphics();
-    
+
     // Enemy HP bar
     this.enemyHpBar = this.add.graphics();
   }
@@ -526,22 +527,50 @@ export class BattleScene extends Phaser.Scene {
     // Enemy name
     this.enemyNameText.setText(`${this.enemy.name} — ${this.enemy.spiritType?.toUpperCase()}`);
 
-    // Enemy sprite (glowing orb)
-    this.enemySprite.clear();
-    const enemyColor = this.getEnemyColor();
-    this.enemySprite.fillStyle(enemyColor, 0.8);
-    this.enemySprite.fillCircle(w / 2, h * 0.2, 40);
-    
-    // Add pulse effect
-    this.tweens.add({
-      targets: this.enemySprite,
-      scaleX: { from: 0.9, to: 1.1 },
-      scaleY: { from: 0.9, to: 1.1 },
-      duration: 1500,
-      yoyo: true,
-      repeat: -1,
-      ease: 'Sine.easeInOut'
-    });
+    // Try to show pixel art sprite, fallback to glowing orb
+    // Spirit IDs use underscores (hantu_raya) but sprite keys use hyphens (hantu-raya)
+    const spriteId = this.enemy.id.replace(/_/g, '-');
+    const spriteKey = `spirit-${spriteId}-south`;
+    if (this.textures.exists(spriteKey) && !this.enemySpriteImage) {
+      // Use pixel art sprite — scale up for battle visibility
+      this.enemySprite.clear(); // Hide orb fallback
+      this.enemySpriteImage = this.add.image(w / 2, h * 0.2, spriteKey);
+      this.enemySpriteImage.setScale(3); // 48px × 3 = 144px display size
+      this.enemySpriteImage.setOrigin(0.5);
+      
+      // Add floating/breathing animation
+      this.tweens.add({
+        targets: this.enemySpriteImage,
+        y: { from: h * 0.2 - 4, to: h * 0.2 + 4 },
+        scaleX: { from: 2.9, to: 3.1 },
+        scaleY: { from: 2.9, to: 3.1 },
+        duration: 2000,
+        yoyo: true,
+        repeat: -1,
+        ease: 'Sine.easeInOut'
+      });
+
+      // Add eerie glow behind sprite
+      this.enemySprite.fillStyle(this.getEnemyColor(), 0.2);
+      this.enemySprite.fillCircle(w / 2, h * 0.2, 50);
+    } else if (!this.enemySpriteImage) {
+      // Fallback: glowing orb
+      this.enemySprite.clear();
+      const enemyColor = this.getEnemyColor();
+      this.enemySprite.fillStyle(enemyColor, 0.8);
+      this.enemySprite.fillCircle(w / 2, h * 0.2, 40);
+      
+      // Add pulse effect
+      this.tweens.add({
+        targets: this.enemySprite,
+        scaleX: { from: 0.9, to: 1.1 },
+        scaleY: { from: 0.9, to: 1.1 },
+        duration: 1500,
+        yoyo: true,
+        repeat: -1,
+        ease: 'Sine.easeInOut'
+      });
+    }
 
     // Enemy HP bar
     this.updateEnemyHpBar(w, h);
