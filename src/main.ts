@@ -20,6 +20,13 @@ const config: Phaser.Types.Core.GameConfig = {
   input: {
     activePointers: 2,
   },
+  physics: {
+    default: 'arcade',
+    arcade: {
+      gravity: { x: 0, y: 0 },
+      debug: false,
+    },
+  },
   scene: [BootScene, MenuScene, DialogueScene, ExploreScene, BattleScene, InventoryScene],
 };
 

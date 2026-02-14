@@ -78,9 +78,9 @@ export class BootScene extends Phaser.Scene {
     const directions = ['north', 'north-east', 'east', 'south-east', 'south', 'south-west', 'west', 'north-west'];
     
     for (const dir of directions) {
-      this.load.image(`syafiq-${dir}`, `src/assets/characters/syafiq/rotations/${dir}.png`);
-      this.load.image(`dian-${dir}`, `src/assets/characters/dian/rotations/${dir}.png`);
-      this.load.image(`zafri-${dir}`, `src/assets/characters/zafri/rotations/${dir}.png`);
+      this.load.image(`syafiq-${dir}`, `assets/characters/syafiq/rotations/${dir}.png`);
+      this.load.image(`dian-${dir}`, `assets/characters/dian/rotations/${dir}.png`);
+      this.load.image(`zafri-${dir}`, `assets/characters/zafri/rotations/${dir}.png`);
     }
 
     // Syafiq walking animations - check what directions have animation frames
@@ -92,14 +92,14 @@ export class BootScene extends Phaser.Scene {
         const frameNum = i.toString().padStart(3, '0');
         this.load.image(
           `syafiq-walk-${dir}-${i}`, 
-          `src/assets/characters/syafiq/animations/walking/${dir}/frame_${frameNum}.png`
+          `assets/characters/syafiq/animations/walking/${dir}/frame_${frameNum}.png`
         );
       }
     }
 
     // === TILESETS ===
-    this.load.image('ppr-corridor-tileset', 'src/assets/tilesets/ppr-corridor.png');
-    this.load.json('ppr-corridor-data', 'src/assets/tilesets/ppr-corridor.json');
+    this.load.image('ppr-corridor-tileset', 'assets/tilesets/ppr-corridor.png');
+    this.load.json('ppr-corridor-data', 'assets/tilesets/ppr-corridor.json');
 
     // === UI ICONS ===
     // We'll create simple colored circles for now as icons

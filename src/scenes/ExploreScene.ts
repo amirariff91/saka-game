@@ -25,6 +25,7 @@ export class ExploreScene extends Phaser.Scene {
   private worldWidth = 800;
   private worldHeight = 400;
   private walls!: Phaser.GameObjects.Graphics;
+  private wallGroup!: Phaser.Physics.Arcade.StaticGroup;
 
   // NPCs and interactions
   private dian!: Phaser.GameObjects.Sprite;
@@ -115,27 +116,41 @@ export class ExploreScene extends Phaser.Scene {
     this.walls.fillRect(500, this.worldHeight - 140, 30, 80);
     this.walls.fillRect(350, this.worldHeight / 2 - 15, 100, 30);
 
-    // Add wall collision bodies
-    this.physics.add.existing(this.walls, true);
+    // Create collision group for walls
+    const wallGroup = this.physics.add.staticGroup();
     
-    // Create individual collision rectangles for walls
-    const wallBodies = [
-      this.add.rectangle(this.worldWidth / 2, 20, this.worldWidth, 40),
-      this.add.rectangle(this.worldWidth / 2, this.worldHeight - 20, this.worldWidth, 40),
-      this.add.rectangle(215, 100, 30, 80),
-      this.add.rectangle(515, this.worldHeight - 100, 30, 80),
-      this.add.rectangle(400, this.worldHeight / 2, 100, 30),
+    const wallDefs = [
+      { x: this.worldWidth / 2, y: 20, w: this.worldWidth, h: 40 },
+      { x: this.worldWidth / 2, y: this.worldHeight - 20, w: this.worldWidth, h: 40 },
+      { x: 215, y: 100, w: 30, h: 80 },
+      { x: 515, y: this.worldHeight - 100, w: 30, h: 80 },
+      { x: 400, y: this.worldHeight / 2, w: 100, h: 30 },
     ];
 
-    wallBodies.forEach(wall => {
-      this.physics.add.existing(wall, true);
-      wall.setVisible(false);
+    wallDefs.forEach(def => {
+      const wall = this.add.zone(def.x, def.y, def.w, def.h);
+      wallGroup.add(wall);
     });
+
+    // Store for collision setup in createPlayer
+    this.wallGroup = wallGroup;
   }
 
   private createPlayer(): void {
-    // Create player sprite (Syafiq facing south)
-    this.player = this.add.sprite(100, this.worldHeight / 2, 'syafiq-south');
+    // Create player sprite — use texture if available, fallback to simple graphic
+    const hasTexture = this.textures.exists('syafiq-south');
+    
+    if (hasTexture) {
+      this.player = this.add.sprite(100, this.worldHeight / 2, 'syafiq-south');
+    } else {
+      // Fallback: create a colored rectangle as placeholder
+      const placeholder = this.add.graphics();
+      placeholder.fillStyle(0x2dd4a8, 1);
+      placeholder.fillRect(-8, -12, 16, 24);
+      placeholder.generateTexture('player-placeholder', 16, 24);
+      placeholder.destroy();
+      this.player = this.add.sprite(100, this.worldHeight / 2, 'player-placeholder');
+    }
     this.player.setScale(1);
     
     // Add physics body
@@ -144,13 +159,22 @@ export class ExploreScene extends Phaser.Scene {
     body.setCollideWorldBounds(true);
     body.setSize(16, 16);
 
-    // Add collision with walls - we'll handle this differently
-    // For now, just ensure player collides with world bounds
-    this.physics.add.collider(this.player, this.walls);
+    // Add collision with walls
+    if (this.wallGroup) {
+      this.physics.add.collider(this.player, this.wallGroup);
+    }
   }
 
   private createNPCs(): void {
     // Dian standing near the middle of the corridor
+    const hasDianTexture = this.textures.exists('dian-south');
+    if (!hasDianTexture) {
+      const ph = this.add.graphics();
+      ph.fillStyle(0xd4a82d, 1);
+      ph.fillRect(-8, -12, 16, 24);
+      ph.generateTexture('dian-south', 16, 24);
+      ph.destroy();
+    }
     this.dian = this.add.sprite(300, 200, 'dian-south');
     this.dian.setScale(1);
 
