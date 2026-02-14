@@ -78,9 +78,9 @@ export class BattleScene extends Phaser.Scene {
     // Load player's captured spirits (simplified - in real game would come from save data)
     this.initializePlayerSpirits();
 
-    // Background
+    // Background — flat dark
     const bg = this.add.graphics();
-    bg.fillGradientStyle(0x0a0a0a, 0x0a0a0a, 0x1a0d0d, 0x1a0d0d, 1);
+    bg.fillStyle(0x0a0a0a, 1);
     bg.fillRect(0, 0, w, h);
 
     // Enemy display area (top 40%)

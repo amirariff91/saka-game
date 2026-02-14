@@ -133,14 +133,7 @@ export class LocationMenuScene extends Phaser.Scene {
       }
     }
 
-    // Vignette overlay
-    const vignette = this.add.graphics();
-    const vignetteAlpha = 0.4;
-    vignette.fillGradientStyle(
-      0x000000, 0x000000, 0x000000, 0x000000, 
-      vignetteAlpha, 0, vignetteAlpha, 0
-    );
-    vignette.fillEllipse(w / 2, h / 2, w * 1.5, h * 1.5);
+    // Vignette removed — clean look
   }
 
   private createParticles(w: number, h: number): void {

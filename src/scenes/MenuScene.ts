@@ -30,25 +30,14 @@ export class MenuScene extends Phaser.Scene {
     this.daySystem = DaySystem.getInstance();
     this.questSystem = QuestSystem.getInstance();
 
-    // Background gradient overlay
+    // Dark flat background
     const bg = this.add.graphics();
-    bg.fillGradientStyle(0x0a0a0a, 0x0a0a0a, 0x0d1f1a, 0x0d1f1a, 1);
+    bg.fillStyle(0x0a0a0a, 1);
     bg.fillRect(0, 0, w, h);
 
-    // Subtle fog/mist layer at the bottom
+    // Fog layer (kept for reference but minimal)
     this.fogLayer = this.add.graphics();
-    this.fogLayer.setAlpha(0.2);
-    this.createFogLayer(w, h);
-    
-    // Animate fog
-    this.tweens.add({
-      targets: this.fogLayer,
-      alpha: { from: 0.1, to: 0.3 },
-      duration: 3000,
-      yoyo: true,
-      repeat: -1,
-      ease: 'Sine.easeInOut',
-    });
+    this.fogLayer.setAlpha(0);
 
     // Mute toggle button (top-left safe area)
     this.createMuteButton(safeTop);
@@ -179,11 +168,9 @@ export class MenuScene extends Phaser.Scene {
       color: '#1a2a24',
     }).setOrigin(0.5);
 
-    // Scan-line overlay (horror aesthetic)
+    // Scanlines removed — clean look
     this.scanlines = this.add.graphics();
-    this.drawScanlines(w, h);
-    this.scanlines.setAlpha(0.04);
-    this.scanlines.setDepth(1000);
+    this.scanlines.setAlpha(0);
 
     // Fade in with consistent transition
     this.cameras.main.fadeIn(800, 0, 0, 0);

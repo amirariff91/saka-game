@@ -72,9 +72,9 @@ export class DialogueScene extends Phaser.Scene {
     this.soundManager.updateScene(this);
     this.daySystem = DaySystem.getInstance();
 
-    // Dark atmospheric background
+    // Dark flat background
     const bg = this.add.graphics();
-    bg.fillGradientStyle(0x0a0a0a, 0x0a0a0a, 0x0a1210, 0x0a1210, 1);
+    bg.fillStyle(0x0a0a0a, 1);
     bg.fillRect(0, 0, w, h);
 
     // Background container (60% of screen for atmospheric art)
@@ -467,23 +467,18 @@ export class DialogueScene extends Phaser.Scene {
     bottomY: number,
     _scale: number
   ): void {
-    // Position: left character at ~25%, right at ~75%
-    const x = side === 'left' ? screenW * 0.25 : screenW * 0.75;
+    // Position: left character at ~35%, right at ~65% (closer to center for impact)
+    const x = side === 'left' ? screenW * 0.35 : screenW * 0.65;
     
-    // Calculate scale: HD portraits are 1024px, we want them to fill ~60% of the background area height
-    const bgAreaHeight = bottomY; // Background area is from top to dialogue box
-    const targetHeight = bgAreaHeight * 0.7; // Portrait fills 70% of background area
-    const portraitScale = targetHeight / 1024; // Scale down from 1024px
-
-    // Soft glow behind portrait
-    const glow = this.add.graphics();
-    const glowColor = side === 'left' ? 0x2dd4a8 : 0x8866cc; // Teal for Syafiq, purple for others
-    glow.fillStyle(glowColor, 0.12);
-    glow.fillCircle(0, 0, targetHeight * 0.4);
-    glow.setPosition(x, bottomY - targetHeight * 0.45);
+    // Fill the entire area above dialogue box — portrait IS the visual
+    const availableHeight = bottomY;
+    const portraitScale = availableHeight / 1024; // Fill full height
+    
+    // No glow — let the portrait's own atmosphere breathe
+    const glow = this.add.graphics(); // Keep ref for dimming system
     this.portraitContainer.add(glow);
 
-    // HD character portrait
+    // HD character portrait — fills the screen
     const portrait = this.add.image(x, bottomY, textureKey);
     portrait.setScale(portraitScale);
     portrait.setOrigin(0.5, 1); // Bottom-center anchor
@@ -491,22 +486,15 @@ export class DialogueScene extends Phaser.Scene {
     this.portraitContainer.add(portrait);
 
     // Cinematic fade + slide in
-    const slideFrom = side === 'left' ? x - 30 : x + 30;
+    const slideFrom = side === 'left' ? x - 20 : x + 20;
     portrait.setAlpha(0);
     portrait.setPosition(slideFrom, bottomY);
-    glow.setAlpha(0);
 
     this.tweens.add({
       targets: portrait,
       alpha: 1,
       x: x,
-      duration: 500,
-      ease: 'Power2.easeOut'
-    });
-    this.tweens.add({
-      targets: glow,
-      alpha: 0.12,
-      duration: 500,
+      duration: 400,
       ease: 'Power2.easeOut'
     });
 
@@ -809,9 +797,8 @@ export class DialogueScene extends Phaser.Scene {
   }
 
   private createPPRCorridorBackground(w: number, h: number): void {
-    // Simple dark gradient - no competing effects
     const bg = this.add.graphics();
-    bg.fillGradientStyle(0x1a1a1a, 0x1a1a1a, 0x0a0a0a, 0x0a0a0a, 1);
+    bg.fillStyle(0x111111, 1);
     bg.fillRect(0, 0, w, h);
     this.backgroundContainer.add(bg);
     this.backgroundElements.push(bg);
@@ -844,9 +831,8 @@ export class DialogueScene extends Phaser.Scene {
   }
 
   private createUnit94Background(w: number, h: number): void {
-    // Simple dark room
     const bg = this.add.graphics();
-    bg.fillGradientStyle(0x0f0c0a, 0x0f0c0a, 0x050302, 0x050302, 1);
+    bg.fillStyle(0x0c0a08, 1);
     bg.fillRect(0, 0, w, h);
     this.backgroundContainer.add(bg);
     this.backgroundElements.push(bg);
@@ -882,9 +868,8 @@ export class DialogueScene extends Phaser.Scene {
   }
 
   private createStairwellBackground(w: number, h: number): void {
-    // Dark stairwell
     const bg = this.add.graphics();
-    bg.fillGradientStyle(0x1a1a1a, 0x1a1a1a, 0x0a0a0a, 0x0a0a0a, 1);
+    bg.fillStyle(0x0f0f0f, 1);
     bg.fillRect(0, 0, w, h);
     this.backgroundContainer.add(bg);
     this.backgroundElements.push(bg);
@@ -907,16 +892,15 @@ export class DialogueScene extends Phaser.Scene {
 
     // Light from above
     const light = this.add.graphics();
-    light.fillGradientStyle(0xffffcc, 0xffffcc, 0x000000, 0x000000, 0.4, 0, 0.8, 0);
-    light.fillRect(w * 0.3, 0, w * 0.4, h * 0.5);
+    light.fillStyle(0xffffcc, 0.15);
+    light.fillRect(w * 0.35, 0, w * 0.3, h * 0.4);
     this.backgroundContainer.add(light);
     this.backgroundElements.push(light);
   }
 
   private createRooftopBackground(w: number, h: number): void {
-    // Dark sky gradient
     const sky = this.add.graphics();
-    sky.fillGradientStyle(0x001133, 0x001133, 0x000000, 0x000000, 1);
+    sky.fillStyle(0x000d22, 1);
     sky.fillRect(0, 0, w, h * 0.7);
     this.backgroundContainer.add(sky);
     this.backgroundElements.push(sky);
