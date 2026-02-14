@@ -309,29 +309,32 @@ export class DialogueScene extends Phaser.Scene {
     }
 
     this.typewriter.start(line.text, () => {
+      // CRITICAL: Set all state FIRST before any cleanup that could throw.
+      // Previous bug: sound cleanup threw on mobile, preventing waitingForInput
+      // from ever being set, permanently freezing the dialogue.
       this.isTyping = false;
-      this.muteButton.setAlpha(1); // Show mute button again
-      
-      // Stop typewriter sound — wrapped in try/catch because mobile audio
-      // contexts can throw when stopped/destroyed in suspended state.
-      // If this throws without protection, waitingForInput never gets set
-      // and the player is permanently stuck (can't advance dialogue).
+      const hasChoices = !!(line.choices && line.choices.length > 0);
+      if (!hasChoices) {
+        this.waitingForInput = true;
+        this.continueIndicator.setAlpha(1);
+      }
+
+      // Non-critical cleanup — can safely fail
       try {
+        this.muteButton.setAlpha(1);
         if (this.typewriterSound) {
           this.typewriterSound.stop();
           this.typewriterSound.destroy();
           this.typewriterSound = undefined;
         }
       } catch (error) {
-        console.warn('[DialogueScene] Failed to stop typewriter sound:', error);
+        console.warn('[DialogueScene] Cleanup error (non-fatal):', error);
         this.typewriterSound = undefined;
       }
 
-      if (line.choices && line.choices.length > 0) {
+      // Show choices AFTER state is set
+      if (hasChoices) {
         this.showChoices(line);
-      } else {
-        this.waitingForInput = true;
-        this.continueIndicator.setAlpha(1);
       }
     });
   }
@@ -911,7 +914,24 @@ export class DialogueScene extends Phaser.Scene {
     this.backgroundElements.push(bg);
   }
 
-  update(): void {
+  private lastStateChangeTime = 0;
+
+  update(_time: number, _delta: number): void {
     this.updateHungerBar();
+
+    // Stuck detection: if 8 seconds pass with isTyping=false, no choices,
+    // and waitingForInput=false, something went wrong — force recovery
+    if (!this.isTyping && !this.waitingForInput && !this.engine.hasChoices()) {
+      if (this.lastStateChangeTime === 0) {
+        this.lastStateChangeTime = _time;
+      } else if (_time - this.lastStateChangeTime > 8000) {
+        console.warn('[DialogueScene] Stuck detected! Forcing recovery.');
+        this.waitingForInput = true;
+        this.continueIndicator.setAlpha(1);
+        this.lastStateChangeTime = 0;
+      }
+    } else {
+      this.lastStateChangeTime = 0;
+    }
   }
 }
