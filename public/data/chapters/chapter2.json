@@ -28,6 +28,7 @@
     "toyol_01": {
       "id": "toyol_01",
       "speaker": "Syafiq",
+      "expression": "shocked",
       "text": "Mak... ada tak... benda pelik dalam rumah ni?",
       "next": "toyol_02"
     },
@@ -51,6 +52,7 @@
     "toyol_05": {
       "id": "toyol_05",
       "speaker": "Syafiq",
+      "expression": "shocked",
       "text": "WOAH!",
       "next": "toyol_06"
     },
@@ -100,6 +102,7 @@
     "reveal_02": {
       "id": "reveal_02",
       "speaker": "Syafiq",
+      "expression": "shocked",
       "text": "Macam... budak kecil. Atas kabinet.",
       "next": "reveal_03"
     },
@@ -129,6 +132,7 @@
     "reveal_07": {
       "id": "reveal_07",
       "speaker": "Syafiq",
+      "expression": "shocked",
       "text": "Macam mana ayah dulu? Apa yang ayah nampak?",
       "next": "reveal_08"
     },
@@ -168,6 +172,7 @@
     "makcik_02": {
       "id": "makcik_02",
       "speaker": "Syafiq",
+      "expression": "shocked",
       "text": "Nampak apa, makcik?",
       "next": "makcik_03"
     },
@@ -236,6 +241,7 @@
     "cats_05": {
       "id": "cats_05",
       "speaker": "Syafiq",
+      "expression": "shocked",
       "text": "What the hell...",
       "next": "school_01"
     },
@@ -285,18 +291,21 @@
     "dian_01": {
       "id": "dian_01",
       "speaker": "Dian",
+      "expression": "worried",
       "text": "Kau dengar dia tak?",
       "next": "dian_02"
     },
     "dian_02": {
       "id": "dian_02",
       "speaker": "Syafiq",
+      "expression": "shocked",
       "text": "Dengar apa?",
       "next": "dian_03"
     },
     "dian_03": {
       "id": "dian_03",
       "speaker": "Dian",
+      "expression": "frightened",
       "text": "Yang ikut kau tu. Dia bisik-bisik. Cakap... 'lapar'.",
       "next": "dian_04"
     },
@@ -309,12 +318,14 @@
     "dian_05": {
       "id": "dian_05",
       "speaker": "Syafiq",
+      "expression": "shocked",
       "text": "Kau... boleh dengar?",
       "next": "dian_06"
     },
     "dian_06": {
       "id": "dian_06",
       "speaker": "Dian",
+      "expression": "worried",
       "text": "Sejak kecik. Mula-mula family ingat aku gila. Lepas tu mereka just... ignore. Pakai headphones supaya orang ingat aku dengar musik.",
       "next": "dian_07"
     },
@@ -355,6 +366,7 @@
     "tell_truth_01": {
       "id": "tell_truth_01",
       "speaker": "Dian",
+      "expression": "happy",
       "text": "Unit 9-4? Fuck. Kau masuk dalam?",
       "next": "tell_truth_02"
     },
@@ -367,18 +379,21 @@
     "tell_truth_03": {
       "id": "tell_truth_03",
       "speaker": "Dian",
+      "expression": "frightened",
       "text": "Oh no. Oh fuck no. Kau sentuh botol tu?",
       "next": "tell_truth_04"
     },
     "tell_truth_04": {
       "id": "tell_truth_04",
       "speaker": "Syafiq",
+      "expression": "sad",
       "text": "Yeah... lepas tu everything jadi hitam.",
       "next": "tell_truth_05"
     },
     "tell_truth_05": {
       "id": "tell_truth_05",
       "speaker": "Dian",
+      "expression": "worried",
       "text": "Syafiq... apa yang kau buat tu... that's not just seeing spirits. That's bonding with one.",
       "next": "reveal_danger_01"
     },
@@ -397,18 +412,21 @@
     "uncertain_03": {
       "id": "uncertain_03",
       "speaker": "Dian",
+      "expression": "worried",
       "text": "Yang dalam kau tu bukan just ability to see. It's something else. Something hungry.",
       "next": "reveal_danger_01"
     },
     "reveal_danger_01": {
       "id": "reveal_danger_01",
       "speaker": "Dian",
+      "expression": "worried",
       "text": "Aku dengar dia bisik since semalam. Getting stronger. If you don't feed it...",
       "next": "reveal_danger_02"
     },
     "reveal_danger_02": {
       "id": "reveal_danger_02",
       "speaker": "Syafiq",
+      "expression": "shocked",
       "text": "Feed it apa?",
       "next": "reveal_danger_03"
     },

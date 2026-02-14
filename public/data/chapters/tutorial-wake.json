@@ -38,6 +38,7 @@
     "wake_06": {
       "id": "wake_06",
       "speaker": "Syafiq",
+      "expression": "sad",
       "text": "Okay je, Mak. Mungkin penat kerja.",
       "choices": [
         {
@@ -57,18 +58,21 @@
     "tell_mak": {
       "id": "tell_mak",
       "speaker": "Syafiq",
+      "expression": "shocked",
       "text": "Mak, kau tahu tak apa ada dalam Unit 9-4? Botol-botol banyak...",
       "next": "mak_worried"
     },
     "ask_dreams": {
       "id": "ask_dreams",
       "speaker": "Syafiq",
+      "expression": "sad",
       "text": "Mak, kalau mimpi nampak benda pelik... tu normal kan?",
       "next": "mak_dreams"
     },
     "keep_secret": {
       "id": "keep_secret",
       "speaker": "Syafiq",
+      "expression": "sad",
       "text": "Takde apa, Mak. Cuma penat.",
       "next": "mak_nasi_lemak"
     },
@@ -93,6 +97,7 @@
     "syafiq_agrees": {
       "id": "syafiq_agrees",
       "speaker": "Syafiq",
+      "expression": "sad",
       "text": "Okay, Mak.",
       "next": "inner_voice"
     },

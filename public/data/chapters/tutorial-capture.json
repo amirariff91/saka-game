@@ -12,12 +12,14 @@
     "dian_amazed": {
       "id": "dian_amazed",
       "speaker": "Dian",
+      "expression": "happy",
       "text": "Wah... kau betul-betul tangkap dia? Macam dalam cerita atuk!",
       "next": "syafiq_feels"
     },
     "syafiq_feels": {
       "id": "syafiq_feels",
-      "speaker": "Syafiq", 
+      "speaker": "Syafiq",
+      "expression": "smirk",
       "text": "Rasa... kenyang sikit. Macam benda dalam aku dah makan.",
       "next": "dian_explains_2"
     },
@@ -55,6 +57,7 @@
     "scared_response": {
       "id": "scared_response",
       "speaker": "Syafiq",
+      "expression": "sad",
       "text": "Ni semua terlalu pelik. Aku nak hidup normal balik.",
       "next": "dian_reality"
     },
@@ -73,6 +76,7 @@
     "dian_reality": {
       "id": "dian_reality",
       "speaker": "Dian",
+      "expression": "worried",
       "text": "Normal? Syafiq, kau ada saka sekarang. Dia tak akan pergi. Kena bagi makan.",
       "next": "serious_talk"
     },
@@ -85,6 +89,7 @@
     "dian_agrees": {
       "id": "dian_agrees",
       "speaker": "Dian",
+      "expression": "happy",
       "text": "Okay. Aku dengar cerita atuk sejak kecil. Kita boleh cari jalan sama-sama.",
       "next": "serious_talk"
     },
@@ -97,12 +102,14 @@
     "syafiq_understands": {
       "id": "syafiq_understands",
       "speaker": "Syafiq",
+      "expression": "smirk",
       "text": "So... aku ni macam pemburu hantu sekarang?",
       "next": "dian_smile"
     },
     "dian_smile": {
       "id": "dian_smile",
       "speaker": "Dian",
+      "expression": "happy",
       "text": "Pemburu hantu PPR Sri Kerinchi. Bunyi cool kan?",
       "next": "partnership"
     },

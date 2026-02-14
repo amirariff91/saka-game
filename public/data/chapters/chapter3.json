@@ -12,6 +12,7 @@
     "start_02": {
       "id": "start_02",
       "speaker": "Dian",
+      "expression": "happy",
       "text": "Aku tak tidur semalam. Compile everything aku tau pasal PPR ni.",
       "next": "start_03"
     },
@@ -23,6 +24,7 @@
     "notebook_01": {
       "id": "notebook_01",
       "speaker": "Syafiq",
+      "expression": "shocked",
       "text": "Kau buat semua ni?",
       "next": "notebook_02"
     },
@@ -40,6 +42,7 @@
     "notebook_04": {
       "id": "notebook_04",
       "speaker": "Dian",
+      "expression": "worried",
       "text": "Tingkat 9 — yang paling active. Dan semua suara tu, mereka sebut nama sama: 'Tok Pawang Ismail'.",
       "next": "notebook_05"
     },
@@ -68,6 +71,7 @@
     "zafri_intro_03": {
       "id": "zafri_intro_03",
       "speaker": "Zafri",
+      "expression": "excited",
       "text": "Dian? Apa hal pagi-pagi ni... oh. Kau Syafiq kan? Yang duduk tingkat 11.",
       "next": "zafri_intro_04"
     },
@@ -85,6 +89,7 @@
     "zafri_intro_06": {
       "id": "zafri_intro_06",
       "speaker": "Zafri",
+      "expression": "serious",
       "text": "Masuk dulu. Dan Syafiq... kau ada benda dalam kau. Aku boleh rasa dari sini.",
       "effect": "shake",
       "next": "inside_01"
@@ -109,6 +114,7 @@
     "inside_04": {
       "id": "inside_04",
       "speaker": "Zafri",
+      "expression": "frustrated",
       "text": "Because aku buta and pekak, spiritually. Tak boleh nampak, tak boleh dengar. Zero gift. Tapi aku ada knowledge.",
       "next": "inside_05"
     },
@@ -127,6 +133,7 @@
     "inside_07": {
       "id": "inside_07",
       "speaker": "Zafri",
+      "expression": "nervous",
       "text": "Fuck me. Kau bonded dengan saka. Datuk aku paling takut benda ni.",
       "next": "saka_explanation_01"
     },
@@ -139,6 +146,7 @@
     "saka_explanation_02": {
       "id": "saka_explanation_02",
       "speaker": "Zafri",
+      "expression": "serious",
       "text": "Ancient spirit. Pre-Islamic. Datuk cakap they're like... spiritual parasites. Feed on host's life force. Slowly.",
       "next": "saka_explanation_03"
     },
@@ -156,6 +164,7 @@
     "saka_explanation_05": {
       "id": "saka_explanation_05",
       "speaker": "Dian",
+      "expression": "worried",
       "text": "Feed it apa?",
       "next": "saka_explanation_06"
     },
@@ -168,6 +177,7 @@
     "choice_01": {
       "id": "choice_01",
       "speaker": "Syafiq",
+      "expression": "sad",
       "text": "...",
       "choices": [
         {
@@ -190,6 +200,7 @@
     "removal_path_01": {
       "id": "removal_path_01",
       "speaker": "Zafri",
+      "expression": "serious",
       "text": "Maybe. Datuk ada note pasal 'severance rituals'. But they're dangerous. High chance of killing the host too.",
       "next": "removal_02"
     },
@@ -202,12 +213,14 @@
     "practical_01": {
       "id": "practical_01",
       "speaker": "Zafri",
+      "expression": "excited",
       "text": "Ok practical stuff. Kau need bottles, inscriptions, and capture techniques. Lucky for you, datuk left everything in Unit 9-4.",
       "next": "practical_02"
     },
     "practical_02": {
       "id": "practical_02",
       "speaker": "Syafiq",
+      "expression": "sad",
       "text": "So I have to go back there.",
       "next": "practical_03"
     },
@@ -231,6 +244,7 @@
     "death_story_02": {
       "id": "death_story_02",
       "speaker": "Zafri",
+      "expression": "serious",
       "text": "Heart attack. But... yang pelik, semua bottled spirits dalam collection dia hilang pada hari yang sama.",
       "next": "death_story_03"
     },
@@ -249,6 +263,7 @@
     "death_story_05": {
       "id": "death_story_05",
       "speaker": "Dian",
+      "expression": "worried",
       "text": "Or maybe someone freed them. Someone who knew exactly which bottles to target.",
       "next": "journal_discovery_01"
     },
@@ -260,6 +275,7 @@
     "journal_discovery_02": {
       "id": "journal_discovery_02",
       "speaker": "Zafri",
+      "expression": "serious",
       "text": "Last few entries... datuk ada tulis dia worried pasal something. Someone. 'Halim sudah berubah. Dia tak faham consequences.'",
       "next": "journal_discovery_03"
     },
@@ -294,6 +310,7 @@
     "family_tree_03": {
       "id": "family_tree_03",
       "speaker": "Syafiq",
+      "expression": "shocked",
       "text": "Wait. That name... 'Ahmad bin Rashid'. That's... that's my father's name.",
       "effect": "flash",
       "next": "revelation_01"
@@ -306,18 +323,21 @@
     "revelation_02": {
       "id": "revelation_02",
       "speaker": "Zafri",
+      "expression": "nervous",
       "text": "Fuck. Your father was in the network. Circle next to his name... dengan note: 'JANGAN LEPASKAN.'",
       "next": "revelation_03"
     },
     "revelation_03": {
       "id": "revelation_03",
       "speaker": "Dian",
+      "expression": "frightened",
       "text": "Don't release what?",
       "next": "revelation_04"
     },
     "revelation_04": {
       "id": "revelation_04",
       "speaker": "Zafri",
+      "expression": "serious",
       "text": "The saka. Your father was bonded to the same saka. Datuk aku helped him contain it. But something happened...",
       "next": "revelation_05"
     },
@@ -335,12 +355,14 @@
     "revelation_07": {
       "id": "revelation_07",
       "speaker": "Syafiq",
+      "expression": "sad",
       "text": "My father didn't leave us. Something happened to him. And now the saka is in me.",
       "next": "choice_02"
     },
     "choice_02": {
       "id": "choice_02",
       "speaker": "Syafiq",
+      "expression": "angry",
       "text": "...",
       "choices": [
         {
@@ -369,6 +391,7 @@
     "practical_path_01": {
       "id": "practical_path_01",
       "speaker": "Zafri",
+      "expression": "excited",
       "text": "Ok, plan: we go to Unit 9-4, get the bottles and tools. I'll teach you basic containment theory. First target... something small.",
       "next": "practical_path_02"
     },
@@ -393,6 +416,7 @@
     "team_formation_01": {
       "id": "team_formation_01",
       "speaker": "Dian",
+      "expression": "happy",
       "text": "So we're really doing this. Syafiq the spirit-touched, me the listener, Zafri the researcher. Weird team.",
       "next": "team_formation_02"
     },
@@ -405,12 +429,14 @@
     "team_formation_03": {
       "id": "team_formation_03",
       "speaker": "Syafiq",
+      "expression": "sad",
       "text": "What if I hurt you guys? What if I lose control?",
       "next": "team_formation_04"
     },
     "team_formation_04": {
       "id": "team_formation_04",
       "speaker": "Dian",
+      "expression": "happy",
       "text": "Then we'll figure it out. Kau tak perlu go through this alone. None of us do.",
       "next": "resolution_01"
     },

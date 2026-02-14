@@ -23,12 +23,14 @@
     "dian_01": {
       "id": "dian_01",
       "speaker": "Dian",
+      "expression": "worried",
       "text": "Bunyi tu... kau dengar tak?",
       "next": "syafiq_01"
     },
     "syafiq_01": {
       "id": "syafiq_01",
       "speaker": "Syafiq",
+      "expression": "shocked",
       "text": "Bunyi apa?",
       "choices": [
         {
@@ -66,18 +68,21 @@
     "dian_surprised": {
       "id": "dian_surprised",
       "speaker": "Dian",
+      "expression": "happy",
       "text": "Betul?! Ada orang lain yang boleh dengar! Aku fikir aku sorang je...",
       "next": "dian_intro"
     },
     "dian_sad": {
       "id": "dian_sad",
       "speaker": "Dian",
+      "expression": "worried",
       "text": "Macam biasa... aku sorang je yang dengar.",
       "next": "dian_intro"
     },
     "dian_explains": {
       "id": "dian_explains",
       "speaker": "Dian",
+      "expression": "worried",
       "text": "Sejak kecil, aku dengar suara yang orang lain tak boleh dengar...",
       "next": "dian_intro"
     },
@@ -102,12 +107,14 @@
     "syafiq_explains": {
       "id": "syafiq_explains",
       "speaker": "Syafiq",
+      "expression": "shocked",
       "text": "Unit 9-4. Botol-botol pecah. Lepas tu... aku rasa macam ada sesuatu dalam diri aku.",
       "next": "dian_understanding"
     },
     "dian_understanding": {
       "id": "dian_understanding",
       "speaker": "Dian",
+      "expression": "worried",
       "text": "Aku tahu... Atuk cerita. Kalau botol bomoh pecah, benda dalam keluar. Dan cari host baru.",
       "next": "appearance"
     },
@@ -125,12 +132,14 @@
     "dian_senses": {
       "id": "dian_senses",
       "speaker": "Dian",
+      "expression": "frightened",
       "text": "Ada sesuatu... dekat kau sekarang. Aku tak nampak, tapi aku rasa.",
       "next": "syafiq_sees"
     },
     "syafiq_sees": {
       "id": "syafiq_sees",
       "speaker": "Syafiq",
+      "expression": "shocked",
       "text": "Toyol. Tengah capai aku.",
       "next": "battle_start"
     },
