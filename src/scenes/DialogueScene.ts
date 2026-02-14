@@ -21,6 +21,23 @@ export class DialogueScene extends Phaser.Scene {
   private currentBackground = '';
   private backgroundElements: Phaser.GameObjects.GameObject[] = [];
 
+  // Character portrait system (VN style)
+  private portraitContainer!: Phaser.GameObjects.Container;
+  private leftPortrait?: Phaser.GameObjects.Image;
+  private rightPortrait?: Phaser.GameObjects.Image;
+  private leftPortraitGlow?: Phaser.GameObjects.Graphics;
+  private rightPortraitGlow?: Phaser.GameObjects.Graphics;
+  private currentSpeakerSide: 'left' | 'right' | 'center' | 'none' = 'none';
+  private lastSpeaker = '';
+
+  // Speaker → sprite key mapping
+  private readonly speakerSpriteMap: Record<string, { key: string; side: 'left' | 'right' }> = {
+    'Syafiq': { key: 'syafiq-south', side: 'left' },
+    'Dian': { key: 'dian-south', side: 'right' },
+    'Zafri': { key: 'zafri-south', side: 'right' },
+    'Mak': { key: 'mak-south', side: 'right' }, // No texture — handled gracefully
+  };
+
   // UI elements
   private dialogueBox!: Phaser.GameObjects.Graphics;
   private speakerText!: Phaser.GameObjects.Text;
@@ -64,10 +81,15 @@ export class DialogueScene extends Phaser.Scene {
     this.backgroundContainer = this.add.container(0, 0);
     this.createBackground('ppr-corridor'); // Default background
     
+    // Character portrait container (above dialogue box, below vignette)
+    this.portraitContainer = this.add.container(0, 0);
+    this.portraitContainer.setDepth(5);
+
     // Vignette overlay
     const vignette = this.add.graphics();
     vignette.fillStyle(0x000000, 0.3);
     vignette.fillRect(0, 0, w, safeTop + 40);
+    vignette.setDepth(6);
 
     // Dialogue box — full width with padding, at bottom
     const boxHeight = Math.max(160, h * 0.28);
@@ -80,6 +102,7 @@ export class DialogueScene extends Phaser.Scene {
     this.dialogueBox.fillRoundedRect(boxX, boxY, boxW, boxHeight, 8);
     this.dialogueBox.lineStyle(1, 0x2dd4a8, 0.3);
     this.dialogueBox.strokeRoundedRect(boxX, boxY, boxW, boxHeight, 8);
+    this.dialogueBox.setDepth(10);
     
     // Add subtle breathing effect to dialogue box border
     this.tweens.add({
@@ -99,7 +122,7 @@ export class DialogueScene extends Phaser.Scene {
       fontStyle: 'bold',
       backgroundColor: '#0d1a16',
       padding: { x: 10, y: 3 },
-    });
+    }).setDepth(11);
 
     // Dialogue text — 16px, comfortable reading
     this.dialogueText = this.add.text(boxX + 16, boxY + 20, '', {
@@ -108,7 +131,7 @@ export class DialogueScene extends Phaser.Scene {
       color: '#d4d4c8',
       wordWrap: { width: boxW - 32 },
       lineSpacing: 8,
-    });
+    }).setDepth(11);
 
     this.typewriter = new TypewriterEffect(this, this.dialogueText, 28);
 
@@ -122,7 +145,7 @@ export class DialogueScene extends Phaser.Scene {
         fontSize: '14px',
         color: '#2dd4a8',
       }
-    ).setAlpha(0);
+    ).setAlpha(0).setDepth(11);
 
     // Blinking continue indicator
     this.tweens.add({
@@ -209,13 +232,21 @@ export class DialogueScene extends Phaser.Scene {
       this.createBackground((line as any).background);
     }
 
-    // Speaker
+    // Speaker + VN portrait
     if (line.speaker) {
       this.speakerText.setText(line.speaker);
       this.speakerText.setVisible(true);
+      this.updatePortrait(line.speaker);
     } else {
       this.speakerText.setText('');
       this.speakerText.setVisible(false);
+      // Narration — dim both portraits
+      this.dimAllPortraits();
+    }
+
+    // Show spirit sprite if line has enemy/spirit reference
+    if ((line as any).enemy) {
+      this.showSpiritPortrait((line as any).enemy);
     }
 
     // Effects
@@ -288,6 +319,7 @@ export class DialogueScene extends Phaser.Scene {
       btnBg.fillRoundedRect(pad, btnY, btnW, btnHeight, 6);
       btnBg.lineStyle(1, 0x2dd4a8, 0.2);
       btnBg.strokeRoundedRect(pad, btnY, btnW, btnHeight, 6);
+      btnBg.setDepth(12);
       this.choiceBorders.push(btnBg);
 
       const btn = this.add.text(pad + 20, btnY + btnHeight / 2, `◈  ${choice.text}`, {
@@ -295,7 +327,7 @@ export class DialogueScene extends Phaser.Scene {
         fontSize: '15px',
         color: '#6b8f82',
         wordWrap: { width: btnW - 40 },
-      }).setOrigin(0, 0.5).setInteractive({
+      }).setOrigin(0, 0.5).setDepth(12).setInteractive({
         useHandCursor: true,
         hitArea: new Phaser.Geom.Rectangle(-20, -btnHeight / 2, btnW, btnHeight),
         hitAreaCallback: Phaser.Geom.Rectangle.Contains,
@@ -391,6 +423,231 @@ export class DialogueScene extends Phaser.Scene {
       }
     }
   }
+
+  // ===== VN PORTRAIT SYSTEM =====
+
+  private updatePortrait(speaker: string): void {
+    const w = this.scale.width;
+    const h = this.scale.height;
+    const boxHeight = Math.max(160, h * 0.28);
+    const safeBottom = 24;
+    const portraitBottom = h - boxHeight - safeBottom - 10; // Just above dialogue box
+    const portraitScale = 4; // Pixel art scaled up big
+    const spriteInfo = this.speakerSpriteMap[speaker];
+
+    if (!spriteInfo) {
+      // Unknown speaker — show silhouette or nothing
+      this.dimAllPortraits();
+      return;
+    }
+
+    const { key, side } = spriteInfo;
+    const hasTexture = this.textures.exists(key);
+
+    if (side === 'left') {
+      // Show/update left portrait
+      if (!this.leftPortrait && hasTexture) {
+        this.createPortrait('left', key, w, portraitBottom, portraitScale);
+      } else if (this.leftPortrait && hasTexture) {
+        // Already showing — just ensure it's bright
+        if (this.leftPortrait.texture.key !== key) {
+          this.leftPortrait.setTexture(key);
+        }
+      }
+      // Activate left, dim right
+      this.activatePortrait('left');
+      this.dimPortrait('right');
+    } else {
+      // Show/update right portrait
+      if (!this.rightPortrait && hasTexture) {
+        this.createPortrait('right', key, w, portraitBottom, portraitScale);
+      } else if (this.rightPortrait && hasTexture) {
+        if (this.rightPortrait.texture.key !== key) {
+          this.rightPortrait.setTexture(key);
+        }
+      }
+      // Activate right, dim left
+      this.activatePortrait('right');
+      this.dimPortrait('left');
+    }
+
+    this.lastSpeaker = speaker;
+  }
+
+  private createPortrait(
+    side: 'left' | 'right',
+    textureKey: string,
+    screenW: number,
+    bottomY: number,
+    scale: number
+  ): void {
+    const x = side === 'left' ? screenW * 0.22 : screenW * 0.78;
+
+    // Glow behind sprite
+    const glow = this.add.graphics();
+    glow.fillStyle(0x2dd4a8, 0.15);
+    glow.fillCircle(0, 0, 50);
+    glow.setPosition(x, bottomY - 60);
+    this.portraitContainer.add(glow);
+
+    // Character sprite
+    const portrait = this.add.image(x, bottomY, textureKey);
+    portrait.setScale(scale);
+    portrait.setOrigin(0.5, 1); // Bottom-center anchor so feet touch dialogue box area
+    this.portraitContainer.add(portrait);
+
+    // Fade in
+    portrait.setAlpha(0);
+    glow.setAlpha(0);
+    this.tweens.add({
+      targets: [portrait, glow],
+      alpha: { from: 0, to: 1 },
+      duration: 400,
+      ease: 'Power2.easeOut'
+    });
+
+    // Subtle idle float
+    this.tweens.add({
+      targets: portrait,
+      y: { from: bottomY - 2, to: bottomY + 2 },
+      duration: 2500,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut'
+    });
+
+    if (side === 'left') {
+      this.leftPortrait = portrait;
+      this.leftPortraitGlow = glow;
+    } else {
+      this.rightPortrait = portrait;
+      this.rightPortraitGlow = glow;
+    }
+  }
+
+  private activatePortrait(side: 'left' | 'right'): void {
+    const portrait = side === 'left' ? this.leftPortrait : this.rightPortrait;
+    const glow = side === 'left' ? this.leftPortraitGlow : this.rightPortraitGlow;
+    if (portrait) {
+      this.tweens.add({
+        targets: portrait,
+        alpha: 1,
+        scaleX: (portrait.getData('baseScale') || 4),
+        scaleY: (portrait.getData('baseScale') || 4),
+        duration: 200,
+        ease: 'Power2'
+      });
+      portrait.clearTint();
+    }
+    if (glow) {
+      this.tweens.add({ targets: glow, alpha: 0.15, duration: 200 });
+    }
+  }
+
+  private dimPortrait(side: 'left' | 'right'): void {
+    const portrait = side === 'left' ? this.leftPortrait : this.rightPortrait;
+    const glow = side === 'left' ? this.leftPortraitGlow : this.rightPortraitGlow;
+    if (portrait) {
+      this.tweens.add({
+        targets: portrait,
+        alpha: 0.4,
+        duration: 200,
+        ease: 'Power2'
+      });
+      portrait.setTint(0x666666);
+    }
+    if (glow) {
+      this.tweens.add({ targets: glow, alpha: 0.05, duration: 200 });
+    }
+  }
+
+  private dimAllPortraits(): void {
+    this.dimPortrait('left');
+    this.dimPortrait('right');
+  }
+
+  private showSpiritPortrait(spiritId: string): void {
+    const w = this.scale.width;
+    const h = this.scale.height;
+    const boxHeight = Math.max(160, h * 0.28);
+    const safeBottom = 24;
+    const portraitBottom = h - boxHeight - safeBottom - 10;
+
+    // Spirit sprite key (use south-facing)
+    const spriteKey = `spirit-${spiritId}-south`;
+    if (!this.textures.exists(spriteKey)) return;
+
+    // Clear right portrait if there is one (spirits show on right/center)
+    this.clearPortraitSide('right');
+
+    const x = w * 0.65;
+    
+    // Eerie red glow
+    const glow = this.add.graphics();
+    glow.fillStyle(0xff4444, 0.2);
+    glow.fillCircle(0, 0, 60);
+    glow.setPosition(x, portraitBottom - 60);
+    this.portraitContainer.add(glow);
+
+    const sprite = this.add.image(x, portraitBottom, spriteKey);
+    sprite.setScale(4);
+    sprite.setOrigin(0.5, 1);
+    this.portraitContainer.add(sprite);
+
+    // Dramatic entrance
+    sprite.setAlpha(0);
+    sprite.setScale(3);
+    glow.setAlpha(0);
+
+    this.tweens.add({
+      targets: sprite,
+      alpha: 1,
+      scaleX: 4,
+      scaleY: 4,
+      duration: 600,
+      ease: 'Back.easeOut'
+    });
+    this.tweens.add({
+      targets: glow,
+      alpha: 0.2,
+      duration: 600,
+    });
+
+    // Floating/breathing
+    this.tweens.add({
+      targets: sprite,
+      y: { from: portraitBottom - 4, to: portraitBottom + 4 },
+      scaleX: { from: 3.9, to: 4.1 },
+      scaleY: { from: 3.9, to: 4.1 },
+      duration: 2000,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut'
+    });
+
+    // Dim left portrait (Syafiq reacting)
+    this.dimPortrait('left');
+
+    this.rightPortrait = sprite;
+    this.rightPortraitGlow = glow;
+  }
+
+  private clearPortraitSide(side: 'left' | 'right'): void {
+    if (side === 'left') {
+      if (this.leftPortrait) { this.leftPortrait.destroy(); this.leftPortrait = undefined; }
+      if (this.leftPortraitGlow) { this.leftPortraitGlow.destroy(); this.leftPortraitGlow = undefined; }
+    } else {
+      if (this.rightPortrait) { this.rightPortrait.destroy(); this.rightPortrait = undefined; }
+      if (this.rightPortraitGlow) { this.rightPortraitGlow.destroy(); this.rightPortraitGlow = undefined; }
+    }
+  }
+
+  private clearAllPortraits(): void {
+    this.clearPortraitSide('left');
+    this.clearPortraitSide('right');
+  }
+
+  // ===== END PORTRAIT SYSTEM =====
 
   private handleChapterCompletion(): void {
     const chapterKey = (this.scene.settings.data as { chapter?: string })?.chapter ?? 'chapter1';

@@ -90,8 +90,8 @@ export class DaySystem {
   public captureSpirit(spiritId: string): void {
     if (!this.gameState.capturedSpirits.includes(spiritId)) {
       this.gameState.capturedSpirits.push(spiritId);
-      // Capturing spirits reduces hunger temporarily
-      this.gameState.sakaHunger = Math.max(0, this.gameState.sakaHunger - 15);
+      // Capturing spirits FEEDS the saka — this is the core reward loop
+      this.gameState.sakaHunger = Math.min(100, this.gameState.sakaHunger + 30);
       this.saveToStorage();
     }
   }
