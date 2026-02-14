@@ -14,9 +14,11 @@ export class DialogueScene extends Phaser.Scene {
   private dialogueText!: Phaser.GameObjects.Text;
   private continueIndicator!: Phaser.GameObjects.Text;
   private choiceButtons: Phaser.GameObjects.Text[] = [];
+  private choiceBorders: Phaser.GameObjects.Graphics[] = [];
   private hungerBar!: Phaser.GameObjects.Graphics;
   private hungerLabel!: Phaser.GameObjects.Text;
   private chapterTitle!: Phaser.GameObjects.Text;
+  private scanlines!: Phaser.GameObjects.Graphics;
 
   private waitingForInput = false;
   private isTyping = false;
@@ -26,55 +28,69 @@ export class DialogueScene extends Phaser.Scene {
   }
 
   create(): void {
-    const { width, height } = this.cameras.main;
+    const w = this.scale.width;
+    const h = this.scale.height;
+    const safeTop = 40;
+    const safeBottom = 20;
+    const pad = 16;
+
     this.engine = new DialogueEngine();
     this.saka = new SakaSystem(this, 0.3);
 
     // Dark atmospheric background
     const bg = this.add.graphics();
     bg.fillGradientStyle(0x0a0a0a, 0x0a0a0a, 0x0a1210, 0x0a1210, 1);
-    bg.fillRect(0, 0, width, height);
+    bg.fillRect(0, 0, w, h);
 
     // Vignette overlay
     const vignette = this.add.graphics();
     vignette.fillStyle(0x000000, 0.3);
-    vignette.fillRect(0, 0, width, 80);
-    vignette.fillRect(0, height - 220, width, 220);
+    vignette.fillRect(0, 0, w, safeTop + 40);
 
-    // Dialogue box
+    // Dialogue box — full width with padding, at bottom
+    const boxHeight = Math.max(160, h * 0.28);
+    const boxY = h - boxHeight - safeBottom;
+    const boxX = pad;
+    const boxW = w - pad * 2;
+
     this.dialogueBox = this.add.graphics();
     this.dialogueBox.fillStyle(0x0d1a16, 0.92);
-    this.dialogueBox.fillRoundedRect(40, height - 200, width - 80, 180, 8);
+    this.dialogueBox.fillRoundedRect(boxX, boxY, boxW, boxHeight, 8);
     this.dialogueBox.lineStyle(1, 0x2dd4a8, 0.3);
-    this.dialogueBox.strokeRoundedRect(40, height - 200, width - 80, 180, 8);
+    this.dialogueBox.strokeRoundedRect(boxX, boxY, boxW, boxHeight, 8);
 
-    // Speaker name
-    this.speakerText = this.add.text(70, height - 225, '', {
+    // Speaker name — 14px on mobile
+    this.speakerText = this.add.text(boxX + 12, boxY - 20, '', {
       fontFamily: 'Georgia, serif',
-      fontSize: '18px',
+      fontSize: '14px',
       color: '#2dd4a8',
       fontStyle: 'bold',
       backgroundColor: '#0d1a16',
-      padding: { x: 12, y: 4 },
+      padding: { x: 10, y: 3 },
     });
 
-    // Dialogue text
-    this.dialogueText = this.add.text(70, height - 180, '', {
+    // Dialogue text — 16px, comfortable reading
+    this.dialogueText = this.add.text(boxX + 16, boxY + 20, '', {
       fontFamily: 'Georgia, serif',
-      fontSize: '18px',
+      fontSize: '16px',
       color: '#d4d4c8',
-      wordWrap: { width: width - 160 },
-      lineSpacing: 6,
+      wordWrap: { width: boxW - 32 },
+      lineSpacing: 8,
     });
 
     this.typewriter = new TypewriterEffect(this, this.dialogueText, 28);
 
-    // Continue indicator
-    this.continueIndicator = this.add.text(width - 80, height - 40, '▼', {
-      fontFamily: 'monospace',
-      fontSize: '16px',
-      color: '#2dd4a8',
-    }).setAlpha(0);
+    // Continue indicator — bottom-right of dialogue box
+    this.continueIndicator = this.add.text(
+      boxX + boxW - 24,
+      boxY + boxHeight - 24,
+      '▼',
+      {
+        fontFamily: 'monospace',
+        fontSize: '14px',
+        color: '#2dd4a8',
+      }
+    ).setAlpha(0);
 
     // Blinking continue indicator
     this.tweens.add({
@@ -85,23 +101,34 @@ export class DialogueScene extends Phaser.Scene {
       repeat: -1,
     });
 
-    // Hunger bar (top-right)
-    this.hungerLabel = this.add.text(width - 200, 15, 'SAKA', {
+    // Hunger bar (top-right, safe area)
+    const barW = Math.min(100, w * 0.3);
+    this.hungerLabel = this.add.text(w - barW - pad, safeTop + 8, 'SAKA', {
       fontFamily: 'monospace',
-      fontSize: '11px',
+      fontSize: '12px',
       color: '#2dd4a8',
     });
 
     this.hungerBar = this.add.graphics();
     this.updateHungerBar();
 
-    // Chapter title display
-    this.chapterTitle = this.add.text(width / 2, 40, '', {
+    // Chapter title display — safe area
+    const chTitleSize = Math.max(11, Math.floor(w * 0.033));
+    this.chapterTitle = this.add.text(w / 2, safeTop + 12, '', {
       fontFamily: 'Georgia, serif',
-      fontSize: '14px',
+      fontSize: `${chTitleSize}px`,
       color: '#3a5a4e',
       fontStyle: 'italic',
     }).setOrigin(0.5);
+
+    // Scan-line overlay
+    this.scanlines = this.add.graphics();
+    this.scanlines.lineStyle(1, 0x000000, 0.15);
+    for (let y = 0; y < h; y += 3) {
+      this.scanlines.lineBetween(0, y, w, y);
+    }
+    this.scanlines.setAlpha(0.04);
+    this.scanlines.setDepth(1000);
 
     // Load chapter data
     const chapterKey = (this.scene.settings.data as { chapter?: string })?.chapter ?? 'chapter1';
@@ -116,7 +143,7 @@ export class DialogueScene extends Phaser.Scene {
       }
     }
 
-    // Input handling
+    // Input handling — touch anywhere to advance
     this.input.on('pointerdown', () => this.handleInput());
     this.input.keyboard?.on('keydown-SPACE', () => this.handleInput());
     this.input.keyboard?.on('keydown-ENTER', () => this.handleInput());
@@ -171,27 +198,67 @@ export class DialogueScene extends Phaser.Scene {
 
   private showChoices(line: DialogueLine): void {
     if (!line.choices) return;
-    const { width, height } = this.cameras.main;
-    const startY = height - 280 - (line.choices.length * 45);
+    const w = this.scale.width;
+    const h = this.scale.height;
+    const pad = 16;
+    const safeBottom = 20;
+
+    const boxHeight = Math.max(160, h * 0.28);
+    const boxY = h - boxHeight - safeBottom;
+
+    const btnHeight = 48;
+    const btnGap = 8;
+    const totalHeight = line.choices.length * btnHeight + (line.choices.length - 1) * btnGap;
+    const startY = boxY - totalHeight - 16;
 
     line.choices.forEach((choice, index) => {
-      const btn = this.add.text(width / 2, startY + index * 50, `◈  ${choice.text}`, {
+      const btnY = startY + index * (btnHeight + btnGap);
+      const btnW = w - pad * 2;
+
+      // Button background with left teal border
+      const btnBg = this.add.graphics();
+      btnBg.fillStyle(0x0d1a16, 0.95);
+      btnBg.fillRoundedRect(pad, btnY, btnW, btnHeight, 6);
+      btnBg.lineStyle(1, 0x2dd4a8, 0.2);
+      btnBg.strokeRoundedRect(pad, btnY, btnW, btnHeight, 6);
+      this.choiceBorders.push(btnBg);
+
+      const btn = this.add.text(pad + 20, btnY + btnHeight / 2, `◈  ${choice.text}`, {
         fontFamily: 'Georgia, serif',
-        fontSize: '17px',
+        fontSize: '15px',
         color: '#6b8f82',
-        backgroundColor: '#0d1a16e8',
-        padding: { x: 20, y: 10 },
-      }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+        wordWrap: { width: btnW - 40 },
+      }).setOrigin(0, 0.5).setInteractive({
+        useHandCursor: true,
+        hitArea: new Phaser.Geom.Rectangle(-20, -btnHeight / 2, btnW, btnHeight),
+        hitAreaCallback: Phaser.Geom.Rectangle.Contains,
+      });
 
       btn.on('pointerover', () => {
         btn.setColor('#2dd4a8');
-        btn.setScale(1.03);
+        // Redraw with teal left border highlight
+        btnBg.clear();
+        btnBg.fillStyle(0x112a22, 0.95);
+        btnBg.fillRoundedRect(pad, btnY, btnW, btnHeight, 6);
+        btnBg.fillStyle(0x2dd4a8, 1);
+        btnBg.fillRoundedRect(pad, btnY, 3, btnHeight, { tl: 6, bl: 6, tr: 0, br: 0 });
+        btnBg.lineStyle(1, 0x2dd4a8, 0.4);
+        btnBg.strokeRoundedRect(pad, btnY, btnW, btnHeight, 6);
       });
       btn.on('pointerout', () => {
         btn.setColor('#6b8f82');
         btn.setScale(1.0);
+        btnBg.clear();
+        btnBg.fillStyle(0x0d1a16, 0.95);
+        btnBg.fillRoundedRect(pad, btnY, btnW, btnHeight, 6);
+        btnBg.lineStyle(1, 0x2dd4a8, 0.2);
+        btnBg.strokeRoundedRect(pad, btnY, btnW, btnHeight, 6);
       });
       btn.on('pointerdown', () => {
+        btn.setScale(0.95);
+      });
+      btn.on('pointerup', () => {
+        btn.setScale(1.0);
         this.selectChoice(index);
       });
 
@@ -210,7 +277,11 @@ export class DialogueScene extends Phaser.Scene {
     for (const btn of this.choiceButtons) {
       btn.destroy();
     }
+    for (const bg of this.choiceBorders) {
+      bg.destroy();
+    }
     this.choiceButtons = [];
+    this.choiceBorders = [];
   }
 
   private handleInput(): void {
@@ -245,21 +316,23 @@ export class DialogueScene extends Phaser.Scene {
   }
 
   private updateHungerBar(): void {
-    const { width } = this.cameras.main;
-    const barWidth = 120;
-    const barHeight = 6;
-    const x = width - 200;
-    const y = 32;
+    const w = this.scale.width;
+    const pad = 16;
+    const safeTop = 40;
+    const barWidth = Math.min(100, w * 0.3);
+    const barHeight = 8;
+    const x = w - barWidth - pad;
+    const y = safeTop + 26;
 
     this.hungerBar.clear();
     // Background
     this.hungerBar.fillStyle(0x1a1a1a, 1);
-    this.hungerBar.fillRect(x, y, barWidth, barHeight);
+    this.hungerBar.fillRoundedRect(x, y, barWidth, barHeight, 2);
     // Fill
     const hunger = this.saka.getHunger();
     const color = hunger > 50 ? 0x2dd4a8 : hunger > 20 ? 0xd4a82d : 0xd42d2d;
     this.hungerBar.fillStyle(color, 1);
-    this.hungerBar.fillRect(x, y, barWidth * (hunger / 100), barHeight);
+    this.hungerBar.fillRoundedRect(x, y, barWidth * (hunger / 100), barHeight, 2);
   }
 
   update(): void {

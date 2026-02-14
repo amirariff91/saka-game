@@ -9,12 +9,16 @@ import { InventoryScene } from './scenes/InventoryScene';
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
   parent: 'game-container',
-  width: 1280,
-  height: 720,
+  width: 360,
+  height: 640,
   backgroundColor: '#0a0a0a',
+  pixelArt: true,
   scale: {
-    mode: Phaser.Scale.FIT,
+    mode: Phaser.Scale.RESIZE,
     autoCenter: Phaser.Scale.CENTER_BOTH,
+  },
+  input: {
+    activePointers: 2,
   },
   scene: [BootScene, MenuScene, DialogueScene, ExploreScene, BattleScene, InventoryScene],
 };
