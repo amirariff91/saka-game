@@ -1,0 +1,144 @@
+{
+  "id": "tutorial-dian",
+  "title": "The Girl Who Hears",
+  "titleMalay": "Gadis Yang Mendengar",
+  "startNode": "stairs_01",
+  "lines": {
+    "stairs_01": {
+      "id": "stairs_01",
+      "text": "Tangga tingkat 9. Syafiq turun perlahan, nak ke kedai beli nasi lemak.",
+      "background": "ppr-corridor",
+      "next": "stairs_02"
+    },
+    "stairs_02": {
+      "id": "stairs_02",
+      "text": "Bunyi... menangis? Dari arah atas.",
+      "next": "stairs_03"
+    },
+    "stairs_03": {
+      "id": "stairs_03",
+      "text": "Gadis duduk kat anak tangga, kepala dalam tangan. Umur macam Syafiq.",
+      "character": "dian-south",
+      "next": "dian_01"
+    },
+    "dian_01": {
+      "id": "dian_01",
+      "speaker": "Dian",
+      "text": "Bunyi tu... kau dengar tak?",
+      "next": "syafiq_01"
+    },
+    "syafiq_01": {
+      "id": "syafiq_01",
+      "speaker": "Syafiq",
+      "text": "Bunyi apa?",
+      "choices": [
+        {
+          "text": "Ya, aku dengar",
+          "next": "admit_hearing"
+        },
+        {
+          "text": "Takde bunyi apa",
+          "next": "deny_hearing"
+        },
+        {
+          "text": "Kau okay tak?",
+          "next": "ask_okay"
+        }
+      ]
+    },
+    "admit_hearing": {
+      "id": "admit_hearing",
+      "speaker": "Syafiq",
+      "text": "Dengar. Macam... bisikan.",
+      "next": "dian_surprised"
+    },
+    "deny_hearing": {
+      "id": "deny_hearing",
+      "speaker": "Syafiq",
+      "text": "Aku tak dengar apa-apa.",
+      "next": "dian_sad"
+    },
+    "ask_okay": {
+      "id": "ask_okay",
+      "speaker": "Syafiq",
+      "text": "Kau okay tak? Nampak macam takut.",
+      "next": "dian_explains"
+    },
+    "dian_surprised": {
+      "id": "dian_surprised",
+      "speaker": "Dian",
+      "text": "Betul?! Ada orang lain yang boleh dengar! Aku fikir aku sorang je...",
+      "next": "dian_intro"
+    },
+    "dian_sad": {
+      "id": "dian_sad",
+      "speaker": "Dian",
+      "text": "Macam biasa... aku sorang je yang dengar.",
+      "next": "dian_intro"
+    },
+    "dian_explains": {
+      "id": "dian_explains",
+      "speaker": "Dian",
+      "text": "Sejak kecil, aku dengar suara yang orang lain tak boleh dengar...",
+      "next": "dian_intro"
+    },
+    "dian_intro": {
+      "id": "dian_intro",
+      "speaker": "Dian",
+      "text": "Nama aku Dian. Duduk tingkat 8. Kau... baru je nampak macam lain.",
+      "next": "syafiq_intro"
+    },
+    "syafiq_intro": {
+      "id": "syafiq_intro",
+      "speaker": "Syafiq",
+      "text": "Syafiq. Tingkat 9. Semalam ada kejadian... pelik.",
+      "next": "dian_curious"
+    },
+    "dian_curious": {
+      "id": "dian_curious",
+      "speaker": "Dian",
+      "text": "Kejadian macam mana?",
+      "next": "syafiq_explains"
+    },
+    "syafiq_explains": {
+      "id": "syafiq_explains",
+      "speaker": "Syafiq",
+      "text": "Unit 9-4. Botol-botol pecah. Lepas tu... aku rasa macam ada sesuatu dalam diri aku.",
+      "next": "dian_understanding"
+    },
+    "dian_understanding": {
+      "id": "dian_understanding",
+      "speaker": "Dian",
+      "text": "Aku tahu... Atuk cerita. Kalau botol bomoh pecah, benda dalam keluar. Dan cari host baru.",
+      "next": "appearance"
+    },
+    "appearance": {
+      "id": "appearance",
+      "text": "Udara bertukar sejuk. Bayang kecil meluncur dari dinding.",
+      "next": "toyol_appears"
+    },
+    "toyol_appears": {
+      "id": "toyol_appears",
+      "text": "Toyol. Mata merah, gigi tajam. Hanya Syafiq nampak.",
+      "enemy": "toyol",
+      "next": "dian_senses"
+    },
+    "dian_senses": {
+      "id": "dian_senses",
+      "speaker": "Dian",
+      "text": "Ada sesuatu... dekat kau sekarang. Aku tak nampak, tapi aku rasa.",
+      "next": "syafiq_sees"
+    },
+    "syafiq_sees": {
+      "id": "syafiq_sees",
+      "speaker": "Syafiq",
+      "text": "Toyol. Tengah capai aku.",
+      "next": "battle_start"
+    },
+    "battle_start": {
+      "id": "battle_start",
+      "text": "Masa untuk lawan. Saka dalam diri Syafiq bangkit.",
+      "battle": "toyol"
+    }
+  }
+}

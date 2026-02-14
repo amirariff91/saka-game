@@ -1,0 +1,107 @@
+{
+  "id": "tutorial-wake",
+  "title": "Strange Morning",
+  "titleMalay": "Pagi Aneh",
+  "startNode": "wake_01",
+  "lines": {
+    "wake_01": {
+      "id": "wake_01",
+      "text": "Mata terbuka. Siling bilik yang sama. Tapi ada sesuatu... lain.",
+      "next": "wake_02"
+    },
+    "wake_02": {
+      "id": "wake_02",
+      "text": "Syafiq bangun perlahan. Kepala berat. Mimpi tadi... atau betul-betul berlaku?",
+      "next": "wake_03"
+    },
+    "wake_03": {
+      "id": "wake_03",
+      "text": "Botol-botol di Unit 9-4. Bau busuk. Sesuatu yang pecah.",
+      "next": "wake_04"
+    },
+    "wake_04": {
+      "id": "wake_04",
+      "text": "Perut kosong. Tapi bukan perut biasa yang lapar.",
+      "systemMessage": "Saka bar appears",
+      "next": "wake_05"
+    },
+    "wake_05": {
+      "id": "wake_05",
+      "speaker": "Mak",
+      "text": "Syafiq? Kau okay tak? Muka pucat.",
+      "next": "wake_06"
+    },
+    "wake_06": {
+      "id": "wake_06",
+      "speaker": "Syafiq",
+      "text": "Okay je, Mak. Mungkin penat kerja.",
+      "choices": [
+        {
+          "text": "Cerita pasal Unit 9-4",
+          "next": "tell_mak"
+        },
+        {
+          "text": "Tanya pasal mimpi pelik",
+          "next": "ask_dreams"
+        },
+        {
+          "text": "Simpan rahsia",
+          "next": "keep_secret"
+        }
+      ]
+    },
+    "tell_mak": {
+      "id": "tell_mak",
+      "speaker": "Syafiq",
+      "text": "Mak, kau tahu tak apa ada dalam Unit 9-4? Botol-botol banyak...",
+      "next": "mak_worried"
+    },
+    "ask_dreams": {
+      "id": "ask_dreams",
+      "speaker": "Syafiq",
+      "text": "Mak, kalau mimpi nampak benda pelik... tu normal kan?",
+      "next": "mak_dreams"
+    },
+    "keep_secret": {
+      "id": "keep_secret",
+      "speaker": "Syafiq",
+      "text": "Takde apa, Mak. Cuma penat.",
+      "next": "mak_nasi_lemak"
+    },
+    "mak_worried": {
+      "id": "mak_worried",
+      "speaker": "Mak",
+      "text": "Syafiq! Jangan pergi tempat tu! Bilik tu... orang kata ada makhluk.",
+      "next": "mak_nasi_lemak"
+    },
+    "mak_dreams": {
+      "id": "mak_dreams",
+      "speaker": "Mak",
+      "text": "Mimpi tu kadang bukan mimpi, anak. Atuk kau dulu selalu kata...",
+      "next": "mak_nasi_lemak"
+    },
+    "mak_nasi_lemak": {
+      "id": "mak_nasi_lemak",
+      "speaker": "Mak",
+      "text": "Pergi beli nasi lemak kat kedai. Kau kurus sangat ni.",
+      "next": "syafiq_agrees"
+    },
+    "syafiq_agrees": {
+      "id": "syafiq_agrees",
+      "speaker": "Syafiq",
+      "text": "Okay, Mak.",
+      "next": "inner_voice"
+    },
+    "inner_voice": {
+      "id": "inner_voice",
+      "text": "Keluar rumah, Syafiq rasa bayangan bergerak salah. Sesuatu mengikut.",
+      "next": "end_chapter",
+      "onComplete": "unlock_tangga"
+    },
+    "end_chapter": {
+      "id": "end_chapter",
+      "text": "Masa untuk pergi ke tangga. Mungkin jumpa orang yang boleh faham.",
+      "ending": true
+    }
+  }
+}

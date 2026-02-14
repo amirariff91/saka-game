@@ -1,6 +1,8 @@
 import Phaser from 'phaser';
 import { DaySystem } from '../systems/DaySystem';
 import { SoundManager } from '../systems/SoundManager';
+import { QuestSystem } from '../systems/QuestSystem';
+import { SakaWhisper } from '../systems/SakaWhisper';
 
 interface LocationInfo {
   id: string;
@@ -14,6 +16,8 @@ interface LocationInfo {
 export class LocationMenuScene extends Phaser.Scene {
   private daySystem!: DaySystem;
   private soundManager!: SoundManager;
+  private questSystem!: QuestSystem;
+  private sakaWhisper!: SakaWhisper;
   private locations: LocationInfo[] = [];
   
   // UI elements
@@ -24,6 +28,8 @@ export class LocationMenuScene extends Phaser.Scene {
   private locationCards: Phaser.GameObjects.Container[] = [];
   private restButton!: Phaser.GameObjects.Text;
   private muteButton!: Phaser.GameObjects.Text;
+  private questBar!: Phaser.GameObjects.Text;
+  private questBarBg!: Phaser.GameObjects.Graphics;
   private particles: Phaser.GameObjects.Graphics[] = [];
 
   constructor() {
@@ -39,8 +45,11 @@ export class LocationMenuScene extends Phaser.Scene {
     // Initialize systems
     this.daySystem = DaySystem.getInstance();
     this.daySystem.initialize(this);
+    this.questSystem = QuestSystem.getInstance();
+    this.questSystem.initialize(this);
     this.soundManager = SoundManager.getInstance();
     this.soundManager.updateScene(this);
+    this.sakaWhisper = new SakaWhisper(this);
 
     // Start ambient BGM
     this.soundManager.setBGMVolume(0.15);
@@ -58,6 +67,9 @@ export class LocationMenuScene extends Phaser.Scene {
     // Location cards in the center
     this.createLocationCards(w, h, safeTop, safeBottom);
 
+    // Quest bar above rest button
+    this.createQuestBar(w, h, safeBottom);
+
     // Rest button at bottom
     this.createRestButton(w, h, safeBottom);
 
@@ -66,6 +78,9 @@ export class LocationMenuScene extends Phaser.Scene {
 
     // Update locations
     this.updateLocations();
+
+    // Start saka whisper system
+    this.sakaWhisper.start();
 
     // Handle resize
     this.scale.on('resize', this.handleResize, this);
@@ -197,12 +212,42 @@ export class LocationMenuScene extends Phaser.Scene {
 
     const container = this.add.container(0, 0);
 
+    // Check if this location is a quest target
+    const activeQuest = this.questSystem.getActiveQuest();
+    const isQuestTarget = activeQuest && activeQuest.targetLocation === location.id;
+
     // Card background
     const bg = this.add.graphics();
     bg.fillStyle(0x0d1a16, 0.9);
     bg.fillRoundedRect(cardX, y, cardW, height, 8);
-    bg.lineStyle(1, location.hasEvent ? 0x2dd4a8 : 0x1a2a24, location.hasEvent ? 0.5 : 0.3);
-    bg.strokeRoundedRect(cardX, y, cardW, height, 8);
+    
+    // Enhanced border for quest targets
+    if (isQuestTarget) {
+      bg.lineStyle(2, 0x2dd4a8, 0.8);
+      bg.strokeRoundedRect(cardX, y, cardW, height, 8);
+      
+      // Add quest glow effect
+      const glowGraphics = this.add.graphics();
+      glowGraphics.lineStyle(4, 0x2dd4a8, 0.3);
+      glowGraphics.strokeRoundedRect(cardX - 2, y - 2, cardW + 4, height + 4, 10);
+      container.add(glowGraphics);
+      
+      // Pulse the glow
+      this.tweens.add({
+        targets: glowGraphics,
+        alpha: { from: 0.3, to: 0.8 },
+        scaleX: { from: 0.98, to: 1.02 },
+        scaleY: { from: 0.98, to: 1.02 },
+        duration: 1500,
+        yoyo: true,
+        repeat: -1,
+        ease: 'Sine.easeInOut'
+      });
+    } else {
+      bg.lineStyle(1, location.hasEvent ? 0x2dd4a8 : 0x1a2a24, location.hasEvent ? 0.5 : 0.3);
+      bg.strokeRoundedRect(cardX, y, cardW, height, 8);
+    }
+    
     container.add(bg);
 
     // Event indicator (pulsing teal dot)
@@ -225,11 +270,15 @@ export class LocationMenuScene extends Phaser.Scene {
       });
     }
 
-    // Location name
+    // Location name - enhanced color for quest targets
+    let nameColor = '#6b8f82'; // default
+    if (isQuestTarget) nameColor = '#4af7c7'; // bright quest color
+    else if (location.hasEvent) nameColor = '#2dd4a8'; // event color
+    
     const nameText = this.add.text(cardX + 16, y + 15, location.name, {
       fontFamily: 'Georgia, serif',
       fontSize: '16px',
-      color: location.hasEvent ? '#2dd4a8' : '#6b8f82',
+      color: nameColor,
       fontStyle: 'bold'
     });
     container.add(nameText);
@@ -260,9 +309,15 @@ export class LocationMenuScene extends Phaser.Scene {
       bg.clear();
       bg.fillStyle(0x0d1a16, 0.9);
       bg.fillRoundedRect(cardX, y, cardW, height, 8);
-      bg.lineStyle(1, location.hasEvent ? 0x2dd4a8 : 0x1a2a24, location.hasEvent ? 0.5 : 0.3);
+      
+      if (isQuestTarget) {
+        bg.lineStyle(2, 0x2dd4a8, 0.8);
+        nameText.setColor('#4af7c7');
+      } else {
+        bg.lineStyle(1, location.hasEvent ? 0x2dd4a8 : 0x1a2a24, location.hasEvent ? 0.5 : 0.3);
+        nameText.setColor(location.hasEvent ? '#2dd4a8' : '#6b8f82');
+      }
       bg.strokeRoundedRect(cardX, y, cardW, height, 8);
-      nameText.setColor(location.hasEvent ? '#2dd4a8' : '#6b8f82');
     });
 
     container.on('pointerdown', () => {
@@ -320,9 +375,77 @@ export class LocationMenuScene extends Phaser.Scene {
     });
   }
 
+  private createQuestBar(w: number, h: number, safeBottom: number): void {
+    const questBarHeight = 50;
+    const questBarY = h - safeBottom - 120; // Above rest button
+    
+    // Background
+    this.questBarBg = this.add.graphics();
+    this.questBarBg.fillStyle(0x0d1a16, 0.9);
+    this.questBarBg.fillRoundedRect(8, questBarY, w - 16, questBarHeight, 6);
+    this.questBarBg.lineStyle(1, 0x2dd4a8, 0.3);
+    this.questBarBg.strokeRoundedRect(8, questBarY, w - 16, questBarHeight, 6);
+
+    // Quest text
+    this.questBar = this.add.text(16, questBarY + questBarHeight / 2, '', {
+      fontFamily: 'Georgia, serif',
+      fontSize: '13px',
+      color: '#2dd4a8',
+      wordWrap: { width: w - 32 }
+    }).setOrigin(0, 0.5);
+
+    this.updateQuestBar();
+  }
+
+  private updateQuestBar(): void {
+    const activeQuest = this.questSystem.getActiveQuest();
+    if (activeQuest) {
+      this.questBar.setText(`${activeQuest.title}: ${activeQuest.description}`);
+      this.questBarBg.setAlpha(1);
+      this.questBar.setAlpha(1);
+    } else {
+      this.questBar.setText('');
+      this.questBarBg.setAlpha(0.3);
+      this.questBar.setAlpha(0.3);
+    }
+  }
+
+  private checkQuestCompletion(locationId: string): void {
+    const gameState = this.daySystem.getGameState();
+    
+    // Update quest progress based on location visits and context
+    const context: any = {
+      location: locationId,
+      capturedSpiritsCount: gameState.capturedSpirits.length
+    };
+
+    // Add specific event context based on location
+    if (locationId === 'tangga' && !gameState.completedEvents.includes('met-dian')) {
+      context.event = 'met-dian';
+    }
+    if (locationId === 'kedai-runcit' && !gameState.completedEvents.includes('met-zafri')) {
+      context.event = 'met-zafri';
+    }
+    if (locationId === 'unit-9-4' && gameState.completedEvents.includes('first-battle')) {
+      context.event = 'unit-94-explored-again';
+    }
+
+    // Update quest progress
+    const questProgressed = this.questSystem.updateQuestProgress(context);
+    if (questProgressed) {
+      this.updateLocations(); // Refresh UI to show new quest
+    }
+  }
+
   private selectLocation(location: LocationInfo): void {
+    // Check quest completion before advancing time
+    this.checkQuestCompletion(location.id);
+
     // Advance time when visiting a location
     this.daySystem.advanceTime();
+
+    // Stop whisper system
+    this.sakaWhisper.stop();
 
     // Fade out with transition
     this.cameras.main.fadeOut(800, 0, 0, 0);
@@ -404,6 +527,7 @@ export class LocationMenuScene extends Phaser.Scene {
 
   private updateLocations(): void {
     this.createLocationCards(this.scale.width, this.scale.height, 44, 24);
+    this.updateQuestBar();
   }
 
   private updateTimeDisplay(): void {
@@ -457,5 +581,9 @@ export class LocationMenuScene extends Phaser.Scene {
     // Update time display and hunger bar
     this.updateTimeDisplay();
     this.updateHungerBar(w, 44);
+
+    // Update saka whisper system
+    const gameState = this.daySystem.getGameState();
+    this.sakaWhisper.update(gameState.sakaHunger);
   }
 }

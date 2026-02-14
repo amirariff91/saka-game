@@ -4,6 +4,7 @@ import { TypewriterEffect } from '../systems/TypewriterEffect';
 import { SakaSystem } from '../systems/SakaSystem';
 import { SoundManager } from '../systems/SoundManager';
 import { DaySystem } from '../systems/DaySystem';
+import { QuestSystem } from '../systems/QuestSystem';
 
 export class DialogueScene extends Phaser.Scene {
   private engine!: DialogueEngine;
@@ -11,6 +12,7 @@ export class DialogueScene extends Phaser.Scene {
   private saka!: SakaSystem;
   private soundManager!: SoundManager;
   private daySystem!: DaySystem;
+  private questSystem!: QuestSystem;
   private typewriterSound?: Phaser.Sound.BaseSound;
   private muteButton!: Phaser.GameObjects.Text;
 
@@ -48,6 +50,8 @@ export class DialogueScene extends Phaser.Scene {
     this.engine = new DialogueEngine();
     this.saka = new SakaSystem(this, 0.3);
     this.soundManager = SoundManager.getInstance();
+    this.questSystem = QuestSystem.getInstance();
+    this.questSystem.initialize(this);
     this.soundManager.updateScene(this);
     this.daySystem = DaySystem.getInstance();
 
@@ -375,8 +379,7 @@ export class DialogueScene extends Phaser.Scene {
             // Transition to battle scene with enemy ID
             this.scene.start('BattleScene', { enemy: battle });
           } else {
-            const returnTo = (this.scene.settings.data as { returnTo?: string })?.returnTo ?? 'LocationMenuScene';
-            this.scene.start(returnTo);
+            this.handleChapterCompletion();
           }
         });
         return;
@@ -386,6 +389,55 @@ export class DialogueScene extends Phaser.Scene {
       if (nextLine) {
         this.showLine(nextLine);
       }
+    }
+  }
+
+  private handleChapterCompletion(): void {
+    const chapterKey = (this.scene.settings.data as { chapter?: string })?.chapter ?? 'chapter1';
+    const returnTo = (this.scene.settings.data as { returnTo?: string })?.returnTo ?? 'LocationMenuScene';
+
+    // Mark chapter as completed event
+    this.daySystem.completeEvent(`${chapterKey}-complete`);
+    this.daySystem.setCurrentChapter(chapterKey);
+
+    // Update quest progress based on chapter
+    switch (chapterKey) {
+      case 'chapter1':
+        // Chapter 1 done → go to tutorial-wake
+        this.questSystem.completeQuest('discover-unit94');
+        break;
+      case 'tutorial-wake':
+        // Tutorial wake done → go to tutorial-dian
+        this.daySystem.unlockLocation('tangga');
+        break;
+      case 'tutorial-dian':
+        // Tutorial dian done → battle triggers via 'battle' property, handled separately
+        this.questSystem.completeQuest('meet-dian');
+        this.daySystem.increaseBond('dian', 10);
+        break;
+      case 'tutorial-capture':
+        // Tutorial complete → go to hub
+        this.daySystem.completeTutorial();
+        this.questSystem.completeQuest('first-hunt');
+        break;
+      default:
+        // Regular chapter — update quest context
+        this.questSystem.updateQuestProgress({
+          event: `${chapterKey}-complete`,
+          capturedSpiritsCount: this.daySystem.getGameState().capturedSpirits.length
+        });
+        break;
+    }
+
+    // Check if tutorial has a next chapter
+    const nextChapter = this.daySystem.getNextChapter();
+    if (nextChapter) {
+      this.scene.start('DialogueScene', {
+        chapter: nextChapter,
+        returnTo: 'LocationMenuScene'
+      });
+    } else {
+      this.scene.start(returnTo);
     }
   }
 

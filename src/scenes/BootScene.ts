@@ -77,6 +77,9 @@ export class BootScene extends Phaser.Scene {
     this.load.json('unit-9-4-return', 'data/chapters/unit-9-4-return.json');
     this.load.json('tangga-casual', 'data/chapters/tangga-casual.json');
     this.load.json('tangga-encounter', 'data/chapters/tangga-encounter.json');
+    this.load.json('tutorial-wake', 'data/chapters/tutorial-wake.json');
+    this.load.json('tutorial-dian', 'data/chapters/tutorial-dian.json');
+    this.load.json('tutorial-capture', 'data/chapters/tutorial-capture.json');
     this.load.json('spirits', 'data/spirits.json');
 
     // === CHARACTER SPRITES ===

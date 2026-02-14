@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { SakaSystem } from '../systems/SakaSystem';
 import { SoundManager } from '../systems/SoundManager';
 import { DaySystem } from '../systems/DaySystem';
+import { QuestSystem } from '../systems/QuestSystem';
 
 interface BattleUnit {
   id: string;
@@ -45,12 +46,14 @@ export class BattleScene extends Phaser.Scene {
   private saka!: SakaSystem;
   private soundManager!: SoundManager;
   private daySystem!: DaySystem;
+  private questSystem!: QuestSystem;
   private spiritsData: any;
   private playerSpirits: CapturedSpirit[] = [];
   private muteButton!: Phaser.GameObjects.Text;
   private isDefending = false;
   private channeledSpirit?: CapturedSpirit;
   private battleLog: string[] = [];
+  private spiritCaptured = false;
 
   constructor() {
     super({ key: 'BattleScene' });
@@ -66,6 +69,7 @@ export class BattleScene extends Phaser.Scene {
     this.soundManager = SoundManager.getInstance();
     this.soundManager.updateScene(this);
     this.daySystem = DaySystem.getInstance();
+    this.questSystem = QuestSystem.getInstance();
     this.spiritsData = this.cache.json.get('spirits');
     
     // Stop ambient BGM for battle
@@ -95,11 +99,11 @@ export class BattleScene extends Phaser.Scene {
     this.initializeBattle();
     this.updateUI();
 
+    // Show pre-battle info card
+    this.showPreBattleInfo();
+
     // Start saka system
     this.saka.start();
-
-    // Fade in
-    this.cameras.main.fadeIn(800, 0, 0, 0);
   }
 
   private createEnemyArea(w: number, h: number): void {
@@ -292,6 +296,145 @@ export class BattleScene extends Phaser.Scene {
     }));
   }
 
+  private showPreBattleInfo(): void {
+    const w = this.scale.width;
+    const h = this.scale.height;
+    
+    // Info card panel
+    const cardW = Math.min(280, w - 40);
+    const cardH = 200;
+    const cardX = (w - cardW) / 2;
+    const cardY = (h - cardH) / 2;
+
+    const overlay = this.add.graphics();
+    overlay.fillStyle(0x000000, 0.5);
+    overlay.fillRect(0, 0, w, h);
+    overlay.setDepth(2000);
+
+    const card = this.add.graphics();
+    card.fillStyle(0x1a0d0d, 0.95);
+    card.fillRoundedRect(cardX, cardY, cardW, cardH, 10);
+    card.lineStyle(2, 0xd42d2d, 0.8);
+    card.strokeRoundedRect(cardX, cardY, cardW, cardH, 10);
+    card.setDepth(2001);
+
+    // Spirit name and type
+    const nameText = this.add.text(cardX + cardW / 2, cardY + 30, this.enemy.name, {
+      fontFamily: 'Georgia, serif',
+      fontSize: '18px',
+      color: '#d42d2d',
+      fontStyle: 'bold'
+    }).setOrigin(0.5).setDepth(2002);
+
+    const typeText = this.add.text(cardX + cardW / 2, cardY + 55, this.enemy.spiritType?.toUpperCase() || 'SPIRIT', {
+      fontFamily: 'monospace',
+      fontSize: '12px',
+      color: '#d4a82d'
+    }).setOrigin(0.5).setDepth(2002);
+
+    // HP bar
+    const hpBarW = cardW - 60;
+    const hpBarX = cardX + 30;
+    const hpBarY = cardY + 80;
+    
+    const hpBg = this.add.graphics();
+    hpBg.fillStyle(0x1a1a1a, 1);
+    hpBg.fillRoundedRect(hpBarX, hpBarY, hpBarW, 12, 4);
+    hpBg.setDepth(2002);
+    
+    const hpFill = this.add.graphics();
+    hpFill.fillStyle(0xd42d2d, 1);
+    hpFill.fillRoundedRect(hpBarX, hpBarY, hpBarW, 12, 4);
+    hpFill.setDepth(2003);
+
+    const hpLabel = this.add.text(cardX + cardW / 2, cardY + 105, 'HP: Tinggi', {
+      fontFamily: 'Georgia, serif',
+      fontSize: '14px',
+      color: '#6b8f82'
+    }).setOrigin(0.5).setDepth(2002);
+
+    // Weakness hint
+    const weakness = this.getWeaknessHint(this.enemy.spiritType || 'hantu');
+    const weaknessText = this.add.text(cardX + cardW / 2, cardY + 125, `Kelemahan: ${weakness}`, {
+      fontFamily: 'Georgia, serif',
+      fontSize: '12px',
+      color: '#4af7c7'
+    }).setOrigin(0.5).setDepth(2002);
+
+    // Tier
+    const tier = this.getTierName(this.enemy.maxHp);
+    const tierText = this.add.text(cardX + cardW / 2, cardY + 145, `Tier: ${tier}`, {
+      fontFamily: 'Georgia, serif',
+      fontSize: '12px',
+      color: '#d4a82d'
+    }).setOrigin(0.5).setDepth(2002);
+
+    // Fight button
+    const fightBtn = this.add.text(cardX + cardW / 2, cardY + cardH - 30, '[Lawan]', {
+      fontFamily: 'Georgia, serif',
+      fontSize: '16px',
+      color: '#2dd4a8',
+      backgroundColor: '#0d1a16',
+      padding: { x: 16, y: 6 }
+    }).setOrigin(0.5).setDepth(2002);
+
+    fightBtn.setInteractive({ useHandCursor: true });
+
+    fightBtn.on('pointerover', () => {
+      fightBtn.setColor('#4af7c7');
+      fightBtn.setScale(1.05);
+    });
+
+    fightBtn.on('pointerout', () => {
+      fightBtn.setColor('#2dd4a8');
+      fightBtn.setScale(1);
+    });
+
+    fightBtn.on('pointerdown', () => {
+      this.soundManager.playSFX('ui-click');
+      
+      // Hide info card
+      overlay.destroy();
+      card.destroy();
+      nameText.destroy();
+      typeText.destroy();
+      hpBg.destroy();
+      hpFill.destroy();
+      hpLabel.destroy();
+      weaknessText.destroy();
+      tierText.destroy();
+      fightBtn.destroy();
+      
+      // Start battle
+      this.cameras.main.fadeIn(800, 0, 0, 0);
+    });
+
+    // Auto-close after 2 seconds if no interaction
+    this.time.delayedCall(2000, () => {
+      if (overlay.active) {
+        fightBtn.emit('pointerdown');
+      }
+    });
+  }
+
+  private getWeaknessHint(spiritType: string): string {
+    switch (spiritType) {
+      case 'hantu': return 'Serangan fizikal';
+      case 'jembalang': return 'Kuasa bayang';
+      case 'djinn': return 'Doa & mantera';
+      case 'pocong': return 'Air mawar';
+      case 'penanggal': return 'Jeruk nipis';
+      default: return 'Serangan fizikal';
+    }
+  }
+
+  private getTierName(maxHp: number): string {
+    if (maxHp >= 100) return 'Legendary';
+    if (maxHp >= 80) return 'Rare';
+    if (maxHp >= 60) return 'Uncommon';
+    return 'Common';
+  }
+
   private playerAction(action: string): void {
     if (this.battlePhase !== 'action_select' || this.currentTurn !== 'player') return;
 
@@ -370,6 +513,7 @@ export class BattleScene extends Phaser.Scene {
 
     if (this.enemy.hp < (this.enemy.maxHp * 0.25) && Phaser.Math.Between(1, 100) <= captureRate) {
       // Success!
+      this.spiritCaptured = true;
       this.addBattleLog(`Berjaya menangkap ${this.enemy.name}!`);
       this.soundManager.playSFX('capture');
       this.cameras.main.flash(500, 0, 255, 0);
@@ -447,29 +591,208 @@ export class BattleScene extends Phaser.Scene {
     if (!gameState.completedEvents.includes('first-battle')) {
       gameState.completedEvents.push('first-battle');
     }
-    
-    const victoryText = this.add.text(this.scale.width / 2, this.scale.height / 2, 'BERJAYA!', {
-      fontFamily: 'Georgia, serif',
-      fontSize: '32px',
-      color: '#2dd4a8',
-      fontStyle: 'bold',
-    }).setOrigin(0.5);
-
-    // Glow effect
-    this.tweens.add({
-      targets: victoryText,
-      scaleX: { from: 0.8, to: 1.2 },
-      scaleY: { from: 0.8, to: 1.2 },
-      duration: 1000,
-      yoyo: true,
-      ease: 'Power2'
-    });
 
     this.soundManager.playSFX('capture');
     
-    this.time.delayedCall(2500, () => {
+    // Show reward screen overlay
+    this.showRewardScreen();
+  }
+
+  private showRewardScreen(): void {
+    const w = this.scale.width;
+    const h = this.scale.height;
+    
+    // Dark overlay
+    const overlay = this.add.graphics();
+    overlay.fillStyle(0x000000, 0.7);
+    overlay.fillRect(0, 0, w, h);
+    overlay.setDepth(1000);
+
+    // Reward panel
+    const panelW = Math.min(320, w - 40);
+    const panelH = 280;
+    const panelX = (w - panelW) / 2;
+    const panelY = (h - panelH) / 2;
+
+    const panel = this.add.graphics();
+    panel.fillStyle(0x0d1a16, 0.95);
+    panel.fillRoundedRect(panelX, panelY, panelW, panelH, 12);
+    panel.lineStyle(2, 0x2dd4a8, 0.8);
+    panel.strokeRoundedRect(panelX, panelY, panelW, panelH, 12);
+    panel.setDepth(1001);
+
+    // Victory title
+    const title = this.add.text(w / 2, panelY + 40, '✨ BERJAYA!', {
+      fontFamily: 'Georgia, serif',
+      fontSize: '24px',
+      color: '#2dd4a8',
+      fontStyle: 'bold'
+    }).setOrigin(0.5).setDepth(1002);
+
+    // Glow effect on title
+    this.tweens.add({
+      targets: title,
+      scaleX: { from: 0.9, to: 1.1 },
+      scaleY: { from: 0.9, to: 1.1 },
+      duration: 1500,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut'
+    });
+
+    let yOffset = panelY + 80;
+    const lineHeight = 25;
+    const rewardTexts: Phaser.GameObjects.Text[] = [];
+
+    // Capture or defeat result
+    if (this.spiritCaptured) {
+      const captureText = this.add.text(w / 2, yOffset, `Ditangkap: ${this.enemy.name} 🫙`, {
+        fontFamily: 'Georgia, serif',
+        fontSize: '16px',
+        color: '#4af7c7'
+      }).setOrigin(0.5).setDepth(1002);
+      rewardTexts.push(captureText);
+    } else {
+      const defeatText = this.add.text(w / 2, yOffset, `Dikalahkan: ${this.enemy.name} ⚔️`, {
+        fontFamily: 'Georgia, serif',
+        fontSize: '16px',
+        color: '#d4a82d'
+      }).setOrigin(0.5).setDepth(1002);
+      rewardTexts.push(defeatText);
+    }
+
+    yOffset += lineHeight;
+
+    // Saka gain
+    const sakaGain = this.spiritCaptured ? 30 : 15;
+    const gameState = this.daySystem.getGameState();
+    const newSaka = Math.min(100, gameState.sakaHunger + sakaGain);
+    const sakaBarLength = Math.floor((newSaka / 100) * 12);
+    const sakaBar = '█'.repeat(sakaBarLength) + '░'.repeat(12 - sakaBarLength);
+    
+    const sakaText = this.add.text(w / 2, yOffset, `Saka: ${sakaBar} +${sakaGain}`, {
+      fontFamily: 'monospace',
+      fontSize: '14px',
+      color: '#2dd4a8'
+    }).setOrigin(0.5).setDepth(1002);
+    rewardTexts.push(sakaText);
+
+    yOffset += lineHeight;
+
+    // New bayang ability (only if captured)
+    if (this.spiritCaptured) {
+      const bayangName = this.getBayangAbilityName(this.enemy.id);
+      const bayangText = this.add.text(w / 2, yOffset, `Bayang Baru: ${bayangName}`, {
+        fontFamily: 'Georgia, serif',
+        fontSize: '14px',
+        color: '#d4a82d'
+      }).setOrigin(0.5).setDepth(1002);
+      rewardTexts.push(bayangText);
+      yOffset += lineHeight;
+    }
+
+    // Bottles remaining
+    const bottlesLeft = Math.max(0, this.playerBottles - (this.spiritCaptured ? 1 : 0));
+    const bottlesText = this.add.text(w / 2, yOffset, `Botol: ${bottlesLeft} tinggal`, {
+      fontFamily: 'Georgia, serif',
+      fontSize: '14px',
+      color: '#6b8f82'
+    }).setOrigin(0.5).setDepth(1002);
+    rewardTexts.push(bottlesText);
+
+    // Hide all reward texts initially
+    rewardTexts.forEach(text => text.setAlpha(0));
+
+    // Continue button
+    const continueBtn = this.add.text(w / 2, panelY + panelH - 40, '[Teruskan]', {
+      fontFamily: 'Georgia, serif',
+      fontSize: '16px',
+      color: '#2dd4a8',
+      backgroundColor: '#0d1a16',
+      padding: { x: 20, y: 8 }
+    }).setOrigin(0.5).setDepth(1002);
+
+    continueBtn.setInteractive({ useHandCursor: true });
+    continueBtn.setAlpha(0);
+
+    // Staggered reveal animation
+    this.time.delayedCall(500, () => {
+      rewardTexts.forEach((text, index) => {
+        this.time.delayedCall(index * 300, () => {
+          this.tweens.add({
+            targets: text,
+            alpha: { from: 0, to: 1 },
+            y: { from: text.y + 10, to: text.y },
+            duration: 400,
+            ease: 'Power2.easeOut'
+          });
+        });
+      });
+
+      // Show continue button last
+      this.time.delayedCall(rewardTexts.length * 300 + 500, () => {
+        this.tweens.add({
+          targets: continueBtn,
+          alpha: { from: 0, to: 1 },
+          scaleX: { from: 0.9, to: 1 },
+          scaleY: { from: 0.9, to: 1 },
+          duration: 400,
+          ease: 'Back.easeOut'
+        });
+      });
+    });
+
+    // Button interactions
+    continueBtn.on('pointerover', () => {
+      continueBtn.setColor('#4af7c7');
+      continueBtn.setScale(1.05);
+    });
+
+    continueBtn.on('pointerout', () => {
+      continueBtn.setColor('#2dd4a8');
+      continueBtn.setScale(1);
+    });
+
+    continueBtn.on('pointerdown', () => {
+      this.soundManager.playSFX('ui-click');
+      
+      // Update quest progress
+      this.updateQuestProgress();
+      
       this.returnToLocationMenu();
     });
+  }
+
+  private getBayangAbilityName(spiritId: string): string {
+    // Get bayang ability name from spirit data
+    if (this.spiritsData && this.spiritsData[spiritId]) {
+      return this.spiritsData[spiritId].bayangAbility || 'Shadow Power';
+    }
+    return 'Shadow Power';
+  }
+
+  private updateQuestProgress(): void {
+    const gameState = this.daySystem.getGameState();
+    
+    // Update quest system with capture
+    const context: any = {
+      capturedSpiritsCount: gameState.capturedSpirits.length
+    };
+
+    // Check for specific quest completions
+    if (this.spiritCaptured) {
+      // First hunt quest
+      if (this.questSystem.isQuestActive('first-hunt')) {
+        context.event = 'first-spirit-captured';
+      }
+      
+      // Collect 3 spirits quest
+      if (gameState.capturedSpirits.length >= 3) {
+        context.event = 'collected-3-spirits';
+      }
+    }
+
+    this.questSystem.updateQuestProgress(context);
   }
 
   private battleDefeat(): void {
