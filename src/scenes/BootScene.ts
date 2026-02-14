@@ -120,7 +120,8 @@ export class BootScene extends Phaser.Scene {
     // === SPIRIT SPRITES ===
     const spiritNames = [
       'hantu-raya', 'toyol', 'pelesit', 'penanggal',
-      'pontianak', 'jembalang', 'pocong', 'orang-minyak'
+      'pontianak', 'jembalang', 'pocong', 'orang-minyak',
+      'jenglot', 'hantu-tinggi', 'hantu-tetek', 'jembalang-air'
     ];
     const spiritDirs = ['south', 'east', 'north', 'west'];
 
