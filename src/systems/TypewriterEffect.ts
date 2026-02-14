@@ -44,6 +44,7 @@ export class TypewriterEffect {
   skip(): void {
     if (this.isSkipped) return;
     this.isSkipped = true;
+    this.currentIndex = this.fullText.length;
     this.textObject.setText(this.fullText);
     this.complete();
   }
